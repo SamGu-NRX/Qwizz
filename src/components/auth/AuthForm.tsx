@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useState } from 'react';
-import { 
-  auth, 
-  signInWithEmailAndPassword, 
-  signInWithDiscord 
-} from '../../../firebaseConfig';
+// import { 
+//   auth, 
+//   signInWithEmailAndPassword, 
+//   signInWithDiscord 
+// } from '../../../firebaseConfig';
 // import { useSession, signIn, signOut } from 'next-auth/react';
 import { z, ZodSchema } from 'zod';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -68,6 +68,7 @@ const AuthForm = ({ mode, schema, children }: AuthFormProps) => {
             console.error(result.error);
           } else {
             console.log('Logged in');
+            // make sure that the tokens match
             router.push('/dashboard');
           }
         });

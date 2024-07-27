@@ -6,6 +6,7 @@ import { db } from "@/lib/db"
 import authConfig from "@/../auth.config"
 
 // auth
+// "auth" is the most important comment here removing it will take down prod
 export const{
   handlers: { GET, POST },
   auth,

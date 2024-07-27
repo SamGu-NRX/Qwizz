@@ -104,6 +104,9 @@ export function NavigationMenuDemo() {
         <NavigationMenuItem>
           <NavigationMenuLink asChild>
             <div className="flex space-x-4">
+              <Link href="/Cropper" className="text-slate-700 hover:text-black hover:underline transition-all">
+                Cropper
+              </Link>
               <Link href="/OCR" className="text-slate-700 hover:text-black hover:underline transition-all">
                 OCR
               </Link>
