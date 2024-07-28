@@ -1,12 +1,11 @@
 'use client';
-// this component HAS TO BE use client
 
 import React, { useState } from 'react';
-// import { 
-//   auth, 
-//   signInWithEmailAndPassword, 
-//   signInWithDiscord 
-// } from '../../../firebaseConfig';
+import { 
+  auth, 
+  signInWithEmailAndPassword, 
+  signInWithDiscord 
+} from '../../../firebaseConfig';
 // import { useSession, signIn, signOut } from 'next-auth/react';
 import { z, ZodSchema } from 'zod';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -44,23 +43,17 @@ interface FieldValues {
 
 
 const AuthForm = ({ mode, schema, children, csrfToken }: AuthFormProps) => {
-  const { googleSignIn } = useAuth();
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   // import and initalize zod schema
+
   const { register, handleSubmit, formState: { errors } } = useForm<FieldValues>({
     resolver: zodResolver(schema)
   });
 
-
-  // const signInResponse = await signIn('credentials', {
-  //   email: data.get("email"),
-  //   password: data.get("password"),
-  //   redirect: false
-  // })
-
-
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    setIsLoading(true);
     try {
       if (mode === 'signin') {
         await signIn('credentials', {
@@ -72,7 +65,6 @@ const AuthForm = ({ mode, schema, children, csrfToken }: AuthFormProps) => {
             console.error(result.error);
           } else {
             console.log('Logged in');
-            // make sure that the tokens match
             router.push('/dashboard');
           }
         });
@@ -83,8 +75,25 @@ const AuthForm = ({ mode, schema, children, csrfToken }: AuthFormProps) => {
       }
     } catch (error) {
       console.error(error);
-    } 
+    } finally {
+      setIsLoading(false);
+    }
   };
+  const handleSignIn = async (mode: string = '') => {
+    setIsLoading(true);
+    try {
+      if (mode) {
+        await signIn(mode);
+      } else {
+        await signIn();
+      }
+      console.log(user, "Logged in with Email");
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
 
   const handlePostAuth = (user: { uid: any; }) => {
@@ -103,7 +112,6 @@ const AuthForm = ({ mode, schema, children, csrfToken }: AuthFormProps) => {
     // Replace with actual database call
     return false; // Assuming the user does not exist for demonstration
   };
-
 
   const inputClassNames = (field: keyof FieldValues) => {
     let baseClasses = "w-full px-4 py-2 bg-white border border-slate-300 rounded-md text-md shadow-sm placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-colors";
@@ -124,7 +132,7 @@ const AuthForm = ({ mode, schema, children, csrfToken }: AuthFormProps) => {
         <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">
           {mode === 'signin' ? 'Sign In' : mode === 'signup' ? 'Sign Up' : 'Reset Password'}
         </h2>
-        
+
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 
           {mode === 'signup' && (
@@ -156,21 +164,21 @@ const AuthForm = ({ mode, schema, children, csrfToken }: AuthFormProps) => {
             </>
           )}
 
-          <EmailSignInButton mode={mode} />
+          <EmailSignInButton mode={mode} isLoading={isLoading}/>
 
         </form>
 
         <div className="mt-4 flex flex-col space-y-2">
           {(mode === 'signin' || mode === 'signup') && (
-            <GoogleSignInButton />
+            <GoogleSignInButton handleClick={() => handleSignIn('google')} isLoading={isLoading}/>
           )}
 
           {(mode === 'signin' || mode === 'signup') && (
-            <DiscordSignInButton />
+            <DiscordSignInButton handleClick={() => handleSignIn('discord')} isLoading={isLoading}/>
           )}
 
           {(mode === 'signin' || mode === 'signup') && (
-            <GithubSignInButton />
+            <GithubSignInButton  handleClick={() => handleSignIn('github')} isLoading={isLoading}/>
           )}
 
           {children}

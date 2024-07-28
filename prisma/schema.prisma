@@ -3,10 +3,10 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
 }
+
 
 enum UserRole {
   USER
@@ -14,7 +14,7 @@ enum UserRole {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String    @id @default(cuid()) @map("_id")
   name          String?
   email         String?   @unique
   emailVerified DateTime?
@@ -26,17 +26,17 @@ model User {
 }
 
 model Account {
-  id                 String  @id @default(cuid())
+  id                 String  @id @default(cuid()) @map("_id")
   userId             String
   type               String
   provider           String
   providerAccountId  String
-  refresh_token      String?  @db.Text
-  access_token       String?  @db.Text
+  refresh_token      String?
+  access_token       String?
   expires_at         Int?
   token_type         String?
   scope              String?
-  id_token           String?  @db.Text
+  id_token           String?
   session_state      String?
   createdAt     DateTime  @default(now())
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -44,7 +44,7 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 model VerificationToken {
-  id        String   @id @default(cuid())
+  id        String   @id @default(cuid()) @map("_id")
   email     String
   token     String  @unique
   expires   DateTime
@@ -53,7 +53,7 @@ model VerificationToken {
 }
 
 model PasswordResetToken {
-  id       String   @id @default(cuid())
+  id       String   @id @default(cuid()) @map("_id")
   email     String
   token     String  @unique
   expires   DateTime

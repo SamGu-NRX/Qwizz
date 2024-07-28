@@ -1,34 +1,24 @@
 'use client';
 // this component HAS TO BE use client
 
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { FaDiscord, FaGithub, FaGoogle } from 'react-icons/fa';
-import { signIn } from 'next-auth/react';
 import { LogIn } from 'lucide-react';
 
 type OAuthButtonProps = {
   buttonText?: string;
+  handleClick: () => void;
+  isLoading: boolean;
 }
 
 type EmailSignInButtonProps = {
   mode?: 'signin' | 'signup' | 'resetPassword';
+  handleClick: () => void;
+  isLoading: boolean;
 };
 
-export function GoogleSignInButton({ buttonText }: OAuthButtonProps) {
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleClick = async () => {
-    setIsLoading(true);
-    try {
-      await signIn('google');
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
+export function GoogleSignInButton({ buttonText, handleClick, isLoading }: OAuthButtonProps) {
   return (
     <motion.button
       whileHover={{ scale: 1.05 }}
@@ -42,20 +32,7 @@ export function GoogleSignInButton({ buttonText }: OAuthButtonProps) {
   )
 }
 
-export function DiscordSignInButton({ buttonText }: OAuthButtonProps) {
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleClick = async () => {
-    setIsLoading(true);
-    try {
-      await signIn('discord');
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
+export function DiscordSignInButton({ buttonText, handleClick, isLoading }: OAuthButtonProps) {
   return (
     <motion.button
       whileHover={{ scale: 1.05 }}
@@ -69,20 +46,7 @@ export function DiscordSignInButton({ buttonText }: OAuthButtonProps) {
   )
 }
 
-export function GithubSignInButton({ buttonText }: OAuthButtonProps) {
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleClick = async () => {
-    setIsLoading(true);
-    try {
-      await signIn('github');
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
+export function GithubSignInButton({ buttonText, handleClick, isLoading }: OAuthButtonProps) {
   return (
     <motion.button
       whileHover={{ scale: 1.05 }}
@@ -96,20 +60,7 @@ export function GithubSignInButton({ buttonText }: OAuthButtonProps) {
   )
 }
 
-export function EmailSignInButton({ mode }: EmailSignInButtonProps) {
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleClick = async () => {
-    setIsLoading(true);
-    try {
-      await signIn();
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
+export function EmailSignInButton({ mode, handleClick, isLoading }: EmailSignInButtonProps) {
   return (
     <motion.button
       whileHover={{ scale: 1.05 }}
