@@ -1,36 +1,13 @@
-import Image from "next/image";
-import Link from "next/link";
 import {
   ChevronLeft,
   ChevronRight,
   Copy,
-  CreditCard,
-  File,
-  Home,
-  LineChart,
-  ListFilter,
   MoreVertical,
-  Package,
-  Package2,
-  PanelLeft,
-  Search,
-  Settings,
-  ShoppingCart,
-  Truck,
-  Users2,
 } from "lucide-react";
 
 import Sidebar from "@/components/SidebarDash";
 
 import { Badge } from "@/components/ui/badge";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 
 import { Button } from "@/components/ui/button";
 
@@ -44,14 +21,11 @@ import {
 } from "@/components/ui/card";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
 import {
   Pagination,
   PaginationContent,
@@ -59,17 +33,56 @@ import {
 } from "@/components/ui/pagination";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-export default function Dashboard() {
+import { Question, columns } from "./columns"
+import { DataTable } from "./data-table"
+
+import Header from "@/components/HeaderDash"
+
+
+async function getData(): Promise<Question[]> {
+  // Fetch data from your API here.
+  return [
+    {
+      title: ["Gas Station", "A gas station sells regular gasoline for $2.39 per gallon and premium gasoline for $2.79 per gallon. If the gas station sold a total of 550 gallons of both types of gasoline in one day for a total of $1,344.50, how many gallons of premium gasoline were sold?"],
+      id: "1233515",
+      type: "Math",
+      date: new Date(2023, 3-1, 2),
+      accuracy: true,
+    },
+    {
+      title: ["Gas Station", ""],
+      id: "1233515",
+      type: "Writing",
+      date: new Date(2023, 3-1, 24),
+      accuracy: true,
+    },
+    {
+      title: ["Gas Station", ""],
+      id: "1233515",
+      type: "Math",
+      date: new Date(2023, 5-1, 24),
+      accuracy: true,
+    },
+    {
+      title: ["Gas Station", ""],
+      id: "1233515",
+      type: "Reading",
+      date: new Date(2023, 6-1, 2),
+      accuracy: true,
+    },
+    // ...
+  ]
+}
+
+async function showQuestion() {
+  return ("hi")
+}
+
+export default async function Dashboard() {
+  const data = await getData()
+
+  
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <Sidebar />
@@ -119,48 +132,6 @@ export default function Dashboard() {
                 </CardFooter>
               </Card>
             </div>
-            <Tabs defaultValue="week">
-              <div className="flex items-center">
-                <TabsList>
-                  <TabsTrigger value="week">Week</TabsTrigger>
-                  <TabsTrigger value="month">Month</TabsTrigger>
-                  <TabsTrigger value="year">Year</TabsTrigger>
-                </TabsList>
-                <div className="ml-auto flex items-center gap-2">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="h-7 gap-1 text-sm"
-                      >
-                        <ListFilter className="h-3.5 w-3.5" />
-                        <span className="sr-only sm:not-sr-only">Filter</span>
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuLabel>Filter by</DropdownMenuLabel>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuCheckboxItem checked>
-                        Correct
-                      </DropdownMenuCheckboxItem>
-                      <DropdownMenuCheckboxItem>
-                        Flagged
-                      </DropdownMenuCheckboxItem>
-                      <DropdownMenuCheckboxItem>Wrong</DropdownMenuCheckboxItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="h-7 gap-1 text-sm"
-                  >
-                    <File className="h-3.5 w-3.5" />
-                    <span className="sr-only sm:not-sr-only">Export</span>
-                  </Button>
-                </div>
-              </div>
-              <TabsContent value="week">
                 <Card x-chunk="dashboard-05-chunk-3">
                   <CardHeader className="px-7">
                     <CardTitle>Questions</CardTitle>
@@ -169,208 +140,9 @@ export default function Dashboard() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Question</TableHead>
-                          <TableHead className="hidden sm:table-cell">
-                            Type
-                          </TableHead>
-                          <TableHead className="hidden sm:table-cell">
-                            Link
-                          </TableHead>
-                          <TableHead className="hidden md:table-cell">
-                            Date
-                          </TableHead>
-                          <TableHead className="text-right">Accuracy</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        <TableRow className="bg-accent">
-                          <TableCell>
-                            <div className="font-medium">Gas Station</div>
-                            <div className="hidden text-sm text-muted-foreground md:inline">
-                              A gas station sells regular gasoline for...
-                            </div>
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                            Math
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                            <Button>Show</Button>
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                            2023-06-23
-                          </TableCell>
-                          <TableCell className="text-right">Correct</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell>
-                            <div className="font-medium">
-                              Walden by Henry David Thoreau
-                            </div>
-                            <div className="hidden text-sm text-muted-foreground md:inline">
-                              In the context of the passage, the phrase as when
-                              you throw...
-                            </div>
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                            Reading
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                            <Button>Show</Button>
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                            2023-06-24
-                          </TableCell>
-                          <TableCell className="text-right">Wrong</TableCell>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
+                  <DataTable columns={columns} data={data} />
                   </CardContent>
                 </Card>
-              </TabsContent>
-              <TabsContent value="month">
-                <Card x-chunk="dashboard-05-chunk-3">
-                  <CardHeader className="px-7">
-                    <CardTitle>Questions</CardTitle>
-                    <CardDescription>
-                      Recent questions you answered this week.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Question</TableHead>
-                          <TableHead className="hidden sm:table-cell">
-                            Type
-                          </TableHead>
-                          <TableHead className="hidden sm:table-cell">
-                            Link
-                          </TableHead>
-                          <TableHead className="hidden md:table-cell">
-                            Date
-                          </TableHead>
-                          <TableHead className="text-right">Accuracy</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        <TableRow className="bg-accent">
-                          <TableCell>
-                            <div className="font-medium">Gas Station</div>
-                            <div className="hidden text-sm text-muted-foreground md:inline">
-                              A gas station sells regular gasoline for...
-                            </div>
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                            Math
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                            <Button>Go to</Button>
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                            2023-06-23
-                          </TableCell>
-                          <TableCell className="text-right">Correct</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell>
-                            <div className="font-medium">
-                              Walden by Henry David Thoreau
-                            </div>
-                            <div className="hidden text-sm text-muted-foreground md:inline">
-                              In the context of the passage, the phrase as when
-                              you throw...
-                            </div>
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                            Reading
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                            <Button>Go to</Button>
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                            2023-06-24
-                          </TableCell>
-                          <TableCell className="text-right">Wrong</TableCell>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-              <TabsContent value="year">
-                <Card x-chunk="dashboard-05-chunk-3">
-                  <CardHeader className="px-7">
-                    <CardTitle>Questions</CardTitle>
-                    <CardDescription>
-                      Recent questions you answered this week.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Question</TableHead>
-                          <TableHead className="hidden sm:table-cell">
-                            Type
-                          </TableHead>
-                          <TableHead className="hidden sm:table-cell">
-                            Link
-                          </TableHead>
-                          <TableHead className="hidden md:table-cell">
-                            Date
-                          </TableHead>
-                          <TableHead className="text-right">Accuracy</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        <TableRow className="bg-accent">
-                          <TableCell>
-                            <div className="font-medium">Gas Station</div>
-                            <div className="hidden text-sm text-muted-foreground md:inline">
-                              A gas station sells regular gasoline for...
-                            </div>
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                            Math
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                            <Button>Go to</Button>
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                            2023-06-23
-                          </TableCell>
-                          <TableCell className="text-right">Correct</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell>
-                            <div className="font-medium">
-                              Walden by Henry David Thoreau
-                            </div>
-                            <div className="hidden text-sm text-muted-foreground md:inline">
-                              In the context of the passage, the phrase as when
-                              you throw...
-                            </div>
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                            Reading
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                            <Button>Go to</Button>
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                            2023-06-24
-                          </TableCell>
-                          <TableCell className="text-right">Wrong</TableCell>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-            </Tabs>
           </div>
           <div>
             <Card className="overflow-hidden" x-chunk="dashboard-05-chunk-4">
