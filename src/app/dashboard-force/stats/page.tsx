@@ -39,27 +39,13 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbLink, BreadcrumbS
 
 import Link from "next/link"
 
+import Header from "@/components/HeaderDash"
+
 export default function Charts() {
   return (
     <div className="chart-wrapper mx-auto flex max-w-6xl flex-col flex-wrap items-start justify-center gap-6 p-6 sm:flex-row sm:p-8">
       <Sidebar/>
       <div className="grid w-full gap-6 sm:grid-cols-2 lg:max-w-[22rem] lg:grid-cols-1 xl:max-w-[25rem]">
-      <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
-          <Breadcrumb className="hidden md:flex">
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink asChild>
-                  <Link href="/dashboard-force">Dashboard</Link>
-                </BreadcrumbLink>
-                <BreadcrumbSeparator/>
-                <BreadcrumbLink asChild>
-                  <Link href="/dashboard-force/stats">Stats</Link>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
-
-        </header>
         <Card
           className="lg:max-w-md" x-chunk="charts-01-chunk-0"
         >
@@ -317,7 +303,7 @@ export default function Charts() {
           <CardHeader>
             <CardTitle>Progress</CardTitle>
             <CardDescription>
-              You're average more steps a day this year than last year.
+              You&apos;re averaging more steps a day this year than last year.
             </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-4">
@@ -714,7 +700,7 @@ export default function Charts() {
           <CardHeader className="p-4 pb-0">
             <CardTitle>Active Energy</CardTitle>
             <CardDescription>
-              You're burning an average of 754 calories per day. Good job!
+              You&apos;re burning an average of 754 calories per day. Good job!
             </CardDescription>
           </CardHeader>
           <CardContent className="flex flex-row items-baseline gap-4 p-4 pt-2">

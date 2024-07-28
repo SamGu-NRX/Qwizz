@@ -1,4 +1,5 @@
 'use client';
+// this component HAS TO BE use client
 
 import React, { useState } from 'react';
 // import { 
@@ -11,52 +12,55 @@ import { z, ZodSchema } from 'zod';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
-import { FaGoogle, FaDiscord, FaGithub } from 'react-icons/fa';
-import { LogIn } from 'lucide-react';
 import { useAuth } from '@/context/AuthProvider';
 import { useSession, signIn } from 'next-auth/react';
+import { GoogleSignInButton, DiscordSignInButton, GithubSignInButton, EmailSignInButton } from './AuthButtons';
 
 // change to server (redirect instead of useRouter) for performance and SEO
 import { useRouter } from 'next/navigation';
+import Email from 'next-auth/providers/email';
 // import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 // import { Input } from '@/components/ui/input';
 // import { Button } from '@/components/ui/button';
-// import { toast } from 'react-hot-toast';
+import { Toaster, toast } from 'sonner'
 
 // Define types for state variables
 interface Errors {
   [key: string]: string | undefined;
 }
 
-interface Touched {
-  [key: string]: boolean | undefined;
-}
-
 interface AuthFormProps {
   mode: 'signin' | 'signup' | 'resetPassword';
   schema: ZodSchema;
   children: React.ReactNode;
+  csrfToken?: string;
 }
 
 interface FieldValues {
+  name?: string;
   email: string;
   password: string;
 }
 
 
-const AuthForm = ({ mode, schema, children }: AuthFormProps) => {
+const AuthForm = ({ mode, schema, children, csrfToken }: AuthFormProps) => {
   const { googleSignIn } = useAuth();
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
 
   // import and initalize zod schema
-
   const { register, handleSubmit, formState: { errors } } = useForm<FieldValues>({
     resolver: zodResolver(schema)
   });
 
+
+  // const signInResponse = await signIn('credentials', {
+  //   email: data.get("email"),
+  //   password: data.get("password"),
+  //   redirect: false
+  // })
+
+
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    setIsLoading(true);
     try {
       if (mode === 'signin') {
         await signIn('credentials', {
@@ -79,44 +83,9 @@ const AuthForm = ({ mode, schema, children }: AuthFormProps) => {
       }
     } catch (error) {
       console.error(error);
-    } finally {
-      setIsLoading(false);
-    }
+    } 
   };
 
-  const handleGoogleSignIn = async () => {
-    setIsLoading(true);
-    try {
-      const user = await googleSignIn();
-      console.log(user, "Logged in with Google");
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleDiscordSignIn = async () => {
-    setIsLoading(true);
-    try {
-      await signInWithDiscord();
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleGithubSignIn = async () => {
-    setIsLoading(true);
-    try {
-      await signInWithGithub();
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const handlePostAuth = (user: { uid: any; }) => {
     // Check if the user exists in the database
@@ -135,13 +104,6 @@ const AuthForm = ({ mode, schema, children }: AuthFormProps) => {
     return false; // Assuming the user does not exist for demonstration
   };
 
-  const handleResetPassword = async () => {
-    // Implement password reset logic
-  };
-
-  const handleSignUp = async () => {
-    // Implement sign up logic
-  };
 
   const inputClassNames = (field: keyof FieldValues) => {
     let baseClasses = "w-full px-4 py-2 bg-white border border-slate-300 rounded-md text-md shadow-sm placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-colors";
@@ -164,6 +126,16 @@ const AuthForm = ({ mode, schema, children }: AuthFormProps) => {
         </h2>
         
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+
+          {mode === 'signup' && (
+            <input
+              type="name"
+              {...register('name')}
+              placeholder="Name"
+              className={inputClassNames('name')}
+            />
+          )}
+          
           <input
             type="email"
             {...register('email')}
@@ -184,50 +156,23 @@ const AuthForm = ({ mode, schema, children }: AuthFormProps) => {
             </>
           )}
 
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300"
-            disabled={isLoading}
-          >
-            <div className="flex items-center justify-center">
-              <LogIn className="mr-2 h-4 w-4" />
-              {isLoading ? 'Loading...' : mode === 'signin' ? 'Sign In' : mode === 'signup' ? 'Sign Up' : 'Reset Password'}
-            </div>
-          </motion.button>
+          <EmailSignInButton mode={mode} />
+
         </form>
 
         <div className="mt-4 flex flex-col space-y-2">
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={handleGoogleSignIn}
-            className="flex items-center justify-center w-full bg-white text-gray-700 py-2 px-4 rounded-md border border-gray-300 hover:bg-gray-100 transition duration-300"
-            disabled={isLoading}
-          >
-            <FaGoogle className="mr-2" /> Continue with Google
-          </motion.button>
+          {(mode === 'signin' || mode === 'signup') && (
+            <GoogleSignInButton />
+          )}
 
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={handleDiscordSignIn}
-            className="flex items-center justify-center w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition duration-300"
-            disabled={isLoading}
-          >
-            <FaDiscord className="mr-2" /> Continue with Discord
-          </motion.button>
+          {(mode === 'signin' || mode === 'signup') && (
+            <DiscordSignInButton />
+          )}
 
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={handleGithubSignIn}
-            className="flex items-center justify-center w-full bg-slate-800 text-white py-2 px-4 rounded-md hover:bg-slate-900 transition duration-300"
-            disabled={isLoading}
-          >
-            <FaGithub className="mr-2" /> Continue with Github
-          </motion.button>
+          {(mode === 'signin' || mode === 'signup') && (
+            <GithubSignInButton />
+          )}
+
           {children}
 
         </div>

@@ -9,7 +9,7 @@ const ResetPasswordPage = () => {
 
   return (
     <AuthForm mode="resetPassword" schema={ResetSchema}>
-      <div className="mt-4 pt-2 text-center">
+      <div className="mt-2 text-center">
         <span className="text-sm text-gray-600">
           Remembered your password?{' '}
         </span>

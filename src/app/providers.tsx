@@ -1,4 +1,4 @@
-// in app/providers.tsx
+// src/app/providers.tsx
 
 "use client"
 

@@ -29,7 +29,7 @@ export default {
       credentials: {
         email: {
           label: "Email",
-          type: "text",
+          type: "email",
         },
         password: {
           label: "Password",
