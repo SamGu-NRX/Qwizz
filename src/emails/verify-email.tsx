@@ -32,7 +32,7 @@ import {
         <Container style={container}>
           <Heading style={h1}>Login</Heading>
           <Link
-            href={`https://nizzyabi.com/auth/new-verification?token=${token}`}
+            href={`https://localhost:3000/auth/new-verification?token=${token}`}
             target="_blank"
             style={{
               ...link,
@@ -65,7 +65,7 @@ import {
 
           <Text style={footer}>
             <Link
-              href="https://nizzyabi.com"
+              href="https://localhost:3000"
               target="_blank"
               style={{ ...link, color: "#898989" }}
             >

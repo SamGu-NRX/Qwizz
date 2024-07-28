@@ -13,7 +13,7 @@ export const sendVerificationEmail = async (
     const confirmLink = `https://localhost:3000/auth/new-verification?token=${token}`;
 
     await resend.emails.send({
-        from: "StudyBuddy <studybuddy.noreply@gmail.com>",
+        from: "Sam from StudyBuddy <sgu07966@gmail.com>",
         to: email,
         subject: "Confirm your email",
         html: render(LinkEmail({ token }))
@@ -21,7 +21,7 @@ export const sendVerificationEmail = async (
 
     resend.contacts.create({
         email: email,
-        audience_id: 'ed288a7a-23ef-4f32-a2f1-3dc887da7a1c'
+        audienceId: 'ed288a7a-23ef-4f32-a2f1-3dc887da7a1c'
     })
 
     
@@ -34,7 +34,7 @@ export const sendPasswordResetEmail = async (
     const resetLink = `https://localhost:3000/auth/new-password?token=${token}`;
 
     await resend.emails.send({
-        from: "StudyBuddy <studybuddy.noreply@gmail.com>",
+        from: "Sam from StudyBuddy <sgu07966@gmail.com>",
         to: email,
         subject: "Reset your password",
         html: render(ResetPassword({ token }))

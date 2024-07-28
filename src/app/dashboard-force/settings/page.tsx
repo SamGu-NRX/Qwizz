@@ -13,6 +13,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,6 +22,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
 import { Input } from "@/components/ui/input";
 import Sidebar from "@/components/SidebarDash";
 import Header from "@/components/HeaderDash";
@@ -53,6 +55,7 @@ export default function Settings() {
             <Link href="#">Organizations</Link>
             <Link href="#">Advanced</Link>
           </nav>
+
           <div className="grid gap-6">
             <Card x-chunk="dashboard-04-chunk-1">
               <CardHeader>
@@ -65,26 +68,49 @@ export default function Settings() {
               <ul className="grid gap-3">
                     <li className="flex items-center justify-between">
                       <span className="text-muted-foreground">Subtotal: $299.00</span>
-                      <Button><PenLine className="h-5 w-5"><PenLine></Button>
+                      <div>
+                        <Button variant="ghost" size="sm">
+                          <PenLine className="mr-2 h-4 w-4" />
+                          Edit
+                        </Button>
+                      </div>
                     </li>
                     <li className="flex items-center justify-between">
                       <span className="text-muted-foreground">Shipping</span>
-                      <Button><PenLine className="h-5 w-5"><PenLine></Button>
+                      <div>
+                        <Button variant="ghost" size="sm">
+                          <PenLine className="mr-2 h-4 w-4" />
+                          Edit
+                        </Button>
+                      </div>
                     </li>
                     <li className="flex items-center justify-between">
                       <span className="text-muted-foreground">Tax</span>
-                      <Button><PenLine className="h-5 w-5"><PenLine></Button>
+                      <div>
+                        <Button variant="ghost" size="sm">
+                          <PenLine className="mr-2 h-4 w-4" />
+                          Edit
+                        </Button>
+                      </div>
                     </li>
                     <li className="flex items-center justify-between font-semibold">
                       <span className="text-muted-foreground">Total</span>
-                      <Button><PenLine className="h-5 w-5"><PenLine></Button>
+                      <div>
+                        <Button variant="ghost" size="sm">
+                          <PenLine className="mr-2 h-4 w-4" />
+                          Edit
+                        </Button>
+                      </div>
                     </li>
                   </ul>
-              </ CardContent>
+              </CardContent>
+
               <CardFooter className="border-t px-6 py-4">
                 <Button>Save</Button>
               </CardFooter>
+          
             </Card>
+
             <Card x-chunk="dashboard-04-chunk-2">
               <CardHeader>
                 <CardTitle>Plugins Directory</CardTitle>
@@ -93,6 +119,7 @@ export default function Settings() {
                   located.
                 </CardDescription>
               </CardHeader>
+
               <CardContent>
                 <form className="flex flex-col gap-4">
                   <Input
@@ -110,11 +137,13 @@ export default function Settings() {
                   </div>
                 </form>
               </CardContent>
+
               <CardFooter className="border-t px-6 py-4">
                 <Button>Save</Button>
               </CardFooter>
+
             </Card>
-          </div>
+            </div>
         </div>
       </main>
     </div>

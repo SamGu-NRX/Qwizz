@@ -6,6 +6,9 @@ import '@mantine/core/styles.css';
 import '@mantine/dropzone/styles.css';
 import { ColorSchemeScript, createTheme, MantineProvider } from '@mantine/core';
 
+import Providers from "./providers"
+import { getSession } from "next-auth/react";
+
 const theme = createTheme({
   /** Put your mantine theme override here */
 });
@@ -17,11 +20,12 @@ export const metadata: Metadata = {
   description: "Your all-in-one study companion, supercharged with AI",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getSession();
   return (
     <html lang="en">
       <head>
@@ -30,11 +34,14 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <AuthProvider>
-          <MantineProvider>
-            {children}
-          </MantineProvider >
+          <Providers session={session}>
+            <MantineProvider>
+              {children}
+            </MantineProvider>
+          </Providers>
         </AuthProvider>
       </body>
     </html>
   );
 }
+

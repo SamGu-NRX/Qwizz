@@ -11,7 +11,7 @@ import { z, ZodSchema } from 'zod';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
-import { FaGoogle, FaDiscord } from 'react-icons/fa';
+import { FaGoogle, FaDiscord, FaGithub } from 'react-icons/fa';
 import { LogIn } from 'lucide-react';
 import { useAuth } from '@/context/AuthProvider';
 import { useSession, signIn } from 'next-auth/react';
@@ -100,6 +100,17 @@ const AuthForm = ({ mode, schema, children }: AuthFormProps) => {
     setIsLoading(true);
     try {
       await signInWithDiscord();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleGithubSignIn = async () => {
+    setIsLoading(true);
+    try {
+      await signInWithGithub();
     } catch (error) {
       console.error(error);
     } finally {
@@ -197,6 +208,7 @@ const AuthForm = ({ mode, schema, children }: AuthFormProps) => {
           >
             <FaGoogle className="mr-2" /> Continue with Google
           </motion.button>
+
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -207,6 +219,15 @@ const AuthForm = ({ mode, schema, children }: AuthFormProps) => {
             <FaDiscord className="mr-2" /> Continue with Discord
           </motion.button>
 
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleGithubSignIn}
+            className="flex items-center justify-center w-full bg-slate-800 text-white py-2 px-4 rounded-md hover:bg-slate-900 transition duration-300"
+            disabled={isLoading}
+          >
+            <FaGithub className="mr-2" /> Continue with Github
+          </motion.button>
           {children}
 
         </div>

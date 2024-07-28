@@ -4,23 +4,23 @@
 
 include a link and a screenshot (we're front end devs so we can actually see our work!).
 
-**Link to project:** http://yourstudybuddy.vercel.app
+**Link to project:** [http://yourstudybuddy.vercel.app](http://yourstudybuddy.vercel.app)
 
 ![alt tag](http://placecorgi.com/1200/650)
 
-## How It's Made:
+## How It's Made
 
 **Front-end**: React, Next.js, Tailwind CSS
 
-**Backend**: Node.js, Express.js, Turso for database
+**Backend**: MongoDB, Prisma ORM
 
-**APIs**: SendGrid (Emailing)
+**APIs**: Resend (Emailing)
 
-**Authentication**: Firebase Authentication
+**Authentication**: Firebase, NextAuth
 
-**File Storage**: Firebase Storage
+**File Storage**: MongoDB Atlas
 
-**Hosting**: Vercel (frontend), Netlify (Backend)
+**Hosting**: Vercel (frontend)
 
 Here's where you can go to town on how you actually built this thing. Write as much as you can here, it's totally fine if it's not too much just make sure you write _something_. If you don't have too much experience on your resume working on the front end that's totally fine. This is where you can really show off your passion and make up for that ten fold.
 
@@ -43,15 +43,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 First, run the development server:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
 pnpm dev
-# or
-bun dev
-# or
-next dev
 ```
 
 

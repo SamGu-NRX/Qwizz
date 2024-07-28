@@ -3,7 +3,7 @@ import Sidebar from "@/components/SidebarDash";
 import Link from "next/link";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbLink, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 
-import Header from "@/components/Header"
+import Header from "@/components/HeaderDash"
 
 export default function Upgrade(){
     return (
