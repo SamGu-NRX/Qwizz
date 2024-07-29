@@ -2,8 +2,14 @@ import requests
 import openai
 import json
 import os
+from os.path import join, dirname
+from dotenv import load_dotenv
 
-OPEN_API_KEY = ''  #replace with environment variable
+dotenv_path = join(dirname(__file__), '.env.local')
+load_dotenv(dotenv_path)
+
+OPEN_API_KEY = os.environ.get("SECRET_KEY")
+MONGO_PASSWORD = os.environ.get("DATABASE_PASSWORD")
 
 def delete_thread(self, thread_id):
     url = f"https://api.openai.com/v1/threads/{thread_id}"

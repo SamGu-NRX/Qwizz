@@ -1,3 +1,5 @@
+"use server"
+
 import NextAuth from "next-auth"
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import { UserRole } from "@prisma/client"
@@ -5,8 +7,9 @@ import { getUserById } from "@/data/user"
 import { db } from "@/lib/db"
 import authConfig from "@/../auth.config"
 
+console.log(NextAuth(authConfig));
+
 // auth
-// "auth" is the most important comment here removing it will take down prod
 export const{
   handlers: { GET, POST },
   auth,
@@ -25,6 +28,7 @@ export const{
       })
     }
   },
+
   callbacks: {
     async signIn({ user, account}) {
       if(account?.provider !== "credentials") return true;
@@ -33,7 +37,6 @@ export const{
       return true;
     },
 
-    
     async session({ session, token }) {
       if (token.sub && session.user) {
       session.user.id = token.sub;

@@ -21,18 +21,28 @@ export const LoginSchema = z.object({
 })
 
 export const RegisterSchema = z.object({
+  firstName: z.string().min(1, {
+    message: 'Name is required'
+  }).max(30, {
+    message: 'Name is too long'
+  }),
+  lastName: z.string().min(1, {
+    message: 'Name is required'
+  }).max(30, {
+    message: 'Name is too long'
+  }),
   email: z.string().email(),
   password: z
     .string()
     .min(8, {
-      message: 'Minimum 8 characters'
+      message: 'Password cannot be shorter than 8 characters'
+    })
+    .max(32, {
+      message: 'Password cannot be longer than 32 characters'
     })
     .refine(noSpaces, {
       message: 'Password cannot contain spaces'
     }),
-  name: z.string().min(1, {
-    message: 'Name is required'
-  })
 })
 
 export const ResetSchema = z.object({
