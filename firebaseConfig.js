@@ -31,44 +31,46 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const analytics = getAnalytics(app);
-const db = getFirestore(app);
+export default firebaseConfig;
 
-const googleProvider = new GoogleAuthProvider();
+// const app = initializeApp(firebaseConfig);
+// const auth = getAuth(app);
+// const analytics = getAnalytics(app);
+// const db = getFirestore(app);
 
-const registerWithEmail = async (email, password) => {
-  const userCredential = await createUserWithEmailAndPassword(
-    auth,
-    email,
-    password
-  );
-  const user = userCredential.user;
-  await setDoc(doc(db, "users", user.uid), {
-    email: user.email,
-    plan: "free",
-  });
-};
+// const googleProvider = new GoogleAuthProvider();
 
-const signInWithEmailAndPassword = async (email, password) => {
-  await firebaseSignInWithEmailAndPassword(auth, email, password);
-};
+// const registerWithEmail = async (email, password) => {
+//   const userCredential = await createUserWithEmailAndPassword(
+//     auth,
+//     email,
+//     password
+//   );
+//   const user = userCredential.user;
+//   await setDoc(doc(db, "users", user.uid), {
+//     email: user.email,
+//     plan: "free",
+//   });
+// };
 
-const sendPasswordReset = async (email) => {
-  await sendPasswordResetEmail(auth, email);
-};
+// const signInWithEmailAndPassword = async (email, password) => {
+//   await firebaseSignInWithEmailAndPassword(auth, email, password);
+// };
 
-const changePassword = async (password) => {
-  const user = auth.currentUser;
-  await updatePassword(user, password);
-};
+// const sendPasswordReset = async (email) => {
+//   await sendPasswordResetEmail(auth, email);
+// };
 
-export {
-  auth,
-  db,
-  signInWithEmailAndPassword,
-  registerWithEmail,
-  sendPasswordResetEmail,
-  updatePassword,
-};
+// const changePassword = async (password) => {
+//   const user = auth.currentUser;
+//   await updatePassword(user, password);
+// };
+
+// export {
+//   auth,
+//   db,
+//   signInWithEmailAndPassword,
+//   registerWithEmail,
+//   sendPasswordResetEmail,
+//   updatePassword,
+// };

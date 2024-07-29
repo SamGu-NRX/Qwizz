@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs"
 import type { NextAuthConfig } from "next-auth"
+
 import Credentials from "next-auth/providers/credentials"
 
 import Github from "next-auth/providers/github"
@@ -7,6 +8,19 @@ import Google from "next-auth/providers/google"
 import Discord from "next-auth/providers/discord"
 import { LoginSchema } from "@/schema"
 import { getUserByEmail } from "@/data/user"
+
+import { FirebaseAdapter } from "@next-auth/firebase-adapter"
+import firebase from "firebase/compat/app";
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import "firebase/compat/firestore";
+import firebaseConfig from "./firebaseConfig"
+
+
+// TODO: install fireadmin-sdk and use new authjs: https://authjs.dev/getting-started/adapters/firebase
+const firestore = (
+  firebase.apps[0] ?? firebase.initializeApp(firebaseConfig)
+).firestore()
 
 export default {
   // Google & Github providers
@@ -60,4 +74,5 @@ export default {
       }
     })
   ],
+  adapter: FirebaseAdapter(firestore),
 } satisfies NextAuthConfig

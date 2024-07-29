@@ -1,17 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { 
-  auth, 
-  signInWithEmailAndPassword, 
-  signInWithDiscord 
-} from '../../../firebaseConfig';
 // import { useSession, signIn, signOut } from 'next-auth/react';
 import { z, ZodSchema } from 'zod';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
-import { useAuth } from '@/context/AuthProvider';
+// import { useAuth } from '@/context/AuthProvider';
 import { useSession, signIn } from 'next-auth/react';
 import { GoogleSignInButton, DiscordSignInButton, GithubSignInButton, EmailSignInButton } from './AuthButtons';
 
@@ -36,7 +31,8 @@ interface AuthFormProps {
 }
 
 interface FieldValues {
-  name?: string;
+  firstName?: string;
+  lastName?: string;
   email: string;
   password: string;
 }
@@ -87,7 +83,7 @@ const AuthForm = ({ mode, schema, children, csrfToken }: AuthFormProps) => {
       } else {
         await signIn();
       }
-      console.log(user, "Logged in with Email");
+      console.log("user", "Logged in with Email"); // change to actual username, fetch via GET from database
     } catch (error) {
       console.error(error);
     } finally {
@@ -138,12 +134,21 @@ const AuthForm = ({ mode, schema, children, csrfToken }: AuthFormProps) => {
           {mode === 'signup' && (
             <input
               type="name"
-              {...register('name')}
-              placeholder="Name"
-              className={inputClassNames('name')}
+              {...register('firstName')}
+              placeholder="First Name"
+              className={inputClassNames('firstName')}
             />
           )}
           
+          {mode === 'signup' && (
+            <input
+              type="name"
+              {...register('lastName')}
+              placeholder="Last Name"
+              className={inputClassNames('lastName')}
+            />
+          )}
+
           <input
             type="email"
             {...register('email')}
