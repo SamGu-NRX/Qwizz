@@ -1,7 +1,5 @@
 // src/app/providers.tsx
 
-"use client"
-
 import type { Session } from "next-auth"
 import { SessionProvider } from "next-auth/react"
 
