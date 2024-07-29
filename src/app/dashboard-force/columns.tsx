@@ -18,6 +18,8 @@ import {
 
 import {Check, X} from "lucide-react"
 
+import QuestionBox from "./questionBox"
+
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type Question = {
@@ -48,10 +50,10 @@ export const columns: ColumnDef<Question>[] = [
     accessorKey: "id",
     header: () => <div>Link</div>,
     cell: ({ row }) => {
-        const linkId = parseInt(row.getValue("id"))
+        const linkId = (row.getValue("id"))
         return (
             <div>
-                <Button onClick={() => Dashboard.showQuestion()}>Show</Button>
+                <Button className = "shower" id = {linkId}>Show</Button>
             </div>
         )
     },
