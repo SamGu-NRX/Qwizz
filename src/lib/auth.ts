@@ -7,8 +7,6 @@ import { getUserById } from "@/data/user"
 import { db } from "@/lib/db"
 import authConfig from "@/../auth.config"
 
-console.log(NextAuth(authConfig));
-
 // auth
 export const{
   handlers: { GET, POST },
@@ -16,6 +14,7 @@ export const{
   signIn,
   signOut,
 } = NextAuth ({
+  adapter: PrismaAdapter(db),
   pages: {
     signIn: '/auth/login',
     error: '/auth/error',
@@ -48,16 +47,13 @@ export const{
     },
     async jwt ({ token }) {
       if(!token.sub) return token;
-
       const existingUser = await getUserById(token.sub);
-
       if(!existingUser) return token;
-
       token.role = existingUser.role;
       return token;
     },
   },
-adapter: PrismaAdapter(db),
+
   session: { strategy: "jwt" },
   ...authConfig,
 })

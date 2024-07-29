@@ -26,16 +26,16 @@ export default {
   // Google & Github providers
   providers: [
     Github({
-      clientId: process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID ?? 'default',
-      clientSecret: process.env.NEXT_PUBLIC_GITHUB_CLIENT_SECRET ?? 'default',
+      clientId: process.env.GITHUB_CLIENT_ID ?? 'default',
+      clientSecret: process.env.GITHUB_CLIENT_SECRET ?? 'default',
     }),
     Google({
-      clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? 'default',
-      clientSecret: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET ?? 'default',
+      clientId: process.env.GOOGLE_CLIENT_ID ?? 'default',
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? 'default',
     }),
     Discord({
-      clientId: process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID ?? 'default',
-      clientSecret: process.env.NEXT_PUBLIC_DISCORD_CLIENT_SECRET ?? 'default',
+      clientId: process.env.DISCORD_CLIENT_ID ?? 'default',
+      clientSecret: process.env.DISCORD_CLIENT_SECRET ?? 'default',
     }),
 
     Credentials({
