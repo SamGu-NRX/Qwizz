@@ -1,9 +1,11 @@
+import Head from 'next/head';
+import Onboarding from '@/components/Onboarding/Onboarding';
 import {
   ChevronLeft,
   ChevronRight,
   Copy,
   MoreVertical,
-} from "lucide-react";
+} from 'lucide-react';
 
 import Script from 'next/script'
 
@@ -44,6 +46,9 @@ import {
   PaginationContent,
   PaginationItem,
 } from "@/components/ui/pagination";
+import { title } from "process";
+
+
 
 
 async function getData(): Promise<Question[]> {
@@ -68,11 +73,11 @@ async function getData(): Promise<Question[]> {
 
 export default async function Dashboard() {
   const data = await getData()
-  
-  
+
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <Sidebar />
+      <Onboarding />
       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
         <Header />
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
