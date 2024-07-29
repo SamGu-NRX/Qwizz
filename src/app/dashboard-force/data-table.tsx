@@ -33,9 +33,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu"
-type Checked = DropdownMenuCheckboxItemProps["checked"]
-
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
