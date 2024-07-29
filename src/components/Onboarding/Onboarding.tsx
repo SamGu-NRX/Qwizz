@@ -10,7 +10,7 @@ const Onboarding = () => {
       steps: [
         {
           title: 'Welcome to StudyBuddy!',
-          intro: 'Hello Arthur lol',
+          intro: 'Want to take a look around?',
         //   buttons: [
         //     {
         //       text: 'No',
@@ -30,6 +30,10 @@ const Onboarding = () => {
         //       }
         //     }
         //   ]
+        },
+        {
+          element: '#this-week',
+          intro: 'This is where your weekly statistics are located',
         }
       ]
     });

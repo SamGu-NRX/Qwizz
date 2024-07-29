@@ -92,10 +92,10 @@ export default async function Dashboard() {
                   </CardDescription>
                 </CardHeader>
                 <CardFooter>
-                  <Button>Start Studying</Button>
+                  <Button id="start-studying">Start Studying</Button>
                 </CardFooter>
               </Card>
-              <Card x-chunk="dashboard-05-chunk-1">
+              <Card x-chunk="dashboard-05-chunk-1" id="this-week">
                 <CardHeader className="pb-2">
                   <CardDescription>This Week</CardDescription>
                   <CardTitle className="text-4xl">90%</CardTitle>
