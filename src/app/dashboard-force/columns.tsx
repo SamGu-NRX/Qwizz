@@ -18,6 +18,8 @@ import {
 
 import {Check, X} from "lucide-react"
 
+import Link from "next/link"
+
 import QuestionBox from "./questionBox"
 
 // This type is used to define the shape of our data.
@@ -27,7 +29,8 @@ export type Question = {
   id: string
   type: string
   date: Date
-  accuracy: boolean
+  accuracy: string,
+  "set-size": string,
 }
 
 export const columns: ColumnDef<Question>[] = [
@@ -53,7 +56,7 @@ export const columns: ColumnDef<Question>[] = [
         const linkId = (row.getValue("id"))
         return (
             <div>
-                <Button className = "shower" id = {linkId}>Show</Button>
+                <Button><Link href="#">Show</Link></Button>
             </div>
         )
     },
@@ -85,16 +88,15 @@ export const columns: ColumnDef<Question>[] = [
     },
   },
   {
+    accessorKey: "set-size",
+    header: () => <div>Set Size</div>,
+  },
+  {
     accessorKey: "accuracy",
     header: () => <div>Accuracy</div>,
     cell: ({ row }) => {
       const accuracy = (row.getValue("accuracy"))
-      if (accuracy){
-        return <Check/>
-      }
-      else{
-        return <X/>
-      }
+      return <div>{accuracy.concat("/", row.getValue("set-size"))}</div>
     },
   },
   {

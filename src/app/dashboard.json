@@ -1,110 +1,76 @@
 
 
 {
-    "flashcards": [
-        { 
+    "flashcard-sets": [
+        {
+            "cards" : [{ 
+                "question": "A gas station sells regular gasoline for $2.39 per gallon and premium gasoline for $2.79 per gallon. If the gas station sold a total of 550 gallons of both types of gasoline in one day for a total of $1,344.50, how many gallons of premium gasoline were sold?",
+                "choices": {
+                    "A": "25",
+                    "B": "75",
+                    "C": "175",
+                    "D": "475"
+                },
+                "chosen": "B",
+                "correct": "B",
+                "explaination": "When asked for a specific value, try Plugging In the Answers. Label them as gallons of premium and start with the value in (B). If 75 gallons of premium were sold, the station would make 75($2.79) = $209.25 for those sales. A total of 550 gallons were sold, so the station would have sold 550 - 75 = 475 gallons of regular gasoline. The sales for the regular gasoline would be 475($2.39) = $1,135.25. The total sales for both types of gasoline would be $209.25 + $1,135.25 = $1,344.50. That matches the information in the question, so (B) is correct."
+            },
+            { 
+                "question": "",
+                "choices": {
+                    "A": "25",
+                    "B": "75",
+                    "C": "175",
+                    "D": "475"
+                },
+                "chosen": "B",
+                "correct": "B",
+                "explaination": ""
+            },
+            { 
+                "question": "",
+                "choices": {
+                    "A": "25",
+                    "B": "75",
+                    "C": "175",
+                    "D": "475"
+                },
+                "chosen": "B",
+                "correct": "B",
+                "explaination": ""
+            },{ 
+                "question": "",
+                "choices": {
+                    "A": "25",
+                    "B": "75",
+                    "C": "175",
+                    "D": "475"
+                },
+                "chosen": "B",
+                "correct": "B",
+                "explaination": ""
+            },
+            { 
+                "question": "",
+                "choices": {
+                    "A": "25",
+                    "B": "75",
+                    "C": "175",
+                    "D": "475"
+                },
+                "chosen": "A",
+                "correct": "B",
+                "explaination": ""
+            }],
+            "date": {
+                    "month": 6,
+                    "day": 4,
+                    "year": 2023,
+                    "time": "20:35"
+                },
             "ID": "1233515", 
             "subject": "Math",
-            "title": "Gas Station", 
-            "question": "A gas station sells regular gasoline for $2.39 per gallon and premium gasoline for $2.79 per gallon. If the gas station sold a total of 550 gallons of both types of gasoline in one day for a total of $1,344.50, how many gallons of premium gasoline were sold?",
-            "choices": {
-                "A": "25",
-                "B": "75",
-                "C": "175",
-                "D": "475"
-            },
-            "chosen": "B",
-            "correct": "B",
-            "date": {
-                "month": 3,
-                "day": 4,
-                "year": 2024,
-                "time": "20:35"
-            },
-            "explaination": "When asked for a specific value, try Plugging In the Answers. Label them as gallons of premium and start with the value in (B). If 75 gallons of premium were sold, the station would make 75($2.79) = $209.25 for those sales. A total of 550 gallons were sold, so the station would have sold 550 - 75 = 475 gallons of regular gasoline. The sales for the regular gasoline would be 475($2.39) = $1,135.25. The total sales for both types of gasoline would be $209.25 + $1,135.25 = $1,344.50. That matches the information in the question, so (B) is correct."
-        },
-        { 
-            "ID": "1233515", 
-            "subject": "Math",
-            "title": "Gas Station", 
-            "question": "",
-            "choices": {
-                "A": "25",
-                "B": "75",
-                "C": "175",
-                "D": "475"
-            },
-            "chosen": "B",
-            "correct": "B",
-            "date": {
-                "month": 3,
-                "day": 4,
-                "year": 2023,
-                "time": "20:35"
-            },
-            "explaination": ""
-        },
-        { 
-            "ID": "1233515", 
-            "subject": "Math",
-            "title": "Gas Station", 
-            "question": "",
-            "choices": {
-                "A": "25",
-                "B": "75",
-                "C": "175",
-                "D": "475"
-            },
-            "chosen": "B",
-            "correct": "B",
-            "date": {
-                "month": 3,
-                "day": 30,
-                "year": 2023,
-                "time": "20:35"
-            },
-            "explaination": ""
-        },{ 
-            "ID": "1233515", 
-            "subject": "Math",
-            "title": "Gas Station", 
-            "question": "",
-            "choices": {
-                "A": "25",
-                "B": "75",
-                "C": "175",
-                "D": "475"
-            },
-            "chosen": "B",
-            "correct": "B",
-            "date": {
-                "month": 5,
-                "day": 25,
-                "year": 2023,
-                "time": "20:35"
-            },
-            "explaination": ""
-        },
-        { 
-            "ID": "1233515", 
-            "subject": "Math",
-            "title": "Gas Station", 
-            "question": "",
-            "choices": {
-                "A": "25",
-                "B": "75",
-                "C": "175",
-                "D": "475"
-            },
-            "chosen": "B",
-            "correct": "B",
-            "date": {
-                "month": 6,
-                "day": 4,
-                "year": 2023,
-                "time": "20:35"
-            },
-            "explaination": ""
+            "title": "Gas Station" 
         }
     ]
 }
