@@ -1,5 +1,3 @@
-"use server"
-
 import NextAuth from "next-auth"
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import { UserRole } from "@prisma/client"
@@ -56,7 +54,7 @@ const authInstance = NextAuth(authOptions);
 console.log(authInstance);
 
 export const {
-  handlers: { GET, POST },
+  handlers: {GET, POST},
   auth,
   signIn,
   signOut,
