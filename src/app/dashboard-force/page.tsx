@@ -143,9 +143,9 @@ export default async function Dashboard() {
       <CardHeader className="flex flex-row items-start bg-muted/50">
         <div className="grid gap-0.5">
           <CardTitle className="group flex items-center gap-2 text-lg">
-            Your Performance
+            Weekly Performance
           </CardTitle>
-          <CardDescription>See how you performed across flashcard sets from the past.</CardDescription>
+          <CardDescription>See how you performed across flashcard sets from the past week.</CardDescription>
         </div>
         <div className="ml-auto flex items-center gap-1">
           <DropdownMenu>

@@ -101,6 +101,9 @@ const Navbar = () => {
             }}
           >
             <div className="flex space-x-4">
+              <Link href="/QuestionGenerator" className="text-slate-700 hover:text-black hover:underline transition-all">
+                QuestionGenerator
+              </Link>
               <Link href="/OCR" className="text-slate-700 hover:text-black hover:underline transition-all">
                 OCR
               </Link>
