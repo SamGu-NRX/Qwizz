@@ -34,6 +34,42 @@ const Onboarding = () => {
         {
           element: '#this-week',
           intro: 'This is where your weekly statistics are located',
+        },
+        {
+          element: '#this-month', 
+          intro: 'This is where your monthly statistics are located',
+        },
+        {
+          element: '#your-performance',
+          intro: 'This is where your performance statistics are located',
+        },
+        {
+          element: '#questions',
+          intro: 'Check out your recently answered questions here!',
+        },
+        {
+          element: '#settings',
+          intro: 'Change your settings here!',
+        },
+        {
+          element: '#upgrade',
+          intro: 'Upgrade your study plan here!',
+        },
+        {
+          element: '#stats',
+          intro: 'View your stats in depth here!',
+        },
+        {
+          element: '#connect',
+          intro: 'Connect with your friends here!',
+        },
+        {
+          element: '#dashboard',
+          intro: 'Click here to return to the dashboard!',
+        },
+        {
+          element: '#start-studying',
+          intro: 'Begin your study journey here!',
         }
       ]
     });

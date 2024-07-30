@@ -43,7 +43,7 @@ export default function ProgressBars({percent1, percent2}){
                   <Progress value={progressWk} aria-label="90% correct" />
                 </CardFooter>
               </Card>
-              <Card x-chunk="dashboard-05-chunk-2">
+              <Card x-chunk="dashboard-05-chunk-2" id="this-month">
                 <CardHeader className="pb-2">
                   <CardDescription>This Month</CardDescription>
                   <CardTitle className="text-4xl">{percent2}%</CardTitle>

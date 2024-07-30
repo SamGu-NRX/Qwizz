@@ -1,5 +1,16 @@
 "use client"
 
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer"
+
 import { Button } from "@/components/ui/button"
 import { ColumnDef } from "@tanstack/react-table"
 
@@ -19,6 +30,8 @@ import {
 import {Check, X} from "lucide-react"
 
 import Link from "next/link"
+
+import FlashcardDrawer from "@/components/FlashcardDisplay"
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -49,9 +62,16 @@ export const columns: ColumnDef<Question>[] = [
     cell: ({ row }) => {
         const linkId = (row.getValue("id"))
         return (
-            <div>
-                <Button><Link href="#">Show</Link></Button> 
-            </div>
+            <Drawer>
+              <DrawerTrigger>
+                <Button>Show</Button> 
+              </DrawerTrigger>
+              <DrawerContent>
+              <div className="mx-auto w-full max-w-sm">
+                <FlashcardDrawer cardID = {row.getValue("id")}/>
+                </div>
+              </DrawerContent>
+            </Drawer>
         )
     },
   },
