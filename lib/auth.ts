@@ -56,7 +56,7 @@ const authInstance = NextAuth(authOptions);
 console.log(authInstance);
 
 export const {
-  handlers: { GET: GETHandler, POST: POSTHandler },
+  handlers: { GET, POST },
   auth,
   signIn,
   signOut,
