@@ -20,8 +20,6 @@ import {Check, X} from "lucide-react"
 
 import Link from "next/link"
 
-import QuestionBox from "./questionBox"
-
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type Question = {
@@ -29,8 +27,8 @@ export type Question = {
   id: string
   type: string
   date: Date
-  accuracy: string,
-  "set-size": string,
+  accuracy: number,
+  "set-size": number,
 }
 
 export const columns: ColumnDef<Question>[] = [
@@ -38,13 +36,9 @@ export const columns: ColumnDef<Question>[] = [
     accessorKey: "title",
     header: () => <div>Title</div>,
     cell: ({ row }) => {
-        var description = (row.getValue("title")[1]).toString()
         return (
             <div>
                 <div className="font-medium">Gas Station</div>
-                <div className="hidden text-sm text-muted-foreground md:inline">
-                    {description.substring(0, 40).concat("", "...")}
-                </div>
             </div>
         )
     },
@@ -56,7 +50,7 @@ export const columns: ColumnDef<Question>[] = [
         const linkId = (row.getValue("id"))
         return (
             <div>
-                <Button><Link href="#">Show</Link></Button>
+                <Button><Link href="#">Show</Link></Button> 
             </div>
         )
     },
@@ -96,7 +90,7 @@ export const columns: ColumnDef<Question>[] = [
     header: () => <div>Accuracy</div>,
     cell: ({ row }) => {
       const accuracy = (row.getValue("accuracy"))
-      return <div>{accuracy.concat("/", row.getValue("set-size"))}</div>
+      return <div>{accuracy.toString().concat("/", row.getValue("set-size").toString())}</div>
     },
   },
   {
@@ -115,9 +109,9 @@ export const columns: ColumnDef<Question>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(question.title[1])}
+              onClick={() => navigator.clipboard.writeText(question.id)}
             >
-              Copy question
+              Copy question set ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Flag</DropdownMenuItem>
