@@ -126,7 +126,7 @@ export default async function Dashboard() {
               </Card>
               <ProgressBars percent1={getAccuracy(weekData)} percent2={getAccuracy(monthData)}/>
             </div>
-                <Card x-chunk="dashboard-05-chunk-3">
+                <Card x-chunk="dashboard-05-chunk-3" id="questions">
                   <CardHeader className="px-7">
                     <CardTitle>Questions</CardTitle>
                     <CardDescription>
@@ -139,7 +139,7 @@ export default async function Dashboard() {
                 </Card>
           </div>
           <div>
-    <Card className="overflow-hidden" x-chunk="dashboard-05-chunk-4">
+    <Card className="overflow-hidden" x-chunk="dashboard-05-chunk-4" id="your-performance">
       <CardHeader className="flex flex-row items-start bg-muted/50">
         <div className="grid gap-0.5">
           <CardTitle className="group flex items-center gap-2 text-lg">
