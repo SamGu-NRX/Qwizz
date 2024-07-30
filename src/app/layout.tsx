@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthProvider";
 import '@mantine/core/styles.css';
+import { auth } from '@/../lib/auth'
 import '@mantine/dropzone/styles.css';
 import { ColorSchemeScript, createTheme, MantineProvider } from '@mantine/core';
 
