@@ -40,6 +40,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "create-email": "^0.0.30",
+    "embla-carousel-react": "^8.1.7",
     "firebase": "^10.12.4",
     "framer-motion": "^11.3.8",
     "gsap": "^3.12.5",
@@ -65,14 +66,16 @@
     "tailwindcss-animate": "^1.0.7",
     "tesseract.js": "^5.1.0",
     "uuid": "^10.0.0",
+    "vaul": "^0.9.1",
     "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
     "@types/intro.js": "^5.1.5",
-    "@types/node": "^20.14.11",
+    "@types/node": "^20.14.13",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18",
+    "@types/uuid": "^10.0.0",
     "autoprefixer": "^10.4.19",
     "css-loader": "^7.1.2",
     "eslint": "^8.57.0",
@@ -84,6 +87,6 @@
     "prisma": "^5.17.0",
     "tailwindcss": "^3.4.6",
     "ts-node": "^10.9.2",
-    "typescript": "^5.5.3"
+    "typescript": "^5.5.4"
   }
 }

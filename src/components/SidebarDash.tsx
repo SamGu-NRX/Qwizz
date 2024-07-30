@@ -95,7 +95,7 @@ export default function Sidebar() {
           </Sheet>
           <TooltipProvider>
           <Tooltip>
-            <TooltipTrigger asChild>
+            <TooltipTrigger asChild id='dashboard'>
               <Link
                 href="/dashboard-force"
                 className={pathName == "/dashboard-force" ? accentIconStyle : mutedIconStyle}
@@ -109,7 +109,7 @@ export default function Sidebar() {
           </TooltipProvider>
           <TooltipProvider>
           <Tooltip>
-            <TooltipTrigger asChild>
+            <TooltipTrigger asChild id="connect">
               <Link
                 href="/dashboard-force/connect"
                 className={pathName.startsWith("/dashboard-force/connect") ? accentIconStyle : mutedIconStyle}
@@ -123,7 +123,7 @@ export default function Sidebar() {
           </TooltipProvider>
           <TooltipProvider>
           <Tooltip>
-            <TooltipTrigger asChild>
+            <TooltipTrigger asChild id="stats">
               <Link
                 href="/dashboard-force/stats"
                 className={pathName.startsWith("/dashboard-force/stats") ? accentIconStyle : mutedIconStyle}
@@ -137,7 +137,7 @@ export default function Sidebar() {
           </TooltipProvider>
           <TooltipProvider>
           <Tooltip>
-            <TooltipTrigger asChild>
+            <TooltipTrigger asChild id="upgrade">
               <Link
                 href="/dashboard-force/upgrade"
                 className={pathName.startsWith("/dashboard-force/upgrade") ? accentIconStyle : mutedIconStyle}
@@ -151,7 +151,7 @@ export default function Sidebar() {
           </TooltipProvider>
           <TooltipProvider>
           <Tooltip>
-            <TooltipTrigger asChild>
+            <TooltipTrigger asChild id="settings">
               <Link
                 href="/dashboard-force/settings"
                 className={pathName.startsWith("/dashboard-force/settings") ? accentIconStyle : mutedIconStyle}
