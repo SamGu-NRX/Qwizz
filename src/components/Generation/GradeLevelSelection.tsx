@@ -14,4 +14,6 @@ const GradeLevelSelection = ({ gradeLevels, onSelect }:
       </div>
     );
 };
+
+export default GradeLevelSelection;
   

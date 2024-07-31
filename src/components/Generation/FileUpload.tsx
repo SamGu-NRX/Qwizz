@@ -1,59 +1,82 @@
 // src/components/FileUpload.tsx
-import { Dropzone, FileWithPath } from '@mantine/dropzone';
 import { useState } from 'react';
-import { Button, Modal, Textarea, Text } from '@mantine/core';
+import { Container, Paper, Title, Text, Space, Button, Textarea, Modal } from '@mantine/core';
+import OCR from '@/components/OCR/OCR'; // Adjust the import path as necessary
+import { Dropzone, FileWithPath, IMAGE_MIME_TYPE, PDF_MIME_TYPE, MIME_TYPES } from '@mantine/dropzone';
 
 const FileUpload = ({ label, onFileAccepted }: { label: string, onFileAccepted: (ocrContent: string) => void }) => {
-  const [file, setFile] = useState<File | null>(null);
+  const [ocrResult, setOcrResult] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [ocrContent, setOcrContent] = useState('');
 
-  const handleDrop = (acceptedFiles: FileWithPath[]) => {
-    setFile(acceptedFiles[0]);
-    setIsModalOpen(true);
-    // Perform OCR if image, otherwise just read the file
-    if (acceptedFiles[0].type.startsWith('image/')) {
-      performOcr(acceptedFiles[0]);
+  const handleFileDrop = (acceptedFiles: FileWithPath[]) => {
+    const file = acceptedFiles[0];
+    if (file.type.startsWith('image/')) {
+      setIsModalOpen(true);
     } else {
+      // Handle non-image files (PDF, DOC, etc.)
       const reader = new FileReader();
       reader.onload = () => {
-        setOcrContent(reader.result as string);
+        setOcrResult(reader.result as string);
+        setIsModalOpen(true);
       };
-      reader.readAsText(acceptedFiles[0]);
+      if (file.type.startsWith('application/pdf') || file.type === MIME_TYPES.doc || file.type === MIME_TYPES.docx) {
+        reader.readAsText(file);
+      }
     }
   };
 
-  const performOcr = (file: File) => {
-    // Placeholder for OCR function
-    setOcrContent('OCR transcribed text...');
+  const handleOcrComplete = (ocrText: string) => {
+    setOcrResult(ocrText);
   };
 
   const handleConfirm = () => {
-    onFileAccepted(ocrContent);
+    onFileAccepted(ocrResult);
     setIsModalOpen(false);
   };
 
   return (
-    <div className="my-4">
-      <Text size="lg" weight={500} className="mb-2">{label}</Text>
-      <Dropzone onDrop={handleDrop}>
-        <div>
-          <input type="file" />
-          <Text>Drag &apos;n&apos; drop some files here, or click to select files</Text>
-        </div>
-      </Dropzone>
-      <Modal opened={isModalOpen} onClose={() => setIsModalOpen(false)} title="Confirm OCR Transcription">
-        <Textarea
-          value={ocrContent}
-          onChange={(e) => setOcrContent(e.target.value)}
-          rows={10}
-          className="w-full p-2 border rounded"
-        />
-        <Button onClick={handleConfirm} className="mt-4">
-          Confirm
-        </Button>
-      </Modal>
-    </div>
+    <Container size="lg" py="xl">
+      <Paper shadow="md" p="xl" radius="md">
+      <Title order={1} mb="lg" className="text-center">
+        Upload and Extract Text
+      </Title>
+        <Text className="text-center" c="dimmed" mb="xl">
+          Upload an image or document, crop it if needed, and extract text using OCR technology.
+        </Text>
+        <Space h="md" />
+        <Dropzone
+            onDrop={handleFileDrop}
+            accept={[
+                ...IMAGE_MIME_TYPE,
+                ...Array.from(PDF_MIME_TYPE),
+                MIME_TYPES.doc,
+                MIME_TYPES.docx,
+              ]}
+            >
+            <Text size="xl" inline>
+                Drag and drop files here, or click to select files
+            </Text>
+            </Dropzone>
+
+        <Modal opened={isModalOpen} onClose={() => setIsModalOpen(false)} title="Confirm OCR Transcription">
+          {ocrResult ? (
+            <>
+              <Textarea
+                value={ocrResult}
+                onChange={(e) => setOcrResult(e.target.value)}
+                rows={10}
+                className="w-full p-2 border rounded"
+              />
+              <Button onClick={handleConfirm} className="mt-4">
+                Confirm
+              </Button>
+            </>
+          ) : (
+            <OCR onOcrComplete={handleOcrComplete} />
+          )}
+        </Modal>
+      </Paper>
+    </Container>
   );
 };
 

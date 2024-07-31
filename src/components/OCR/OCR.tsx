@@ -1,3 +1,4 @@
+// src/components/OCR/OCR.tsx
 "use client";
 
 import { SetStateAction, useEffect, useRef, useState } from 'react';
@@ -7,7 +8,7 @@ import { createWorker, PSM, OEM } from 'tesseract.js';
 import ReactCrop, { Crop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 
-const OCR = () => {
+const OCR = ({ onOcrComplete }: { onOcrComplete: (ocrContent: string) => void }) => {
   const [imageData, setImageData] = useState<null | string>(null);
   const [crop, setCrop] = useState<Crop>();
   const [croppedImageData, setCroppedImageData] = useState<null | string>(null);
@@ -35,7 +36,7 @@ const OCR = () => {
       workerRef.current = worker;
       worker.setParameters({ tessedit_pageseg_mode: PSM.AUTO, tessedit_ocr_engine_mode: OEM.LSTM_ONLY });
     };
-    
+
     initializeWorker();
 
     return () => {
@@ -89,6 +90,7 @@ const OCR = () => {
     try {
       const result = await worker.recognize(croppedImageData);
       setOcrResult(result.data.text);
+      onOcrComplete(result.data.text);
       console.log(result.data);
       setProgressLabel('Done');
     } catch (error) {
@@ -104,15 +106,15 @@ const OCR = () => {
           onDrop={(files) => loadFile(files[0])}
           accept={IMAGE_MIME_TYPE}
           multiple={false}
-          >{(() => (
-            <Text size="xl" inline>
-              Drag image here or click to select file
-            </Text>
-          ))()}</Dropzone>
+          >
+          <Text size="xl" inline>
+            Drag image here or click to select file
+          </Text>
+        </Dropzone>
 
         {isCropping && imageData && (
           <ReactCrop crop={crop} onChange={c => setCrop(c)}>
-            <img ref={imgRef} src={imageData} alt="Upload" style={{ maxWidth: '100%' }} />
+            <Image ref={imgRef} src={imageData} alt="Upload" style={{ maxWidth: '100%' }} />
           </ReactCrop>
         )}
 
