@@ -1,27 +1,48 @@
 import bcrypt from "bcryptjs"
 import type { NextAuthConfig } from "next-auth"
+
 import Credentials from "next-auth/providers/credentials"
 
 import Github from "next-auth/providers/github"
 import Google from "next-auth/providers/google"
 import Discord from "next-auth/providers/discord"
+import Resend from "next-auth/providers/resend"
+
 import { LoginSchema } from "@/schema"
 import { getUserByEmail } from "@/data/user"
+
+// import { FirestoreAdapter } from "@auth/firebase-adapter"
+// import firebase from "firebase/compat/app";
+// import { initializeApp } from "firebase/app";
+// import { getAnalytics } from "firebase/analytics";
+// import "firebase/compat/firestore";
+// import firebaseConfig from "./firebaseConfig"
+import { EmailAuthProvider } from "firebase/auth"
+
+
+// // TODO: install fireadmin-sdk and use new authjs: https://authjs.dev/getting-started/adapters/firebase
+// const firestore = (
+//   firebase.apps[0] ?? firebase.initializeApp(firebaseConfig)
+// ).firestore()
 
 export default {
   // Google & Github providers
   providers: [
     Github({
-      clientId: process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID ?? 'default',
-      clientSecret: process.env.NEXT_PUBLIC_GITHUB_CLIENT_SECRET ?? 'default',
+      clientId: process.env.AUTH_GITHUB_CLIENT_ID ?? 'default',
+      clientSecret: process.env.AUTH_GITHUB_CLIENT_SECRET ?? 'default',
     }),
     Google({
-      clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? 'default',
-      clientSecret: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET ?? 'default',
+      clientId: process.env.AUTH_GOOGLE_CLIENT_ID ?? 'default',
+      clientSecret: process.env.AUTH_GOOGLE_CLIENT_SECRET ?? 'default',
     }),
     Discord({
-      clientId: process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID ?? 'default',
-      clientSecret: process.env.NEXT_PUBLIC_DISCORD_CLIENT_SECRET ?? 'default',
+      clientId: process.env.AUTH_DISCORD_CLIENT_ID ?? 'default',
+      clientSecret: process.env.AUTH_DISCORD_CLIENT_SECRET ?? 'default',
+    }),
+    Resend({
+      apiKey: process.env.AUTH_RESEND_API_KEY ?? 'default',
+      from: process.env.AUTH_RESEND_FROM ?? 'default',
     }),
 
     Credentials({
@@ -60,4 +81,5 @@ export default {
       }
     })
   ],
+  // adapter: FirestoreAdapter(firestore),
 } satisfies NextAuthConfig

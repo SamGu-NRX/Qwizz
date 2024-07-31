@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { AuthProvider } from "@/context/AuthProvider";
+// import { AuthProvider } from "@/context/AuthProvider";
 import '@mantine/core/styles.css';
 import { auth } from '@/../lib/auth'
 import '@mantine/dropzone/styles.css';
@@ -26,23 +26,21 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await getSession();
+  const session = await auth();
   return (
-    <html lang="en">
-      <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <ColorSchemeScript />
-      </head>
-      <body className={inter.className}>
-        <AuthProvider>
-          <Providers session={session}>
-            <MantineProvider>
-              {children}
-            </MantineProvider>
-          </Providers>
-        </AuthProvider>
-      </body>
-    </html>
+    <Providers session={session}>
+      <html lang="en">
+        <head>
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <ColorSchemeScript />
+        </head>
+        <body className={inter.className}>
+          <MantineProvider>
+            {children}
+          </MantineProvider>
+        </body>
+      </html>
+    </Providers>
   );
 }
 

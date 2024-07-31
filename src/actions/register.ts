@@ -12,14 +12,12 @@ import { sendVerificationEmail } from "@/../lib/mail";
 export const register = async (values: z.infer<typeof RegisterSchema>) => {
     // Validate fields
     const validatedFields = RegisterSchema.safeParse(values);
-
     // If fields are not valid
     if(!validatedFields.success) {
         return { error: "Invalid fields 😞"};
     }
-
     // extract validated fields
-    const { email, password, name } = validatedFields.data;
+    const { email, password, firstName, lastName } = validatedFields.data;
 
     // hash password
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -34,7 +32,8 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     // success code
     await db.user.create({
         data: {
-            name,
+            firstName,
+            lastName,
             email, 
             password: hashedPassword,
         },

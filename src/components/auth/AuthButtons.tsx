@@ -9,12 +9,11 @@ import { LogIn } from 'lucide-react';
 type OAuthButtonProps = {
   buttonText?: string;
   handleClick: () => void;
-  isLoading: boolean;
+  isLoading?: boolean;
 }
 
 type EmailSignInButtonProps = {
   mode?: 'signin' | 'signup' | 'resetPassword';
-  handleClick: () => void;
   isLoading: boolean;
 };
 
@@ -60,13 +59,12 @@ export function GithubSignInButton({ buttonText, handleClick, isLoading }: OAuth
   )
 }
 
-export function EmailSignInButton({ mode, handleClick, isLoading }: EmailSignInButtonProps) {
+export function EmailSignInButton({ mode, isLoading }: EmailSignInButtonProps) {
   return (
     <motion.button
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       type="submit"
-      onClick={handleClick}
       className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300"
       disabled={isLoading}
     >
