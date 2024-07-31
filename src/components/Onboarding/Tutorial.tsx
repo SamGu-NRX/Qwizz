@@ -3,7 +3,11 @@ import React from 'react';
 import IntroJs from 'intro.js';
 import 'intro.js/minified/introjs.min.css';
 
-const Onboarding = () => {
+interface TutorialProps {
+  onClose: () => void;
+}
+
+const Tutorial: React.FC<TutorialProps> = ({ onClose }) => {
     React.useEffect(() => {
     const intro = IntroJs();
     intro.setOptions({
@@ -78,4 +82,4 @@ const Onboarding = () => {
 
   return null;
 };
-export default Onboarding;
+export default Tutorial;

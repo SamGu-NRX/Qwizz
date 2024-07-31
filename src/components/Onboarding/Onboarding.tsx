@@ -8,8 +8,8 @@ export default function Home() {
     setShowOverlay(false);
   };
 
-  const handleOverlaySave = (selectedLanguages: any) => {
-    console.log('Selected languages:', selectedLanguages);
+  const handleOverlaySave = (selectedSubjects: any) => {
+    console.log('Selected Subjects:', selectedSubjects);
   };
 
   useEffect(() => {
