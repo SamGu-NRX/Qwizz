@@ -12,8 +12,6 @@ import { SubjectSelection } from './SubjectSelection'
 
 type Inputs = z.infer<typeof FormDataSchema>
 
-
-
 const steps = [
   {
     id: 'Step 1',
@@ -156,7 +154,7 @@ export default function Onboarding() {
   }
 
   return (
-    <section className='absolute inset-0 flex flex-col justify-between p-24'>
+    <section className='absolute inset-0 flex flex-col justify-between p-24 backdrop-blur-xl'>
       {/* steps */}
       <nav aria-label='Progress'>
         <ol role='list' className='space-y-4 md:flex md:space-x-8 md:space-y-0'>
@@ -200,7 +198,7 @@ export default function Onboarding() {
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.3, ease: 'easeInOut' }}
           >
-           <h2 className='text-base font-semibold leading-7 text-gray-900'>
+           <h2 className='text-xl font-semibold leading-7 text-gray-900'>
               Educational Information
             </h2>
             <p className='mt-1 text-sm leading-6 text-gray-600'>
@@ -346,9 +344,27 @@ export default function Onboarding() {
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.3, ease: 'easeInOut' }}
           >
-            
+            <div className='col-span-full'>
+                <FileUpload
+                  label="Upload Document"
+                  onFileAccepted={handleFileAccepted}
+                />
 
-              
+                {fileData && (
+                  <textarea
+                    value={fileData}
+                    onChange={handleOcrTextEdit}
+                    className='mt-2 w-full p-2 border rounded'
+                    rows={10}
+                  />
+                )}
+                
+                {errors.uploadedText?.message && (
+                  <p className='mt-2 text-sm text-red-400'>
+                    {errors.uploadedText.message}
+                  </p>
+                )}
+              </div>
           </motion.div>
         )}
 
