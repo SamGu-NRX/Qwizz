@@ -20,6 +20,17 @@ import {
 } from "recharts"
 
 import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
+import { Button } from "@/components/ui/button"
+
+import {
   Card,
   CardContent,
   CardDescription,
@@ -35,26 +46,177 @@ import {
 import { Separator } from "@/components/ui/separator"
 import Sidebar from "@/components/SidebarDash"
 
+import { ArrowUpDown, MoreHorizontal } from "lucide-react"
+
 import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbLink, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 
 import Link from "next/link"
 
 import Header from "@/components/HeaderDash"
 
+import dataJson from "@/app/dashboard.json"
+
+import * as React from "react"
+
 export default function Charts() {
+  const [position, setPosition] = React.useState("none")
+
+  let data = []
+  for (let i = 0; i < dataJson['flashcard-sets'].length; i++){
+    var correct = 0;
+    const flashcardContent = dataJson['flashcard-sets'][i];
+    for (let index = 0; index < flashcardContent.cards.length; index++){
+      if (flashcardContent.cards[index].correct == flashcardContent.cards[index].chosen) correct++;
+    }
+    let flashcardJson = {
+      title: [flashcardContent.title],
+      id: flashcardContent.ID,
+      type: flashcardContent.subject,
+      date: new Date(flashcardContent.date.year, flashcardContent.date.month-1, flashcardContent.date.day),
+      accuracy: correct,
+      "set-size": flashcardContent.cards.length
+    }
+    data.push(flashcardJson)
+  }
+
+  data.sort(
+    function (a, b) {
+      if ( a.date > b.date) return 1;
+      if (b.date > a.date) return -1;
+      return 0; 
+    }  
+  )
+
+  const todayDate = new Date(Date.now())
+  const sundayDate = new Date(todayDate.getFullYear(), todayDate.getMonth(),todayDate.getDate() - todayDate.getDay())
+  const weekData = []
+  const monthData = []
+  const yearData = []
+  const dayData = []
+
+  for (let i = 0; i < data.length; i++){
+    if (data[i].date.getFullYear() == todayDate.getFullYear()){
+      yearData.push(data[i])
+      if (data[i].date.getMonth() == todayDate.getMonth()) {
+        monthData.push(data[i])
+        const sundayDate = todayDate.getDate() - todayDate.getDay();
+        if (data[i].date.getDate() - sundayDate >= 0) weekData.push(data[i])
+        if (data[i].date.getDate() == todayDate.getDate()) dayData.push(data[i])
+      }
+    }
+  }
+
+  function getChartData(time){
+    var myData = [];
+    if (time === "Day") myData = dayData;
+    if (time === "Week") myData = weekData;
+    if (time === "Month") myData = monthData;
+    if (time === "Year") myData = yearData;
+    if (time === "none") myData = data;
+    const myChart = []
+    for (let i = 0; i < myData.length; i++){
+      let barJson = {
+        date: getDateString(myData[i].date, 0),
+        steps: myData[i].accuracy
+      }
+      myChart.push(barJson)
+    }
+    return myChart
+  }
+
+  function getAccuracy(myData){
+    var correct = 0;
+    var total = 0;
+    for (let i = 0; i < myData.length; i++){
+      correct += myData[i].accuracy;
+      total += myData[i]['set-size'];
+    }
+    return Math.round(correct/total * 100)
+  }
+
+  function getTotal(myData){
+    var total = 0;
+    for (let i = 0; i < myData.length; i++){
+      total += myData[i]['set-size'];
+    }
+    return total
+  }
+
+  function getTotalCorrect(myData){
+    var total = 0;
+    for (let i = 0; i < myData.length; i++){
+      total += myData[i].accuracy;
+    }
+    return total
+  }
+
+  const dayInMillis = 24 * 60 * 60 * 1000;
+
+  function getDateString(date: Date, offset: number){
+    const newDate = new Date(date.getTime())
+    newDate.setTime(date.getTime() + offset * dayInMillis);
+    return (newDate.getFullYear().toString().concat("-",(newDate.getMonth() + 1).toString().concat("-",(newDate.getDate()).toString())))
+  }
+
   return (
+    <>
+    <Sidebar/>
+    <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
+    <Header/>
+    <Card>
+      <CardHeader>
+        <CardTitle>Your Stats {position == "Day" ? "Today": null} {position == "Week" ? "this Week": null} {position == "Month" ? "this Month": null} {position == "Year" ? "this Year": null}</CardTitle>
+        </CardHeader>
+        <CardContent>
+        <div className="justify-start">
+          <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="ml-auto">
+              Filter: Time <ArrowUpDown className="ml-2 h-4 w-4"/>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuRadioGroup value={position} onValueChange={setPosition}>
+          <DropdownMenuRadioItem
+          value="Day"
+          className="max-w-sm">
+            Day
+          </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem
+          value="Week"
+          className="max-w-sm">
+            Week
+          </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem
+          value="Month"
+          className="max-w-sm">
+            Month
+          </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem
+          value="Year"
+          className="max-w-sm">
+            Year
+          </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem
+          value="none"
+          className="max-w-sm">
+            None
+          </DropdownMenuRadioItem>
+          </DropdownMenuRadioGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+        </div>
     <div className="chart-wrapper mx-auto flex max-w-6xl flex-col flex-wrap items-start justify-center gap-6 p-6 sm:flex-row sm:p-8">
-      <Sidebar/>
       <div className="grid w-full gap-6 sm:grid-cols-2 lg:max-w-[22rem] lg:grid-cols-1 xl:max-w-[25rem]">
         <Card
           className="lg:max-w-md" x-chunk="charts-01-chunk-0"
         >
           <CardHeader className="space-y-0 pb-2">
-            <CardDescription>Today</CardDescription>
+            <CardDescription>{position == "Day" ? "Today": null} {position == "Week" ? "This Week": null} {position == "Month" ? "This Month": null} {position == "Year" ? "This Year": null} {position == "none" ? "All-Time": null}</CardDescription>
             <CardTitle className="text-4xl tabular-nums">
-              12,584{" "}
+            {position == "Day" ? getTotalCorrect(dayData): null} {position == "Week" ? getTotalCorrect(weekData): null} {position == "Month" ? getTotalCorrect(monthData): null} {position == "Year" ? getTotalCorrect(yearData): null}{position == "none" ? getTotalCorrect(data): null}{" "}
               <span className="font-sans text-sm font-normal tracking-normal text-muted-foreground">
-                steps
+                correct answers
               </span>
             </CardTitle>
           </CardHeader>
@@ -75,33 +237,9 @@ export default function Charts() {
                 }}
                 data={[
                   {
-                    date: "2024-01-01",
-                    steps: 2000,
-                  },
-                  {
-                    date: "2024-01-02",
-                    steps: 2100,
-                  },
-                  {
-                    date: "2024-01-03",
-                    steps: 2200,
-                  },
-                  {
-                    date: "2024-01-04",
-                    steps: 1300,
-                  },
-                  {
-                    date: "2024-01-05",
-                    steps: 1400,
-                  },
-                  {
-                    date: "2024-01-06",
-                    steps: 2500,
-                  },
-                  {
-                    date: "2024-01-07",
-                    steps: 1600,
-                  },
+                    date: "2024-4-4",
+                    steps: 5
+                  }
                 ]}
               >
                 <Bar
@@ -138,27 +276,6 @@ export default function Charts() {
                   }
                   cursor={false}
                 />
-                <ReferenceLine
-                  y={1200}
-                  stroke="hsl(var(--muted-foreground))"
-                  strokeDasharray="3 3"
-                  strokeWidth={1}
-                >
-                  <Label
-                    position="insideBottomLeft"
-                    value="Average Steps"
-                    offset={10}
-                    fill="hsl(var(--foreground))"
-                  />
-                  <Label
-                    position="insideTopLeft"
-                    value="12,343"
-                    className="text-lg"
-                    fill="hsl(var(--foreground))"
-                    offset={10}
-                    startOffset={100}
-                  />
-                </ReferenceLine>
               </BarChart>
             </ChartContainer>
           </CardContent>
@@ -170,7 +287,7 @@ export default function Charts() {
             <CardDescription>
               You need{" "}
               <span className="font-medium text-foreground">12,584</span> more
-              steps to reach your goal.
+              steps to reach you{getChartData("none").length}
             </CardDescription>
           </CardFooter>
         </Card>
@@ -415,84 +532,20 @@ export default function Charts() {
           className="max-w-xs" x-chunk="charts-01-chunk-3"
         >
           <CardHeader className="p-4 pb-0">
-            <CardTitle>Walking Distance</CardTitle>
+            <CardTitle>Total Cards Studied</CardTitle>
             <CardDescription>
-              Over the last 7 days, your distance walked and run was 12.5 miles
-              per day.
+              {position == "none"? null : "Over the last "}{position == "Day" ? "day": null}{position == "Week" ? "week": null}{position == "Month" ? "month": null}{position == "Year" ? "year": null}
+              {position == "none"? "T" : ", t"}he total amount of cards you studied was
             </CardDescription>
           </CardHeader>
           <CardContent className="flex flex-row items-baseline gap-4 p-4 pt-0">
             <div className="flex items-baseline gap-1 text-3xl font-bold tabular-nums leading-none">
-              12.5
+            {position == "Day" ? getTotal(dayData): null} {position == "Week" ? getTotal(weekData): null} {position == "Month" ? getTotal(monthData): null} {position == "Year" ? getTotal(yearData): null}{position == "none" ? getTotal(data): null}
               <span className="text-sm font-normal text-muted-foreground">
-                miles/day
+                cards
               </span>
             </div>
-            <ChartContainer
-              config={{
-                steps: {
-                  label: "Steps",
-                  color: "hsl(var(--chart-1))",
-                },
-              }}
-              className="ml-auto w-[72px]"
-            >
-              <BarChart
-                accessibilityLayer
-                margin={{
-                  left: 0,
-                  right: 0,
-                  top: 0,
-                  bottom: 0,
-                }}
-                data={[
-                  {
-                    date: "2024-01-01",
-                    steps: 2000,
-                  },
-                  {
-                    date: "2024-01-02",
-                    steps: 2100,
-                  },
-                  {
-                    date: "2024-01-03",
-                    steps: 2200,
-                  },
-                  {
-                    date: "2024-01-04",
-                    steps: 1300,
-                  },
-                  {
-                    date: "2024-01-05",
-                    steps: 1400,
-                  },
-                  {
-                    date: "2024-01-06",
-                    steps: 2500,
-                  },
-                  {
-                    date: "2024-01-07",
-                    steps: 1600,
-                  },
-                ]}
-              >
-                <Bar
-                  dataKey="steps"
-                  fill="var(--color-steps)"
-                  radius={2}
-                  fillOpacity={0.2}
-                  activeIndex={6}
-                  activeBar={<Rectangle fillOpacity={0.8} />}
-                />
-                <XAxis
-                  dataKey="date"
-                  tickLine={false}
-                  axisLine={false}
-                  tickMargin={4}
-                  hide
-                />
-              </BarChart>
-            </ChartContainer>
+            
           </CardContent>
         </Card>
         <Card
@@ -885,5 +938,9 @@ export default function Charts() {
         </Card>
       </div>
     </div>
+    </CardContent>
+    </Card>
+    </div>
+    </>
   )
 }
