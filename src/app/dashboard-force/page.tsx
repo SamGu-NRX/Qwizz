@@ -1,5 +1,7 @@
 import Head from 'next/head';
-import Onboarding from '@/components/Onboarding/Onboarding';
+// import { useEffect, useState } from 'react';
+import Tutorial from '@/components/Onboarding/Tutorial';
+import Overlay from '@/components/Onboarding/Overlay';
 import {
   ChevronLeft,
   ChevronRight,
@@ -10,7 +12,6 @@ import {
 import Script from 'next/script'
 
 import * as React from "react"
-import { useState, useEffect } from 'react'
 
 import Sidebar from "@/components/SidebarDash";
 
@@ -40,13 +41,10 @@ import {
   DropdownMenuContent,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-} from "@/components/ui/pagination";
 
 import ProgressBars from '@/components/ProgressBar';
+
+import StatCharts from '@/components/StatGraphs';
 
 
 
@@ -78,17 +76,29 @@ async function getData(): Promise<Question[]> {
 
 export default async function Dashboard() {
   const data = await getData()
+  // const [showOverlay, setShowOverlay] = useState(true);
   const todayDate = new Date(Date.now())
   const weekData = []
+  const lastWeekData = []
   const monthData = []
   const yearData = []
+
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     const data = await getData();
+  //     setData(data);
+  //   }
+  //   fetchData();
+  // }, []);
 
   for (let i = 0; i < data.length; i++){
     if (data[i].date.getFullYear() == todayDate.getFullYear()){
       yearData.push(data[i])
       if (data[i].date.getMonth() == todayDate.getMonth()) {
         monthData.push(data[i])
-        if (todayDate.getDate() - data[i].date.getDate() < 7) weekData.push(data[i])
+        const sundayDate = todayDate.getDate() - todayDate.getDay();
+        if (data[i].date.getDate() - sundayDate >= 0) weekData.push(data[i])
+        else if (data[i].date.getDate() - sundayDate + 7 >= 0) lastWeekData.push(data[i])
       }
     }
   }
@@ -103,10 +113,20 @@ export default async function Dashboard() {
     return Math.round(correct/total * 100)
   }
 
+
+  const handleOverlayClose = () => {
+    setShowOverlay(false);
+  };
+
+  const handleOverlaySave = (selectedLanguages: string[]) => {
+    console.log('Selected languages:', selectedLanguages);
+  };
+
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
+      {showOverlay && <Overlay onClose={handleOverlayClose} onSave={handleOverlaySave} />}
       <Sidebar />
-      <Onboarding />
+      <Tutorial />
       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
         <Header />
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
@@ -165,6 +185,7 @@ export default async function Dashboard() {
         </div>
       </CardHeader>
       <CardContent className="p-6 text-sm">
+        <StatCharts weekData={weekData} lastWeekData={lastWeekData}/>
       </CardContent>
     </Card>
   </div>
@@ -172,5 +193,9 @@ export default async function Dashboard() {
       </div>
     </div>
   );
+}
+
+function setShowOverlay(arg0: boolean) {
+  throw new Error('Function not implemented.');
 }
 
