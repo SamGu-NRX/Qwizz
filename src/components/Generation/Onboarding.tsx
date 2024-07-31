@@ -1,37 +1,50 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-
 import { z } from 'zod'
 import { FormDataSchema } from '@/schema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, SubmitHandler } from 'react-hook-form'
+import FileUpload from './FileUpload'
+import GradeLevelSelection from './GradeLevelSelection'
+import { SubjectSelection } from './SubjectSelection'
 
 type Inputs = z.infer<typeof FormDataSchema>
+
+
 
 const steps = [
   {
     id: 'Step 1',
-    name: 'Personal Information',
-    fields: ['firstName', 'lastName', 'email']
+    name: 'Basic Information',
+    fields: ['gradeLevel', 'subject']
   },
   {
     id: 'Step 2',
-    name: 'Address',
-    fields: ['country', 'state', 'city', 'street', 'zip']
+    name: 'Upload Documents & Notes',
+    fields: ['uploadedText']
   },
-  { id: 'Step 3', name: 'Complete' }
+  {
+    id: 'Step 3',
+    name: 'Upload Syllabus & Context',
+    fields: ['uploadedText']
+  },
+  { id: 'Step 4', name: 'Complete' }
 ]
+
+const gradeLevels = ['Elementary', 'Middle School', 'High School', 'College']
 
 export default function Onboarding() {
   const [previousStep, setPreviousStep] = useState(0)
   const [currentStep, setCurrentStep] = useState(0)
+  const [fileData, setFileData] = useState<string | null>(null)
   const delta = currentStep - previousStep
 
   const {
     register,
     handleSubmit,
+    setValue,
     watch,
     reset,
     trigger,
@@ -40,10 +53,52 @@ export default function Onboarding() {
     resolver: zodResolver(FormDataSchema)
   })
 
-  const processForm: SubmitHandler<Inputs> = data => {
-    console.log(data)
-    reset()
-  }
+  // Load data from local storage on initial render
+  useEffect(() => {
+    const savedData = localStorage.getItem('onboardingData')
+    if (savedData) {
+      const parsedData = JSON.parse(savedData)
+      Object.keys(parsedData).forEach((key) => {
+        setValue(key as keyof Inputs, parsedData[key])
+      })
+    }
+    
+    const savedFileData = localStorage.getItem('onboardingFileData')
+    if (savedFileData) {
+        setFileData(savedFileData)
+    }
+
+    const savedStep = localStorage.getItem('onboardingStep')
+    if (savedStep) {
+        setCurrentStep(parseInt(savedStep, 10))
+    }
+  }, [setValue])
+    
+      // Save data to local storage after each field change
+    const saveToLocalStorage = (data: Partial<Inputs>) => {
+        const existingData = localStorage.getItem('onboardingData')
+        const newData = existingData ? { ...JSON.parse(existingData), ...data } : data
+        localStorage.setItem('onboardingData', JSON.stringify(newData))
+    }
+    
+      // Watch for changes in form fields and save to local storage
+    useEffect(() => {
+      const subscription = watch((value, { name }) => {
+        if (name) {
+            saveToLocalStorage({ [name]: value[name as keyof Inputs] })
+        }
+      })
+      return () => subscription.unsubscribe()
+    }, [watch])
+    
+    const processForm: SubmitHandler<Inputs> = data => {
+      console.log(data)
+      // Clear local storage after successful form submission
+      localStorage.removeItem('onboardingData')
+      localStorage.removeItem('onboardingFileData')
+      localStorage.removeItem('onboardingStep')
+      reset()
+    }
 
   type FieldName = keyof Inputs
 
@@ -56,17 +111,48 @@ export default function Onboarding() {
     if (currentStep < steps.length - 1) {
       if (currentStep === steps.length - 2) {
         await handleSubmit(processForm)()
+      } else {
+        const newStep = currentStep + 1
+        setCurrentStep(newStep)
+        setPreviousStep(currentStep)
+        localStorage.setItem('onboardingStep', newStep.toString())
       }
-      setPreviousStep(currentStep)
-      setCurrentStep(step => step + 1)
     }
   }
 
   const prev = () => {
     if (currentStep > 0) {
+      const newStep = currentStep - 1
+      setCurrentStep(newStep)
       setPreviousStep(currentStep)
-      setCurrentStep(step => step - 1)
+      localStorage.setItem('onboardingStep', newStep.toString())
     }
+  }
+
+  const handleGradeLevelSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = event.target.value
+    setValue('gradeLevel', value)
+    saveToLocalStorage({ gradeLevel: value })
+  }
+
+  const handleSubjectSelect = (subject: string) => {
+    setValue('subject', subject)
+    saveToLocalStorage({ subject })
+  }
+
+  const handleFileAccepted = (ocrContent: string) => {
+    setValue('uploadedText', ocrContent)
+    saveToLocalStorage({ uploadedText: ocrContent })
+    setFileData(ocrContent)
+    localStorage.setItem('onboardingFileData', ocrContent)
+  }
+
+  const handleOcrTextEdit = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const editedText = event.target.value
+    setValue('uploadedText', editedText)
+    saveToLocalStorage({ uploadedText: editedText })
+    setFileData(editedText)
+    localStorage.setItem('onboardingFileData', editedText)
   }
 
   return (
@@ -114,7 +200,67 @@ export default function Onboarding() {
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.3, ease: 'easeInOut' }}
           >
-            <h2 className='text-base font-semibold leading-7 text-gray-900'>
+           <h2 className='text-base font-semibold leading-7 text-gray-900'>
+              Educational Information
+            </h2>
+            <p className='mt-1 text-sm leading-6 text-gray-600'>
+              Please provide your educational details and upload any relevant documents.
+            </p>
+
+            <div className='mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6'>
+              <div className='sm:col-span-3'>
+                <GradeLevelSelection
+                  gradeLevels={gradeLevels}
+                  onSelect={handleGradeLevelSelect}
+                />
+                {errors.gradeLevel?.message && (
+                  <p className='mt-2 text-sm text-red-400'>
+                    {errors.gradeLevel.message}
+                  </p>
+                )}
+              </div>
+
+              <div className='sm:col-span-3'>
+                <SubjectSelection />
+                {errors.subject?.message && (
+                  <p className='mt-2 text-sm text-red-400'>
+                    {errors.subject.message}
+                  </p>
+                )}
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {currentStep === 1 && (
+          <motion.div
+            initial={{ x: delta >= 0 ? '50%' : '-50%', opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+          >
+            <div className='col-span-full'>
+                <FileUpload
+                  label="Upload Document"
+                  onFileAccepted={handleFileAccepted}
+                />
+
+                {fileData && (
+                  <textarea
+                    value={fileData}
+                    onChange={handleOcrTextEdit}
+                    className='mt-2 w-full p-2 border rounded'
+                    rows={10}
+                  />
+                )}
+                
+                {errors.uploadedText?.message && (
+                  <p className='mt-2 text-sm text-red-400'>
+                    {errors.uploadedText.message}
+                  </p>
+                )}
+              </div>
+
+            {/* <h2 className='text-base font-semibold leading-7 text-gray-900'>
               Personal Information
             </h2>
             <p className='mt-1 text-sm leading-6 text-gray-600'>
@@ -189,146 +335,24 @@ export default function Onboarding() {
                   )}
                 </div>
               </div>
-            </div>
+            </div> */}
+
           </motion.div>
         )}
 
-        {currentStep === 1 && (
+        {currentStep === 2 && (
           <motion.div
             initial={{ x: delta >= 0 ? '50%' : '-50%', opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.3, ease: 'easeInOut' }}
           >
-            <h2 className='text-base font-semibold leading-7 text-gray-900'>
-              Address
-            </h2>
-            <p className='mt-1 text-sm leading-6 text-gray-600'>
-              Address where you can receive mail.
-            </p>
+            
 
-            <div className='mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6'>
-              <div className='sm:col-span-3'>
-                <label
-                  htmlFor='country'
-                  className='block text-sm font-medium leading-6 text-gray-900'
-                >
-                  Country
-                </label>
-                <div className='mt-2'>
-                  <select
-                    id='country'
-                    {...register('country')}
-                    autoComplete='country-name'
-                    className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:max-w-xs sm:text-sm sm:leading-6'
-                  >
-                    <option>United States</option>
-                    <option>Canada</option>
-                    <option>Mexico</option>
-                  </select>
-                  {errors.country?.message && (
-                    <p className='mt-2 text-sm text-red-400'>
-                      {errors.country.message}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              <div className='col-span-full'>
-                <label
-                  htmlFor='street'
-                  className='block text-sm font-medium leading-6 text-gray-900'
-                >
-                  Street address
-                </label>
-                <div className='mt-2'>
-                  <input
-                    type='text'
-                    id='street'
-                    {...register('street')}
-                    autoComplete='street-address'
-                    className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6'
-                  />
-                  {errors.street?.message && (
-                    <p className='mt-2 text-sm text-red-400'>
-                      {errors.street.message}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              <div className='sm:col-span-2 sm:col-start-1'>
-                <label
-                  htmlFor='city'
-                  className='block text-sm font-medium leading-6 text-gray-900'
-                >
-                  City
-                </label>
-                <div className='mt-2'>
-                  <input
-                    type='text'
-                    id='city'
-                    {...register('city')}
-                    autoComplete='address-level2'
-                    className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6'
-                  />
-                  {errors.city?.message && (
-                    <p className='mt-2 text-sm text-red-400'>
-                      {errors.city.message}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              <div className='sm:col-span-2'>
-                <label
-                  htmlFor='state'
-                  className='block text-sm font-medium leading-6 text-gray-900'
-                >
-                  State / Province
-                </label>
-                <div className='mt-2'>
-                  <input
-                    type='text'
-                    id='state'
-                    {...register('state')}
-                    autoComplete='address-level1'
-                    className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6'
-                  />
-                  {errors.state?.message && (
-                    <p className='mt-2 text-sm text-red-400'>
-                      {errors.state.message}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              <div className='sm:col-span-2'>
-                <label
-                  htmlFor='zip'
-                  className='block text-sm font-medium leading-6 text-gray-900'
-                >
-                  ZIP / Postal code
-                </label>
-                <div className='mt-2'>
-                  <input
-                    type='text'
-                    id='zip'
-                    {...register('zip')}
-                    autoComplete='postal-code'
-                    className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6'
-                  />
-                  {errors.zip?.message && (
-                    <p className='mt-2 text-sm text-red-400'>
-                      {errors.zip.message}
-                    </p>
-                  )}
-                </div>
-              </div>
-            </div>
+              
           </motion.div>
         )}
 
-        {currentStep === 2 && (
+        {currentStep === 3 && (
           <>
             <h2 className='text-base font-semibold leading-7 text-gray-900'>
               Complete

@@ -88,7 +88,7 @@ const config: Config = {
         'rainbow-gradient': 'linear-gradient(100deg, #DD7DDF, #E1CD86, #BBCB92, #71C2EF, #3BFFFF, #DD7DFF)',
       },
     },
-    plugins: [require("tailwindcss-animate"), require("tailwindcss/forms")],
+    plugins: [require("tailwindcss-animate"), require("@tailwindcss/forms")],
   },
 }
 

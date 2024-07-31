@@ -22,6 +22,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { ClassNames } from "@emotion/react"
 
 type Subject = {
   value: string
@@ -32,19 +33,29 @@ const subjects: Subject[] = [
   { value: "math", label: "Mathematics" },
   { value: "science", label: "Science" },
   { value: "history", label: "History" },
+  { value: "english", label: "English" },
+  { value: "geography", label: "Geography" },
+  { value: "spanish", label: "Spanish" },
+  { value: "art", label: "Art" },
+  { value: "music", label: "Music" },
+  { value: "chemistry", label: "Chemistry" },
+  { value: "biology", label: "Biology" },
+  { value: "psychology", label: "Psychology" },
+  { value: "computer_science", label: "Computer Science" },
+  { value: "environmental_science", label: "Environmental Science" },
   // Add more subjects as needed
 ]
 
 export function SubjectSelection() {
   const [open, setOpen] = React.useState(false)
-  const isDesktop = useMediaQuery("only screen and (min-width: 768px)")
+  const isDesktop = useMediaQuery("(min-width: 768px)")
   const [selectedSubject, setSelectedSubject] = React.useState<Subject | null>(null)
 
   if (isDesktop) {
     return (
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <Button variant="outline" className="w-[150px] justify-start">
+          <Button variant="outline" className="w-[150px] justify-start text-center items-center">
             {selectedSubject ? <>{selectedSubject.label}</> : <>+ Select Subject</>}
           </Button>
         </PopoverTrigger>
@@ -88,9 +99,9 @@ function SubjectList({
             <CommandItem
               key={subject.value}
               value={subject.value}
-              onSelect={(value: string) => {
+              onSelect={(value) => {
                 setSelectedSubject(
-                  subjects.find((subject) => subject.value === value) || null
+                  subjects.find((priority: { value: string }) => priority.value === value) || null
                 )
                 setOpen(false)
               }}

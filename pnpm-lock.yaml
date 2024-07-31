@@ -195,6 +195,9 @@ importers:
         specifier: ^3.23.8
         version: 3.23.8
     devDependencies:
+      '@tailwindcss/forms':
+        specifier: ^0.5.7
+        version: 0.5.7(tailwindcss@3.4.7(ts-node@10.9.2(@types/node@20.14.13)(typescript@5.5.4)))
       '@types/bcryptjs':
         specifier: ^2.4.6
         version: 2.4.6
