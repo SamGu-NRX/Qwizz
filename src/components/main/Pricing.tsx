@@ -1,5 +1,6 @@
 "use client";
 
+// src\components\main\Pricing.tsx
 import React, { useEffect, useRef } from 'react';
 import { fadeUp } from '@/animations/gsap';
 import CheckIcon from '@/assets/check.svg';

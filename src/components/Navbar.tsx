@@ -101,6 +101,9 @@ const Navbar = () => {
             }}
           >
             <div className="flex space-x-4">
+              <Link href="/QuestionOnboarding" className="text-slate-700 hover:text-black hover:underline transition-all">
+                QuestionOnboarding
+              </Link>
               <Link href="/QuestionGenerator" className="text-slate-700 hover:text-black hover:underline transition-all">
                 QuestionGenerator
               </Link>

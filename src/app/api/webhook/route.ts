@@ -1,6 +1,6 @@
 // import Stripe from "stripe";
-// import { stripe } from "@/lib/stripe";
-// import { db } from "@/lib/db";
+// import { stripe } from "@/../lib/stripe";
+// import { db } from "@/../lib/db";
 // import { headers } from "next/headers"
 // import { NextResponse } from "next/server";
 
