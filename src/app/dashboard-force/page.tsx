@@ -1,7 +1,6 @@
 import Head from 'next/head';
-// import { useEffect, useState } from 'react';
 import Tutorial from '@/components/Onboarding/Tutorial';
-import Overlay from '@/components/Onboarding/Overlay';
+import ClientOverlay from '@/components/Onboarding/ClientOverlay';
 import {
   ChevronLeft,
   ChevronRight,
@@ -76,7 +75,6 @@ async function getData(): Promise<Question[]> {
 
 export default async function Dashboard() {
   const data = await getData()
-  // const [showOverlay, setShowOverlay] = useState(true);
   const todayDate = new Date(Date.now())
   const weekData = []
   const lastWeekData = []
@@ -114,16 +112,9 @@ export default async function Dashboard() {
   }
 
 
-  const handleOverlayClose = () => {
-    setShowOverlay(false);
-  };
-
-  const handleOverlaySave = (selectedLanguages: string[]) => {
-    console.log('Selected languages:', selectedLanguages);
-  };
-
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
+      <ClientOverlay />
       {/* {showOverlay && <Overlay onClose={handleOverlayClose} onSave={handleOverlaySave} />} */}
       <Sidebar />
       <Tutorial />
