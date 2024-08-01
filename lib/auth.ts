@@ -7,7 +7,7 @@ import authConfig from "@/../auth.config"
 
 // auth
 // Configuration object
-const authOptions = {
+export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(db),
   pages: {
     signIn: '/auth/login',
@@ -22,40 +22,40 @@ const authOptions = {
     }
   },
   callbacks: {
-    async signIn({ user, account }: { user: { id: string }; account: any }) {
-      if(account?.provider !== "credentials") return true;
+    signIn: async ({ user, account }: { user: { id: string }; account: any }) => {
+      if (account?.provider !== "credentials") return true;
       const existingUser = await getUserById(user.id ?? '');
-      if(!existingUser?.emailVerified) return false;
+      if (!existingUser?.emailVerified) return false;
       return true;
     },
-    async session({ session, token }: { session: any; token: any }) {
+    session: async ({ session, token }: { session: any; token: any }) => {
       if (token.sub && session.user) {
         session.user.id = token.sub;
       }
-      if(token.role && session.user) {
+      if (token.role && session.user) {
         session.user.role = token.role as UserRole;
       }  
       return session;
     },
-    async jwt ({ token }: { token: { sub: string; role?: UserRole } }) {
-      if(!token.sub) return token;
+    jwt: async ({ token }: { token: { sub: string; role?: UserRole } }) => {
+      if (!token.sub) return token;
       const existingUser = await getUserById(token.sub);
-      if(!existingUser) return token;
+      if (!existingUser) return token;
       token.role = existingUser.role;
       return token;
     },
   },
   session: { strategy: "jwt" },
   ...authConfig,
-}
+});
 
-// Log the return value of NextAuth to ensure it is as expected
-const authInstance = NextAuth(authOptions);
-console.log(authInstance);
+// // Log the return value of NextAuth to ensure it is as expected
+// const authInstance = NextAuth(authOptions);
+// console.log(authInstance);
 
-export const {
-  handlers,
-  auth,
-  signIn,
-  signOut,
-} = authInstance;
+// export const {
+//   handlers,
+//   auth,
+//   signIn,
+//   signOut,
+// } = authInstance;
