@@ -59,13 +59,13 @@ const Tutorial: React.FC<TutorialProps> = ({ onClose }) => {
           element: '#upgrade',
           intro: 'Upgrade your study plan here!',
         },
+        // {
+        //   element: '#stats',
+        //   intro: 'View your stats in depth here!',
+        // },
         {
-          element: '#stats',
-          intro: 'View your stats in depth here!',
-        },
-        {
-          element: '#connect',
-          intro: 'Connect with your friends here!',
+          element: '#review',
+          intro: 'Review your flashcard sets here!',
         },
         {
           element: '#dashboard',

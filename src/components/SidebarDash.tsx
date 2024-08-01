@@ -13,7 +13,7 @@ import {
   Package2,
   Settings,
   ShoppingCart,
-  Users2,
+  BookOpenCheck,
   Menu
 } from "lucide-react"
 import Link from "next/link"
@@ -63,19 +63,19 @@ export default function Sidebar() {
                   Dashboard
                 </Link>
                 <Link
-                  href="/dashboard-force/connect"
-                  className= {pathName.startsWith("/dashboard-force/connect") ? accentLinkStyle : mutedLinkStyle}
+                  href="/dashboard-force/review"
+                  className= {pathName.startsWith("/dashboard-force/review") ? accentLinkStyle : mutedLinkStyle}
                 >
-                  <Users2 className="h-5 w-5" />
-                  Connect
+                  <BookOpenCheck className="h-5 w-5" />
+                  Review Flashcards
                 </Link>
-                <Link
+                {/* <Link
                   href="/dashboard-force/stats"
                   className= {pathName.startsWith("/dashboard-force/stats") ? accentLinkStyle : mutedLinkStyle}
                 >
                   <LineChart className="h-5 w-5" />
                   Stats
-                </Link>
+                </Link> */}
                 <Link
                   href="/dashboard-force/upgrade"
                   className= {pathName.startsWith("/dashboard-force/upgrade") ? accentLinkStyle : mutedLinkStyle}
@@ -109,19 +109,19 @@ export default function Sidebar() {
           </TooltipProvider>
           <TooltipProvider>
           <Tooltip>
-            <TooltipTrigger asChild id="connect">
+            <TooltipTrigger asChild id="review">
               <Link
-                href="/dashboard-force/connect"
-                className={pathName.startsWith("/dashboard-force/connect") ? accentIconStyle : mutedIconStyle}
+                href="/dashboard-force/review"
+                className={pathName.startsWith("/dashboard-force/review") ? accentIconStyle : mutedIconStyle}
               >
-                <Users2 className="h-5 w-5" />
-                <span className="sr-only">Connect</span>
+                <BookOpenCheck className="h-5 w-5" />
+                <span className="sr-only">Review Flashcards</span>
               </Link>
             </TooltipTrigger>
-            <TooltipContent side="right">Connect</TooltipContent>
+            <TooltipContent side="right">Review Flashcards</TooltipContent>
           </Tooltip>
           </TooltipProvider>
-          <TooltipProvider>
+          {/* <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild id="stats">
               <Link
@@ -134,7 +134,7 @@ export default function Sidebar() {
             </TooltipTrigger>
             <TooltipContent side="right">Stats</TooltipContent>
           </Tooltip>
-          </TooltipProvider>
+          </TooltipProvider> */}
           <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild id="upgrade">

@@ -1,10 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { CircleUser, Menu, Package2, Search } from "lucide-react";
+import { CircleUser, Menu, Package2, Search, Mail, ChevronRight, Smartphone } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import {Label} from "@/components/ui/label";
 import {
   Card,
   CardContent,
@@ -16,12 +15,6 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar"
-
-import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -29,6 +22,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
+import { Input } from "@/components/ui/input";
+import Sidebar from "@/components/SidebarDash";
+import Header from "@/components/HeaderDash";
+
+import { PenLine } from "lucide-react";
+
+import { Label } from "@/components/ui/label"
 
 import {
   Dialog,
@@ -41,16 +42,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 
-import { Input } from "@/components/ui/input";
-import Sidebar from "@/components/SidebarDash";
-import Header from "@/components/HeaderDash";
-
-import { PenLine } from "lucide-react";
-
-import * as React from "react"
-
-export default function Settings() {
-  const [image, setImage] = React.useState("")
+export default function Security() {
   const username = "guest";
   const name = "Arthur Shufer";
 
@@ -72,114 +64,67 @@ export default function Settings() {
           <nav
             className="grid gap-4 text-sm text-muted-foreground" x-chunk="dashboard-04-chunk-0"
           >
-            <Link href="/dashboard-force/settings" className="font-semibold text-primary">
+            <Link href="/dashboard-force/settings">
               General
             </Link>
-            <Link href="/dashboard-force/settings/security">Security</Link>
+            <Link href="/dashboard-force/settings/security" className="font-semibold text-primary">Security</Link>
             <Link href="#">Subscriptions</Link>
             <Link href="#">Advanced</Link>
           </nav>
 
           <div className="grid gap-6">
-          <Card x-chunk="dashboard-04-chunk-1">
+
+            <Card x-chunk="dashboard-04-chunk-1">
               <CardHeader>
-                <CardTitle>Account Profile</CardTitle>
+                <CardTitle>Change Password</CardTitle>
                 <CardDescription>
-                  Used to identify you while connecting with other studiers.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid gap-3">
-                  <div className="flex items-center justify-between">
-                  <Avatar className="w-20 h-20">
-      <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-      <AvatarFallback>CN</AvatarFallback>
-    </Avatar>
-    <div className="grid w-full max-w-sm items-center gap-1.5">
-      <Label htmlFor="picture">Set new profile picture</Label>
-      <Input id="picture" type="file" onChange = {e => setImage(e.target.value)}/>
-    </div>
-    <Dialog>
+                  Forgot your password? 
+                  <Dialog>
                 <DialogTrigger asChild>
-                <Button>Choose picture</Button>
+                  <Link href="#" className="font-semibold"> Change your password another way.</Link>
                   </DialogTrigger>  
                   <DialogContent className="sm:max-w-md">
             <DialogHeader>
-            <DialogTitle>Profile picture</DialogTitle>
+            <DialogTitle>Forgot Password</DialogTitle>
                 <DialogDescription>
-                    Is this profile picture correct? {image}
+                    Recover your password through other ways.
                 </DialogDescription>
                 </DialogHeader>
-                <div className="flex items-center justify-center space-x-2">
-          <Avatar className="w-20 h-20">
-      <AvatarImage src={image} alt="@shadcn" />
-      <AvatarFallback>CN</AvatarFallback>
-      </Avatar>
+                <div className="flex items-center space-x-2">
+          <div className="grid flex-1 gap-2">
+            <Label htmlFor="link" className="sr-only">
+              Link
+            </Label>
+            <Button className="justify-between"><Mail/>Send a recovery email<ChevronRight/></Button>
+            <Button className="justify-between"><Smartphone/>Send a recovery text<ChevronRight/></Button>
+          </div>
         </div>
         <DialogFooter className="sm:justify-start">
-        <Button type="button" variant="secondary">
-              <Link href="/dashboard-force/settings">Yes</Link>
-            </Button>
           <DialogClose asChild>
             <Button type="button" variant="secondary">
-              No
+              Close
             </Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>
                   </Dialog>
-                    </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card x-chunk="dashboard-04-chunk-1">
-              <CardHeader>
-                <CardTitle>Account Info</CardTitle>
-                <CardDescription>
-                  Used to identify you while connecting with other studiers.
                 </CardDescription>
               </CardHeader>
               <CardContent>
               <ul className="grid gap-3">
                     <li className="flex items-center justify-between">
-                      <span className="text-muted-foreground">Username: {username}</span>
-                      <div>
-                        <Button variant="ghost" size="sm">
-                          <PenLine className="mr-2 h-4 w-4" />
-                          Edit
-                        </Button>
-                      </div>
+                        <Label htmlFor="confirm">Confirm Password</Label>
+                        <Input id = "confirm" className = "max-w-md" onChange = {e => setId(e.target.value)} placeholder="Confirm Password" type="password" required/>
                     </li>
                     <li className="flex items-center justify-between">
-                      <span className="text-muted-foreground">Name: {name}</span>
-                      <div>
-                        <Button variant="ghost" size="sm">
-                          <PenLine className="mr-2 h-4 w-4" />
-                          Edit
-                        </Button>
-                      </div>
-                    </li>
-                    <li className="flex items-center justify-between">
-                      <span className="text-muted-foreground">Email address: {email}</span>
-                      <div>
-                        <Button variant="ghost" size="sm">
-                          <PenLine className="mr-2 h-4 w-4" />
-                          Edit
-                        </Button>
-                      </div>
-                    </li>
-                    <li className="flex items-center justify-between">
-                      <span className="text-muted-foreground">Phone Number: 111-111-1111</span>
-                      <div>
-                        <Button variant="ghost" size="sm">
-                          <PenLine className="mr-2 h-4 w-4" />
-                          Edit
-                        </Button>
-                      </div>
+                      <Label htmlFor="setPass">Set New Password</Label>
+                      <Input id = "setPass" className = "max-w-md" onChange = {e => setId(e.target.value)} placeholder="Set Password" type="password" required/>
                     </li>
                   </ul>
               </CardContent>
+              <CardFooter>
+                <Button>Set New Password</Button>
+                </CardFooter>
             </Card>
 
             {/* possibly use another card for more options, like dark mode or smth */}

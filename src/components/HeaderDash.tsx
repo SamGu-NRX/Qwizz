@@ -43,9 +43,7 @@ export default function Header(){
           <Breadcrumb className="hidden md:flex">
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink asChild>
                   <Link href="/dashboard-force">Dashboard</Link>
-                </BreadcrumbLink>
               </BreadcrumbItem>
               {list.length > 1 ? 
               (<BreadcrumbItem>

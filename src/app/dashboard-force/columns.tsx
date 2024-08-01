@@ -62,16 +62,7 @@ export const columns: ColumnDef<Question>[] = [
     cell: ({ row }) => {
         const linkId = (row.getValue("id"))
         return (
-            <Drawer>
-              <DrawerTrigger>
-                <Button>Show</Button> 
-              </DrawerTrigger>
-              <DrawerContent>
-              <div className="mx-auto w-full max-w-sm">
-                <FlashcardDrawer cardID = {row.getValue("id")}/>
-                </div>
-              </DrawerContent>
-            </Drawer>
+                <Button><Link href={"/dashboard-force/review?id=".concat("", linkId.toString())}>Show</Link></Button> 
         )
     },
   },
