@@ -34,7 +34,7 @@ const authOptions = {
       }
       if(token.role && session.user) {
         session.user.role = token.role as UserRole;
-      }
+      }  
       return session;
     },
     async jwt ({ token }: { token: { sub: string; role?: UserRole } }) {

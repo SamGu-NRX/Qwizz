@@ -31,8 +31,12 @@ export default {
     Github({
       clientId: process.env.AUTH_GITHUB_CLIENT_ID ?? 'default',
       clientSecret: process.env.AUTH_GITHUB_CLIENT_SECRET ?? 'default',
+      clientId: process.env.AUTH_GITHUB_CLIENT_ID ?? 'default',
+      clientSecret: process.env.AUTH_GITHUB_CLIENT_SECRET ?? 'default',
     }),
     Google({
+      clientId: process.env.AUTH_GOOGLE_CLIENT_ID ?? 'default',
+      clientSecret: process.env.AUTH_GOOGLE_CLIENT_SECRET ?? 'default',
       clientId: process.env.AUTH_GOOGLE_CLIENT_ID ?? 'default',
       clientSecret: process.env.AUTH_GOOGLE_CLIENT_SECRET ?? 'default',
     }),
