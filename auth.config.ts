@@ -26,16 +26,16 @@ export default {
   // Google & Github providers
   providers: [
     Github({
-      clientId: process.env.GITHUB_CLIENT_ID ?? 'default',
-      clientSecret: process.env.GITHUB_CLIENT_SECRET ?? 'default',
+      clientId: process.env.AUTH_GITHUB_CLIENT_ID ?? 'default',
+      clientSecret: process.env.AUTH_GITHUB_CLIENT_SECRET ?? 'default',
     }),
     Google({
-      clientId: process.env.GOOGLE_CLIENT_ID ?? 'default',
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? 'default',
+      clientId: process.env.AUTH_GOOGLE_CLIENT_ID ?? 'default',
+      clientSecret: process.env.AUTH_GOOGLE_CLIENT_SECRET ?? 'default',
     }),
     Discord({
-      clientId: process.env.DISCORD_CLIENT_ID ?? 'default',
-      clientSecret: process.env.DISCORD_CLIENT_SECRET ?? 'default',
+      clientId: process.env.AUTH_DISCORD_CLIENT_ID ?? 'default',
+      clientSecret: process.env.AUTH_DISCORD_CLIENT_SECRET ?? 'default',
     }),
 
     Credentials({
@@ -74,5 +74,5 @@ export default {
       }
     })
   ],
-  adapter: FirebaseAdapter(firestore),
+  //adapter: FirebaseAdapter(firestore),
 } satisfies NextAuthConfig
