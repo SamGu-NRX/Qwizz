@@ -12,6 +12,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
+import logoPic from '../assets/StudyBuddyLogo.png'
+import Image from "next/image"
+
 
 
 // Declare prevScrollY on the window object
@@ -85,6 +88,12 @@ const Navbar = () => {
               visible: { opacity: 1, y: 0 },
             }}
           >
+            <Image
+              src={logoPic}
+            width={40}
+            height={40}
+              alt="logo"
+              />
             <Link href="/" className="text-slate-700 hover:text-black transition-all">
               <h1 className='text-3xl font-Outfit text-[#3d4561] md:text-2xl font-bold'>
                 StudyBuddy

@@ -12,8 +12,7 @@
                     "D": "475"
                 },
                 "chosen": "B",
-                "correct": "B",
-                "explaination": "When asked for a specific value, try Plugging In the Answers. Label them as gallons of premium and start with the value in (B). If 75 gallons of premium were sold, the station would make 75($2.79) = $209.25 for those sales. A total of 550 gallons were sold, so the station would have sold 550 - 75 = 475 gallons of regular gasoline. The sales for the regular gasoline would be 475($2.39) = $1,135.25. The total sales for both types of gasoline would be $209.25 + $1,135.25 = $1,344.50. That matches the information in the question, so (B) is correct."
+                "correct": "B"
             },
             { 
                 "question": "",
@@ -24,8 +23,7 @@
                     "D": "475"
                 },
                 "chosen": "C",
-                "correct": "B",
-                "explaination": ""
+                "correct": "B"
             },
             { 
                 "question": "",
@@ -36,8 +34,7 @@
                     "D": "475"
                 },
                 "chosen": "B",
-                "correct": "B",
-                "explaination": ""
+                "correct": "B"
             },{ 
                 "question": "",
                 "choices": {
@@ -47,8 +44,7 @@
                     "D": "475"
                 },
                 "chosen": "B",
-                "correct": "B",
-                "explaination": ""
+                "correct": "B"
             },
             { 
                 "question": "",
@@ -59,8 +55,7 @@
                     "D": "475"
                 },
                 "chosen": "A",
-                "correct": "B",
-                "explaination": ""
+                "correct": "B"
             }],
             "date": {
                     "month": 7,
@@ -82,8 +77,7 @@
                     "D": "475"
                 },
                 "chosen": "B",
-                "correct": "B",
-                "explaination": "When asked for a specific value, try Plugging In the Answers. Label them as gallons of premium and start with the value in (B). If 75 gallons of premium were sold, the station would make 75($2.79) = $209.25 for those sales. A total of 550 gallons were sold, so the station would have sold 550 - 75 = 475 gallons of regular gasoline. The sales for the regular gasoline would be 475($2.39) = $1,135.25. The total sales for both types of gasoline would be $209.25 + $1,135.25 = $1,344.50. That matches the information in the question, so (B) is correct."
+                "correct": "B"
             },
             { 
                 "question": "",
@@ -94,8 +88,7 @@
                     "D": "475"
                 },
                 "chosen": "B",
-                "correct": "B",
-                "explaination": ""
+                "correct": "B"
             },
             { 
                 "question": "",
@@ -106,8 +99,7 @@
                     "D": "475"
                 },
                 "chosen": "B",
-                "correct": "B",
-                "explaination": ""
+                "correct": "B"
             },{ 
                 "question": "",
                 "choices": {
@@ -117,8 +109,7 @@
                     "D": "475"
                 },
                 "chosen": "B",
-                "correct": "B",
-                "explaination": ""
+                "correct": "B"
             },
             { 
                 "question": "",
@@ -129,8 +120,7 @@
                     "D": "475"
                 },
                 "chosen": "A",
-                "correct": "B",
-                "explaination": ""
+                "correct": "B"
             }],
             "date": {
                     "month": 7,

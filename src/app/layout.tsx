@@ -9,6 +9,7 @@ import { ColorSchemeScript, createTheme, MantineProvider } from '@mantine/core';
 
 import Providers from "./providers"
 import { getSession } from "next-auth/react";
+import logoPic from '../assets/StudyBuddyLogo.png'
 
 const theme = createTheme({
   /** Put your mantine theme override here */
@@ -32,7 +33,7 @@ export default async function RootLayout({
       <html lang="en">
         <head>
           <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <ColorSchemeScript />
+          <ColorSchemeScript/>
         </head>
         <body className={inter.className}>
           <MantineProvider>

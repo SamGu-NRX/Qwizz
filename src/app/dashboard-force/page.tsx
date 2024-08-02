@@ -60,7 +60,7 @@ async function getData(): Promise<Question[]> {
       title: [flashcardContent.title],
       id: flashcardContent.ID,
       type: flashcardContent.subject,
-      date: new Date(flashcardContent.date.year, flashcardContent.date.month-1, flashcardContent.date.day),
+      date: new Date(flashcardContent.date.year, flashcardContent.date.month-1, flashcardContent.date.day, parseInt(flashcardContent.date.time.split(":")[0])),
       accuracy: correct,
       "set-size": flashcardContent.cards.length
     }
@@ -88,16 +88,16 @@ export default async function Dashboard() {
   //   }
   //   fetchData();
   // }, []);
+  const sundayDate = new Date(todayDate.getTime() - todayDate.getDay()*24*60*60*1000 - todayDate.getHours()*60*60*1000 - todayDate.getMinutes()*60*1000 - todayDate.getSeconds()*1000 - todayDate.getMilliseconds());
 
   for (let i = 0; i < data.length; i++){
     if (data[i].date.getFullYear() == todayDate.getFullYear()){
       yearData.push(data[i])
-      if (data[i].date.getMonth() == todayDate.getMonth()) {
+      if (data[i].date.getMonth() == todayDate.getMonth()) 
         monthData.push(data[i])
-        const sundayDate = todayDate.getDate() - todayDate.getDay();
-        if (data[i].date.getDate() - sundayDate >= 0) weekData.push(data[i])
-        else if (data[i].date.getDate() - sundayDate + 7 >= 0) lastWeekData.push(data[i])
-      }
+        if (data[i].date.getTime() - sundayDate.getTime() >= 0) weekData.push(data[i])
+        else if (data[i].date.getTime() - sundayDate.getTime() + 7 * 24 * 60 * 60 * 1000 >= 0) lastWeekData.push(data[i])
+      
     }
   }
 
@@ -133,7 +133,7 @@ export default async function Dashboard() {
                   <Button id="start-studying">Start Studying</Button>
                 </CardFooter>
               </Card>
-              <ProgressBars percent1={getAccuracy(weekData)} percent2={getAccuracy(monthData)}/>
+              <ProgressBars percent1={weekData.length != 0 ? getAccuracy(weekData): 0} percent2={monthData.length != 0 ? getAccuracy(monthData): 0}/>
             </div>
                 <Card x-chunk="dashboard-05-chunk-3" id="questions">
                   <CardHeader className="px-7">
@@ -155,22 +155,6 @@ export default async function Dashboard() {
             Weekly Performance
           </CardTitle>
           <CardDescription>See how you performed across flashcard sets from the past week.</CardDescription>
-        </div>
-        <div className="ml-auto flex items-center gap-1">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button size="icon" variant="outline" className="h-8 w-8">
-                <MoreVertical className="h-3.5 w-3.5" />
-                <span className="sr-only">More</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem>Edit</DropdownMenuItem>
-              <DropdownMenuItem>Export</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Trash</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
         </div>
       </CardHeader>
       <CardContent className="p-6 text-sm">

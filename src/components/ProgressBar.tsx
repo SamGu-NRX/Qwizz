@@ -20,10 +20,10 @@ export default function ProgressBars({percent1, percent2}){
     return () => clearTimeout(timer)
   }, [])
 
-  const [progressMth, setProgressMth] = React.useState()
+  const [progressMth, setProgressMth] = React.useState(10)
  
   React.useEffect(() => {
-    const timer = setTimeout(() => setProgressMth(66), 500)
+    const timer = setTimeout(() => setProgressMth(percent2), 500)
     return () => clearTimeout(timer)
   }, [])
 

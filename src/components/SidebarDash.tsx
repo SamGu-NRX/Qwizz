@@ -19,6 +19,9 @@ import {
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import {usePathname} from 'next/navigation'
+import Image from "next/image"
+
+import logoPic from '../assets/StudyBuddyLogo.png'
 
 export default function Sidebar() {
     const pathName = usePathname()
@@ -50,9 +53,14 @@ export default function Sidebar() {
               <nav className="grid gap-6 text-lg font-medium">
                 <Link
                   href="/"
-                  className = {accentLinkStyle}
+                  className = "flex items-center text-2xl gap-4 px-2.5 text-foreground"
                 >
-                  <Package2 className="h-6 w-6" />
+                  <Image
+              src={logoPic}
+            width={40}
+            height={40}
+              alt="logo"
+              />
                   StudyBuddy
                 </Link>
                 <Link
