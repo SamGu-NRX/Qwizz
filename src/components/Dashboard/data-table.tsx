@@ -1,4 +1,4 @@
-"use server"
+"use client"
 import { Button } from "@/components/ui/button"
 
 import * as React from "react"
@@ -33,17 +33,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-import { db } from "@/../lib/db"
-
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
 }
 
-export async function DataTable<TData, TValue>({
+export function DataTable<TData, TValue>({
   columns,
   data,
+  
 }: DataTableProps<TData, TValue>) {
   const [position, setPosition] = React.useState("none")
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -173,13 +172,4 @@ export async function DataTable<TData, TValue>({
       </div>
     </div>
   )
-}
-
-async function fetchFlashcards() {
-  return await db.flashcards.findMany({
-    select: {
-      front: true,
-      back: true,
-    },
-  });
 }

@@ -47,8 +47,17 @@ import ProgressBars from '@/components/ProgressBar';
 
 import StatCharts from '@/components/StatGraphs';
 
+import { db } from "@/../lib/db"
 
 
+async function fetchFlashcards() {
+  return await db.flashcards.findMany({
+    select: {
+      front: true,
+      back: true,
+    },
+  });
+}
 
 async function getData(): Promise<Question[]> {
   let dataTableInfo = []
