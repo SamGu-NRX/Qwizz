@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useTransition } from 'react';
 // import { useSession, signIn, signOut } from 'next-auth/react';
 import { z, ZodSchema } from 'zod';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -17,6 +17,7 @@ import Email from 'next-auth/providers/email';
 // import { Input } from '@/components/ui/input';
 // import { Button } from '@/components/ui/button';
 import { Toaster, toast } from 'sonner'
+import { callbackify } from 'util';
 
 // Define types for state variables
 interface Errors {
@@ -41,6 +42,7 @@ interface FieldValues {
 const AuthForm = ({ mode, schema, children, csrfToken }: AuthFormProps) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [isPending, startTransition] = useTransition()
 
   // import and initalize zod schema
 
@@ -58,55 +60,82 @@ const AuthForm = ({ mode, schema, children, csrfToken }: AuthFormProps) => {
           password: data.password,
         }).then((result) => {
           if (result && result.error) {
-            console.error(result.error);
+            toast.error(result.error);
           } else {
-            console.log('Logged in');
-            router.push('/dashboard');
+            handlePostAuth();
           }
         });
       } else if (mode === 'signup') {
-        // Add sign-up logic
+        // sign up logic
+        // Replace with your actual sign-up logic
+        const response = await fetch('/api/auth/signup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+        const result = await response.json();
+        if (result && result.error) {
+          toast.error(result.error);
+        } else {
+          toast.success('Registration successful, please check your email to verify your account.');
+          // email?
+        }
       } else if (mode === 'resetPassword') {
         // Add reset password logic
+        // Replace with your actual reset password logic
+        const response = await fetch('/api/auth/reset-password', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email: data.email }),
+        });
+        const result = await response.json();
+        if (result && result.error) {
+          toast.error(result.error);
+        } else {
+          toast.success('Password reset email sent.');
+        }
       }
     } catch (error) {
-      console.error(error);
+      toast.error('An error occurred.');
     } finally {
       setIsLoading(false);
     }
   };
-  const handleSignIn = async (mode: string = '') => {
+
+  const handleSignIn = async (provider: string = '') => {
     setIsLoading(true);
     try {
-      if (mode) {
-        await signIn(mode);
-      } else {
-        await signIn();
+      if (provider) {
+        await signIn(provider, { redirectTo: false }).then((result) => {
+          if (result && result.error) {
+            console.error(result.error);
+          } else {
+            handlePostAuth();
+          };
+        });
       }
-      console.log("user", "Logged in with Email"); // change to actual username, fetch via GET from database
     } catch (error) {
-      console.error(error);
+      toast.error('An error occurred: ' + error);
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
 
-  const handlePostAuth = (user: { uid: any; }) => {
-    // Check if the user exists in the database
-    // This is a placeholder logic; replace with actual database check
-    const userExists = checkUserInDatabase(user.uid);
-    if (!userExists) {
+  const handlePostAuth = async () => {
+    const session = await fetch('/api/auth/session').then(res => res.json());
+    // if (!session.user.emailVerified) {
+    //   router.push('/confirm-email');
+    // } else
+    if (session.user.firstTime) {
       router.push('/onboarding');
     } else {
       router.push('/dashboard');
     }
-  };
-
-  const checkUserInDatabase = (uid: string) => {
-    // Placeholder function to check user in database
-    // Replace with actual database call
-    return false; // Assuming the user does not exist for demonstration
   };
 
   const inputClassNames = (field: keyof FieldValues) => {
