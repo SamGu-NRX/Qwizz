@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/drawer"
 
 import { Button } from "@/components/ui/button"
-import { ColumnDef } from "@tanstack/react-table"
+import { ColumnDef, Row } from "@tanstack/react-table"
 
 import { ArrowUpDown, MoreHorizontal } from "lucide-react"
 
@@ -93,12 +93,12 @@ export const columns: ColumnDef<Question>[] = [
       )
     },
     cell: ({ row }) => {
-        const date = (row.getValue("date"))
-        return (
-            <div>
-                {(date.getMonth()+1).toString().concat("-", (date.getDate()).toString()).concat("-", (date.getFullYear()).toString())}
-            </div>
-        )
+      const date: Date = row.getValue("date");
+      return (
+        <div>
+          {(date.getMonth() + 1).toString().concat("-", (date.getDate()).toString()).concat("-", (date.getFullYear()).toString())}
+        </div>
+      )
     },
   },
   {
@@ -108,9 +108,10 @@ export const columns: ColumnDef<Question>[] = [
   {
     accessorKey: "accuracy",
     header: () => <div>Accuracy</div>,
-    cell: ({ row }) => {
-      const accuracy = (row.getValue("accuracy"))
-      return <div>{accuracy.toString().concat("/", row.getValue("set-size").toString())}</div>
+    cell: ({ row }: { row: Row<Question> }) => {
+      const accuracy: number = row.getValue("accuracy");
+      const setSize: number = row.getValue("set-size");
+      return <div>{accuracy.toString().concat("/", setSize.toString())}</div>;
     },
   },
   {
