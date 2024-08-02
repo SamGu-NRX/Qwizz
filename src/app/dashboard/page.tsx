@@ -5,7 +5,7 @@ import { getSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { Session } from 'next-auth';
 import PrivateRoute from '@/components/PrivateRoute';
-import Dashboard from '../dashboard-force/test-page';
+import Dashboard from '@/components/Dashboard/Dashboard';
 
 // Define the type for the session state
 interface SessionType extends Session {
