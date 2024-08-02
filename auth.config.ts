@@ -17,7 +17,7 @@ import { getUserByEmail } from "@/data/user"
 // import { getAnalytics } from "firebase/analytics";
 // import "firebase/compat/firestore";
 // import firebaseConfig from "./firebaseConfig"
-import { EmailAuthProvider } from "firebase/auth"
+// import { EmailAuthProvider } from "firebase/auth"
 
 
 // // TODO: install fireadmin-sdk and use new authjs: https://authjs.dev/getting-started/adapters/firebase
@@ -31,12 +31,8 @@ export default {
     Github({
       clientId: process.env.AUTH_GITHUB_CLIENT_ID ?? 'default',
       clientSecret: process.env.AUTH_GITHUB_CLIENT_SECRET ?? 'default',
-      clientId: process.env.AUTH_GITHUB_CLIENT_ID ?? 'default',
-      clientSecret: process.env.AUTH_GITHUB_CLIENT_SECRET ?? 'default',
     }),
     Google({
-      clientId: process.env.AUTH_GOOGLE_CLIENT_ID ?? 'default',
-      clientSecret: process.env.AUTH_GOOGLE_CLIENT_SECRET ?? 'default',
       clientId: process.env.AUTH_GOOGLE_CLIENT_ID ?? 'default',
       clientSecret: process.env.AUTH_GOOGLE_CLIENT_SECRET ?? 'default',
     }),
@@ -85,5 +81,6 @@ export default {
       }
     })
   ],
+  secret: process.env.AUTH_SECRET,
   // adapter: FirestoreAdapter(firestore),
 } satisfies NextAuthConfig

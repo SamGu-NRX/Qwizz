@@ -19,7 +19,7 @@ model User {
   id            String    @id @default(auto()) @map("_id") @db.ObjectId
   name          String?
   email         String?   @unique
-  emailVerified DateTime?
+  emailVerified DateTime?  @map("email_verified")
   phoneNumber   String?
   image         String?
   password      String?
@@ -29,6 +29,8 @@ model User {
 
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+  
+  @@map("users")
 }
 
 model Account {
@@ -45,12 +47,13 @@ model Account {
   id_token          String? @db.String
   session_state     String?
  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt         DateTime @default(now()) @map(name: "created_at")
+  updatedAt         DateTime @default(now()) @map(name: "updated_at")
  
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
  
   @@unique([provider, providerAccountId])
+  @@map("accounts")
 }
  
 model Session {
@@ -62,6 +65,8 @@ model Session {
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map("sessions")
 }
 model VerificationToken {
   id        String   @id @default(cuid()) @map("_id")

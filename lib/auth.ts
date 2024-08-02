@@ -14,7 +14,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     error: '/auth/error',
   },
   events: {
-    async linkAccount({ user }: { user: { id: string } }) {
+    async linkAccount({ user }) {
       await db.user.update({
         where: { id: user.id },
         data: { emailVerified: new Date() }
@@ -22,7 +22,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }
   },
   callbacks: {
-    signIn: async ({ user, account }: { user: { id: string }; account: any }) => {
+    signIn: async ({ user, account }) => {
       if (account?.provider !== "credentials") return true;
       const existingUser = await getUserById(user.id ?? '');
       if (!existingUser?.emailVerified) return false;
@@ -37,7 +37,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }  
       return session;
     },
-    jwt: async ({ token }: { token: { sub: string; role?: UserRole } }) => {
+    jwt: async ({ token }) => {
       if (!token.sub) return token;
       const existingUser = await getUserById(token.sub);
       if (!existingUser) return token;
