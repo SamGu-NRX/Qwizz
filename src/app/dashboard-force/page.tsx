@@ -19,7 +19,7 @@ import ProgressBars from '@/components/ProgressBar';
 import StatCharts from '@/components/StatGraphs';
 import { fadeUp } from '@/animations/gsap';
 
-function getAccuracy(data: DataItem[]) {
+function getAccuracy(data: Question[]) {
   if (!data || data.length === 0) {
     return 90;
   }
@@ -33,22 +33,13 @@ function getAccuracy(data: DataItem[]) {
   return Math.round((correct / total) * 100);
 }
 
-interface DataItem {
-  title: string[];
-  id: number;
-  type: string; 
-  date: Date; 
-  accuracy: number; 
-  "set-size": number; 
-}
-
 interface DashboardProps {
-  data: DataItem[];
+  data: Question[];
   todayDate: Date;
-  weekData: DataItem[];
-  lastWeekData: DataItem[];
-  monthData: DataItem[];
-  yearData: DataItem[];
+  weekData: Question[];
+  lastWeekData: Question[];
+  monthData: Question[];
+  yearData: Question[];
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ data, todayDate, weekData, lastWeekData, monthData, yearData }) => {
