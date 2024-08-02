@@ -6,12 +6,14 @@ import { useEffect, useState } from 'react';
 import { Session } from 'next-auth';
 import PrivateRoute from '@/components/PrivateRoute';
 import Dashboard from '@/components/Dashboard/Dashboard';
+import { UserRole } from '.prisma/client/default.js';
 
 // Define the type for the session state
 interface SessionType extends Session {
   user: {
     name: string;
     email: string;
+    role: UserRole;
   };
 }
 
