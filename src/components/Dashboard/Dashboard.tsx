@@ -1,5 +1,3 @@
-"use server";
-
 import Head from 'next/head';
 import Tutorial from '@/components/Onboarding/Tutorial';
 import ClientOverlay from '@/components/Onboarding/ClientOverlay';

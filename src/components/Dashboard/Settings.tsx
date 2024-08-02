@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import { CircleUser, Menu, Package2, Search } from "lucide-react";
 

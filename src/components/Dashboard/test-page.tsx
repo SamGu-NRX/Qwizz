@@ -1,4 +1,3 @@
-"use client";
 import { signOut } from 'next-auth/react';
 
 import Navbar from '../../components/Navbar';

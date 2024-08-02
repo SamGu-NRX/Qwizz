@@ -1,5 +1,3 @@
-"use client"
-
 import {
   Drawer,
   DrawerClose,
@@ -15,8 +13,6 @@ import { Button } from "@/components/ui/button"
 import { ColumnDef } from "@tanstack/react-table"
 
 import { ArrowUpDown, MoreHorizontal } from "lucide-react"
-
-import Dashboard from "./page"
 
 import {
   DropdownMenu,

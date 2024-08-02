@@ -1,35 +1,13 @@
 "use client";
 
-// app/dashboard/page.tsx
-import { getSession } from 'next-auth/react';
-import { useEffect, useState } from 'react';
-import { Session } from 'next-auth';
+import { useSession } from 'next-auth/react';
 import PrivateRoute from '@/components/PrivateRoute';
 import Dashboard from '@/components/Dashboard/Dashboard';
 
-// Define the type for the session state
-interface SessionType extends Session {
-  user: {
-    name: string;
-    email: string;
-  };
-}
-
 const DashboardNav = () => {
-  const [session, setSession] = useState<SessionType | null>(null);
+  const { data: session, status } = useSession();
 
-  useEffect(() => {
-    getSession().then((sessionData) => {
-      if (sessionData) {
-        // Type assertion to ensure sessionData conforms to SessionType
-        setSession(sessionData as SessionType);
-      } else {
-        setSession(null);
-      }
-    });
-  }, []);
-
-  if (!session) {
+  if (status === "loading") {
     return <div>Loading...</div>;
   }
 
