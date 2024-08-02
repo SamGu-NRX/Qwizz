@@ -20,7 +20,7 @@ const Hero = () => {
           ref={heroRef}
         >
           <h1 className="text-white text-5xl font-bold" ref={el => { if (el) elementsRef.current[0] = el; }}>StudyBuddy</h1>
-          <p className="text-white mt-4" ref={el => { if (el) elementsRef.current[1] = el; }}>Your Intelligent Study Companion</p>
+          <p className="text-white mt-4" ref={el => { if (el) elementsRef.current[1] = el; }}>Your All-in-One Intelligent Study Companion</p>
           <motion.button 
             className="mt-6 px-4 py-2 bg-white text-blue-500 font-bold rounded-full "
             ref={el => { if (el) elementsRef.current[2] = el; }}

@@ -18,10 +18,21 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import {usePathname} from 'next/navigation'
+import { usePathname } from 'next/navigation'
+import { useEffect, useRef } from "react";
+import { fadeUp } from "@/animations/gsap";
 
 export default function Sidebar() {
     const pathName = usePathname()
+    const iconRefs = useRef<HTMLAnchorElement[] | null>(null);
+
+    useEffect(() => {
+      if (iconRefs.current) {
+        iconRefs.current.forEach((icon, index) => {
+          fadeUp(icon, icon, { delay: index * 0.1 });
+        });
+      }
+    }, []);
 
     const accentIconStyle = "flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
     const mutedIconStyle = "flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
@@ -51,10 +62,12 @@ export default function Sidebar() {
                 <Link
                   href="/"
                   className = {accentLinkStyle}
+                  ref={(el) => { if (el) iconRefs.current![0] = el; }}
                 >
                   <Package2 className="h-6 w-6" />
                   StudyBuddy
                 </Link>
+
                 <Link
                   href="/dashboard-force"
                   className= {pathName == "/dashboard-force" ? accentLinkStyle : mutedLinkStyle}

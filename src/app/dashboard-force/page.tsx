@@ -47,7 +47,7 @@ const Dashboard: React.FC<DashboardProps> = ({ data, todayDate, weekData, lastWe
   const elementsRef = useRef<(HTMLHeadingElement | HTMLParagraphElement | HTMLButtonElement)[]>([]);
   useEffect(() => {
       if (dashboardRef.current) {
-        fadeUp(elementsRef.current.filter(el => el !== null) as HTMLElement[], dashboardRef.current, { delay: 0.05, start: 'top 80%', ease: 'power3.inOut' });
+        fadeUp(elementsRef.current.filter(el => el !== null) as HTMLElement[], dashboardRef.current, { delay: 0.05, start: 'top 80%', ease: 'power3.inOut', stagger: 0.1 });
       }
     }, []);
 
@@ -68,7 +68,7 @@ const Dashboard: React.FC<DashboardProps> = ({ data, todayDate, weekData, lastWe
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
-      <ClientOverlay />
+      {/* <ClientOverlay /> */}
       <Sidebar />
       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
         <Header />

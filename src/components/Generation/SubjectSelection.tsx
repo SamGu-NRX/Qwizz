@@ -50,16 +50,21 @@ export function SubjectSelection() {
   const isDesktop = useMediaQuery("(min-width: 768px)")
   const [selectedSubject, setSelectedSubject] = React.useState<Subject | null>(null)
 
+  const handleSelectSubject = (subject: Subject | null) => {
+    setSelectedSubject(subject)
+    setOpen(false)
+  }
+
   if (isDesktop) {
     return (
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <Button variant="outline" className="w-[150px] justify-start text-center items-center">
+          <Button variant="outline" className="w-[200px] justify-start ">
             {selectedSubject ? <>{selectedSubject.label}</> : <>+ Select Subject</>}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-[200px] p-0" align="start">
-          <SubjectList setOpen={setOpen} setSelectedSubject={setSelectedSubject} />
+          <SubjectList onSelect={handleSelectSubject} />
         </PopoverContent>
       </Popover>
     )
@@ -68,13 +73,13 @@ export function SubjectSelection() {
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button variant="outline" className="w-[150px] justify-start">
+        <Button variant="outline" className="w-[200px] justify-start">
           {selectedSubject ? <>{selectedSubject.label}</> : <>+ Select Subject</>}
         </Button>
       </DrawerTrigger>
       <DrawerContent>
-        <div className="mt-4 border-t">
-          <SubjectList setOpen={setOpen} setSelectedSubject={setSelectedSubject} />
+        <div className="mt-4 p-4 border-t">
+          <SubjectList onSelect={handleSelectSubject} />
         </div>
       </DrawerContent>
     </Drawer>
@@ -82,11 +87,9 @@ export function SubjectSelection() {
 }
 
 function SubjectList({
-  setOpen,
-  setSelectedSubject,
+  onSelect,
 }: {
-  setOpen: (open: boolean) => void
-  setSelectedSubject: (subject: Subject | null) => void
+  onSelect: (subject: Subject | null) => void
 }) {
   return (
     <Command>
@@ -99,10 +102,9 @@ function SubjectList({
               key={subject.value}
               value={subject.value}
               onSelect={(value) => {
-                setSelectedSubject(
-                  subjects.find((priority: { value: string }) => priority.value === value) || null
+                onSelect(
+                  subjects.find((s: { value: string }) => s.value === value) || null
                 )
-                setOpen(false)
               }}
             >
               {subject.label}
