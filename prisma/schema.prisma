@@ -9,6 +9,42 @@ datasource db {
   // relationMode = "prisma"
 }
 
+model Flashcards {
+  id         String                 @id @default(auto()) @map("_id") @db.ObjectId
+  flashcards FlashcardsFlashcards[]
+}
+
+type FlashcardsFlashcards {
+  ID           String
+  choices      FlashcardsFlashcardsChoices
+  chosen       String
+  correct      String
+  date         FlashcardsFlashcardsDate
+  explaination String
+  question     String
+  subject      String
+  title        String
+}
+
+type FlashcardsFlashcardsChoices {
+  A String
+  B String
+  C String
+  D String
+}
+
+type FlashcardsFlashcardsDate {
+  day   Int
+  month Int
+  time  String
+  year  Int
+}
+
+model ContextFiles {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+}
+
+// User Info starts here
 
 enum UserRole {
   USER
@@ -19,7 +55,7 @@ model User {
   id            String    @id @default(auto()) @map("_id") @db.ObjectId
   name          String?
   email         String?   @unique
-  emailVerified DateTime? @map("email_verified")
+  emailVerified DateTime?  @map("email_verified")
   phoneNumber   String?
   image         String?
   password      String?
@@ -29,8 +65,6 @@ model User {
 
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
-
-  firstTime     Boolean @default(true)
   
   @@map("users")
 }
@@ -87,17 +121,3 @@ model PasswordResetToken {
 
   @@unique([email, token])
 }
-
-// model Purchase {
-//   id String @id @default(uuid())
-//   userId String
-// }
-
-// model StripeCustomer {
-//   id String @id @default(uuid())
-//   userId String @unique
-//   stripeCustomerId String @unique
-
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-// }
