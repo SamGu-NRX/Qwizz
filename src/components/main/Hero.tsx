@@ -27,7 +27,7 @@ const Hero = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => {
-              // Implement onClick function to redirect to dashboard/login based on auth
+              window.location.href = "/auth/login";
             }}
           >
             Get Started
