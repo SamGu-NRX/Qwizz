@@ -1,9 +1,10 @@
 # StudyBuddy
 
-Improve your learning skills with an all-in-one education assistant with unlimited MCQ and flashcard generation. Practice for standardized test, difficult subjects, and active recall.
+Improve your learning skills with an all-in-one education assistant with unlimited MCQ and flashcard generation. Practice for standardized tests, difficult subjects, and active recall.
 
 ## Features
-Dashboard Overview
+Dashboard Overview: Smooth Animations and Real-time statistics
+
 ![Dashboard and Statistics Page](https://github.com/user-attachments/assets/33cfdb54-187d-4814-b175-21fbe5fedc0e)
 
 Responsive Onboarding: Document Upload + OCR detection linking to local storage (refresh resistant)
