@@ -45,7 +45,11 @@ const subjects: Subject[] = [
   // Add more subjects as needed
 ]
 
-export function SubjectSelection() {
+interface SubjectSelectionProps {
+  onSubjectSelect: (subject: Subject | null) => void
+}
+
+export function SubjectSelection({ onSubjectSelect }: SubjectSelectionProps) {
   const [open, setOpen] = React.useState(false)
   const isDesktop = useMediaQuery("(min-width: 768px)")
   const [selectedSubject, setSelectedSubject] = React.useState<Subject | null>(null)
@@ -53,6 +57,7 @@ export function SubjectSelection() {
   const handleSelectSubject = (subject: Subject | null) => {
     setSelectedSubject(subject)
     setOpen(false)
+    onSubjectSelect(subject) // Call the parent callback with the selected subject
   }
 
   if (isDesktop) {

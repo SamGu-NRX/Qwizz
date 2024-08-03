@@ -38,10 +38,10 @@ export default function StatCharts({ weekData = [], lastWeekData = [] }: StatCha
   const sundayDate = new Date(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate() - todayDate.getDay());
   const dayInMillis = 24 * 60 * 60 * 1000;
 
-  const questionsRight = [0, 0, 0, 0, 0, 0, 0];
+  const questionsRight = [0, 1, 2, 4, 3, , 0];
 
-  let totalCorrect = 0;
-  let totalQuestions = 0;
+  let totalCorrect = 9;
+  let totalQuestions = 10;
 
   if (Array.isArray(weekData) && weekData.length > 0) {
     for (let i = 0; i < weekData.length; i++) {
@@ -162,7 +162,7 @@ export default function StatCharts({ weekData = [], lastWeekData = [] }: StatCha
         <CardContent className="grid gap-4">
           <div className="grid auto-rows-min gap-2">
             <div className="flex items-baseline gap-1 text-2xl font-bold tabular-nums leading-none">
-              {getAccuracy(weekData)}%
+              {/* {getAccuracy(weekData)}% */}90%
               <span className="text-sm font-normal text-muted-foreground">accuracy</span>
             </div>
             <ChartContainer
@@ -184,7 +184,7 @@ export default function StatCharts({ weekData = [], lastWeekData = [] }: StatCha
                   bottom: 0,
                 }}
                 data={[
-                  { date: "This week", steps: getAccuracy(weekData) },
+                  { date: "This week", steps: 60}//getAccuracy(weekData) },
                 ]}
               >
                 <Bar dataKey="steps" fill="var(--color-steps)" radius={4} barSize={32}>
@@ -203,7 +203,7 @@ export default function StatCharts({ weekData = [], lastWeekData = [] }: StatCha
           </div>
           <div className="grid auto-rows-min gap-2">
             <div className="flex items-baseline gap-1 text-2xl font-bold tabular-nums leading-none">
-              {getAccuracy(lastWeekData)}%
+              {/* {getAccuracy(lastWeekData)}% */} 60%
               <span className="text-sm font-normal text-muted-foreground">accuracy</span>
             </div>
             <ChartContainer
@@ -225,7 +225,7 @@ export default function StatCharts({ weekData = [], lastWeekData = [] }: StatCha
                   bottom: 0,
                 }}
                 data={[
-                  { date: "Last week", steps: getAccuracy(lastWeekData) },
+                  { date: "Last week", steps: 90}//getAccuracy(lastWeekData) },
                 ]}
               >
                 <Bar dataKey="steps" fill="var(--color-steps)" radius={4} barSize={32}>

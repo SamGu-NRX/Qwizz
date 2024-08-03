@@ -33,6 +33,21 @@ const FlashcardApp = () => {
     }
   };
 
+  const handleGenerateMoreFlashCards = async () => {
+    setIsLoading(true);
+    try {
+      const newFlashcardss = await flash_cards(question);
+      const newFlashcards = newFlashcardss["flashcards"];
+      console.log(newFlashcards);
+      setFlashcards((prevFlashcards) => [...prevFlashcards, ...newFlashcards]);
+      localStorage.setItem("flashcards", JSON.stringify([...flashcards, ...newFlashcards]));
+    } catch (error) {
+      console.error("Error generating more flashcards:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Load flashcards and current index from local storage on component mount
   useEffect(() => {
     const savedFlashcards = localStorage.getItem("flashcards");
@@ -50,44 +65,41 @@ const FlashcardApp = () => {
     localStorage.setItem("flashcards", JSON.stringify(flashcards));
     localStorage.setItem("currentIndex", currentIndex.toString());
   }, [flashcards, currentIndex]);
-  
 
   const nextCard = () => {
     if (currentIndex < flashcards.length - 1) {
       gsap.to(cardRef.current, {
-        duration: 0.3,
-        x: -100,
+        duration: 0.4,
+        x: -300,
         opacity: 0,
-        ease: "power3.out",
+        ease: "power3.Out",
         onComplete: () => {
           setCurrentIndex(currentIndex + 1);
           setIsFlipped(false);
           gsap.fromTo(
             cardRef.current,
             { x: 300, opacity: 0 },
-            { duration: 0.3, x: 0, opacity: 1 }
+            { duration: 0.45, x: 0, opacity: 1, ease: "power3.out" }
           );
         },
       });
-    } else {
-      setCanGenerate(true);
     }
   };
 
   const prevCard = () => {
     if (currentIndex > 0) {
       gsap.to(cardRef.current, {
-        duration: 0.3,
+        duration: 0.4,
         x: 300,
         opacity: 0,
-        ease: "power3.out",
+        ease: "power3.Out",
         onComplete: () => {
           setCurrentIndex(currentIndex - 1);
           setIsFlipped(false);
           gsap.fromTo(
             cardRef.current,
             { x: -300, opacity: 0 },
-            { duration: 0.3, x: 0, opacity: 1 }
+            { duration: 0.45, x: 0, opacity: 1, ease: "power3.out" }
           );
         },
       });
@@ -97,6 +109,8 @@ const FlashcardApp = () => {
   const flipCard = () => {
     setIsFlipped(!isFlipped);
   };
+
+  const progress = flashcards.length > 0 ? (currentIndex + 1) / flashcards.length * 100 : 0;
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
@@ -132,14 +146,21 @@ const FlashcardApp = () => {
         </button>
       </div>
 
+      {flashcards.length > 0 ? (
+        <div className="w-full max-w-md h-2 bg-gray-200 rounded-full mb-4">
+          <div
+            className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full transition-width duration-300"
+            style={{ width: `${progress}%` }}
+          ></div>
+        </div>
+      ) : (
+        <p>No flashcards available</p>
+      )}
+
       {flashcards.length > 0 && (
         <AnimatePresence mode="wait">
           <motion.div
             key={currentIndex}
-            initial={{ opacity: 0, x: 300 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -300 }}
-            transition={{ duration: 0.3 }}
             className="w-full max-w-md h-64 perspective"
           >
             <motion.div
@@ -148,30 +169,28 @@ const FlashcardApp = () => {
               onClick={flipCard}
               animate={{ rotateY: isFlipped ? 180 : 0 }}
               transition={{ duration: 0.6 }}
-              // style={{ transformStyle: "preserve-3d" }}
             >
-             {!isFlipped && (
-              <div className="absolute w-full h-full backface-hidden bg-white p-6 rounded-lg shadow-lg flex items-center justify-center text-center">
-                <p className="text-xl">{flashcards[currentIndex]["front"]}</p>
-              </div>
-              )} 
-              
-              {isFlipped && (
-              <motion.div
-                animate={{ rotateY: isFlipped ? 180 : 0 }}
-                transition={{ duration: 0.6 }}
-                className="absolute w-full h-full backface-hidden bg-white p-6 rounded-lg shadow-lg flex items-center justify-center text-center"
-              >
-                <p className="text-xl">{flashcards[currentIndex]["back"]}</p>
-              </motion.div>
+              {!isFlipped && (
+                <div className="absolute w-full h-full backface-hidden bg-white p-6 rounded-lg shadow-lg flex items-center justify-center text-center">
+                  <p className="text-xl">{flashcards[currentIndex]["front"]}</p>
+                </div>
               )}
 
+              {isFlipped && (
+                <motion.div
+                  animate={{ rotateY: isFlipped ? 180 : 0 }}
+                  transition={{ duration: 0.6 }}
+                  className="absolute w-full h-full backface-hidden bg-white p-6 rounded-lg shadow-lg flex items-center justify-center text-center"
+                >
+                  <p className="text-xl">{flashcards[currentIndex]["back"]}</p>
+                </motion.div>
+              )}
             </motion.div>
           </motion.div>
         </AnimatePresence>
       )}
 
-      <div className="flex justify-between w-full max-w-md mt-8">
+      <div className="flex justify-between items-center w-full max-w-md mt-8">
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
@@ -181,6 +200,11 @@ const FlashcardApp = () => {
         >
           <ChevronLeft size={24} />
         </motion.button>
+
+        <div className="text-lg">
+          {flashcards.length > 0 ? currentIndex + 1 : 0} / {flashcards.length}
+        </div>
+
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
@@ -191,6 +215,23 @@ const FlashcardApp = () => {
           <ChevronRight size={24} />
         </motion.button>
       </div>
+
+      {currentIndex === flashcards.length - 1 && (
+        <button
+          className="mt-8 w-full max-w-md p-3 rounded bg-blue-500 text-white hover:bg-blue-600 transition-colors"
+          onClick={handleGenerateMoreFlashCards}
+          disabled={isLoading}
+        >
+          {isLoading ? (
+            <div className="">
+              <Loader className="animate-spin mx-auto" />
+              <p className="p-2">Generating more flashcards...</p>
+            </div>
+          ) : (
+            "Generate More Flashcards"
+          )}
+        </button>
+      )}
     </div>
   );
 };

@@ -4,6 +4,7 @@ import React from "react";
 import { BentoGrid, BentoGridItem } from "../ui/bento-grid";
 import { motion } from "framer-motion";
 import { HeroHighlight, Highlight } from "../ui/hero-highlight";
+import {AIQuestionDifficulty, SaveQuestions, ProgressTracking, MobileFriendly, CustomizableStudyPlans} from "@/components/icons"
 import {
   Bot,
   Save,
@@ -11,6 +12,8 @@ import {
   Settings,
   ChartNoAxesCombined
 } from "lucide-react"
+import Image from "next/image"
+// import statsImage from "@/assets/analytics.png"
 
 export default function HomeGrid() {
     return (
@@ -28,8 +31,8 @@ export default function HomeGrid() {
         <div className="text-3xl md:text-5xl font-bold dark:text-white text-center">
           Features
         </div>
-        <div className="text-center font-light text-base md:text-xl dark:text-neutral-200 py-4 max-w-2xl">
-          StudyBuddy offers a variety of functionalities that allow efficient studying for students and a streamlined and automated process of creating new flashcards.   
+        <div className="text-center font-light text-base md:text-xl dark:text-neutral-200 py-4 max-w-3xl">
+          StudyBuddy offers a variety of functionalities that allow efficient studying for students and an automated process of generating study flashcards.   
         </div>
       </motion.div>
       <BentoGrid className="max-w-5xl mx-auto">
@@ -40,7 +43,7 @@ export default function HomeGrid() {
             description={item.description}
             header={item.header}
             icon={item.icon}
-            className={i === 3 || i === 6 ? "md:col-span-2 " : ""}
+            className={i === 4? "md:col-span-2 " : ""}
           />
         ))}
       </BentoGrid>
@@ -54,32 +57,32 @@ export default function HomeGrid() {
     {
       title: "AI-Generated Question Difficulties",
       description: "Adaptive AI assesses the difficulty level of each generated question, ensuring a balanced and effective study experience.",
-      header: <Skeleton />,
+      header: <AIQuestionDifficulty />,
       icon: <Bot className="h-4 w-4 text-neutral-500" />,
     },
     {
       title: "Popup for Saving Questions",
       description: "Users can save questions to a shared database, contributing to a communal study resource.",
-      header: <Skeleton />,
+      header: <SaveQuestions />,
       icon: <Save className="h-4 w-4 text-neutral-500" />,
+    },
+    {
+      title: "Progress Tracking and Analytics",
+      description: "See your study insights, track performance and study habits to learn more effectively and efficiently.",
+      header: <ProgressTracking/>,//<div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl bg-analytics-image bg-cover"></div>,
+      icon: <ChartNoAxesCombined className="h-4 w-4 text-neutral-500" />,
     },
     {
       title: "Mobile-Friendly Design",
       description: "Ensures the platform is accessible and fully functional on mobile devices.",
-      header: <Skeleton />,
+      header: <MobileFriendly />,
       icon: <Smartphone className="h-4 w-4 text-neutral-500" />,
     },
     {
       title: "Customizable Study Plans",
       description:
         "Allows users to create and follow personalized study plans based on their goals and schedules.",
-      header: <Skeleton />,
+      header: <CustomizableStudyPlans />,
       icon: <Settings className="h-4 w-4 text-neutral-500" />,
-    },
-    {
-      title: "Progress Tracking and Analytics",
-      description: "See your study insights, track performance and study habits to learn more effectively and efficiently.",
-      header: <Skeleton />,
-      icon: <ChartNoAxesCombined className="h-4 w-4 text-neutral-500" />,
     },
   ];

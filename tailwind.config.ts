@@ -105,6 +105,7 @@ const config: Config = {
       backgroundImage: {
         'rainbow-gradient': 'linear-gradient(100deg, #DD7DDF, #E1CD86, #BBCB92, #71C2EF, #3BFFFF, #DD7DFF)',
         'homebackground': "url('/home-background.png')",
+        'analytics-image': "url('/Analytics.png')"
       },
     },
     plugins: [

@@ -133,8 +133,8 @@ export default function Onboarding() {
     saveToLocalStorage({ gradeLevel: value })
   }
 
-  const handleSubjectSelect = (subject: string) => {
-    setValue('subject', subject)
+  const handleSubjectSelect = (subject: Subject | null) => {
+    setValue('subject', subject?.value || '')
     saveToLocalStorage({ subject })
   }
 
@@ -220,7 +220,7 @@ export default function Onboarding() {
 
               <div className='sm:col-span-3 flex flex-col pt-[36px]'>
                 <SubjectSelection 
-                  onSelect={handleSubjectSelect}
+                  onSubjectSelect={handleSubjectSelect}
                 />
                 {errors.subject?.message && (
                   <p className='mt-2 text-sm text-red-400'>

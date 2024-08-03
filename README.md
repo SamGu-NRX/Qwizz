@@ -14,9 +14,7 @@ include a link and a screenshot (we're front end devs so we can actually see our
 
 **Backend**: MongoDB, Prisma ORM
 
-**APIs**: Resend (Emailing)
-
-**Authentication**: Firebase, NextAuth
+**APIs**: Resend (Emailing/Authentication), NextAuth (Authentication)
 
 **File Storage**: MongoDB Atlas
 
@@ -61,3 +59,47 @@ To learn more about Next.js, take a look at the following resources:
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+
+## How to run
+
+### Requirements
+
+python 3 and pip
+
+nodejs and a js package manager of your choise
+
+for best results use pnpm for your package manager
+
+### Step 1
+
+> node setup and run
+
+run ` ./setup.sh ` or ` ./setup.bat ` depending on your os
+
+or if not using pnpm
+
+`<package manager> install`
+
+`<package manager run (ex: npx)> prisma generate`
+
+`<package manager run (ex: npx)> prisma db push`
+
+finally
+
+`pnpm dev` or `<package manager> run dev`
+
+### Step 2
+
+> python setup and run
+
+open a new terminal
+
+`cd ./GPT_API`
+
+`pip install -r ./reqirements.txt`
+
+`python -m flask run`
+
+make sure it is on port 5000 or update .env
+
+.env defualt is `FLASK_API_URL=http://127.0.0.1:5000/`
