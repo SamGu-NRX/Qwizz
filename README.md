@@ -1,8 +1,9 @@
 # StudyBuddy
 
-
+![studybuddydashboard](https://github.com/user-attachments/assets/cdc9b76b-fbb6-4ea3-99d8-433935325c53)
+<!--
 **Link to project:** [http://yourstudybuddy.vercel.app](http://yourstudybuddy.vercel.app)
-
+-->
 
 ## How It's Made
 
