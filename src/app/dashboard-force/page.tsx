@@ -71,9 +71,12 @@ const Dashboard: React.FC<DashboardProps> = ({ data, todayDate, weekData, lastWe
     }
   }
 
+  console.log(data)
+
+
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
-      {/* <ClientOverlay /> */}
+      <ClientOverlay />
       <Sidebar />
       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
         <Header />
@@ -91,7 +94,7 @@ const Dashboard: React.FC<DashboardProps> = ({ data, todayDate, weekData, lastWe
                 }}
               >
                 <CardHeader className="pb-3">
-                  <CardTitle>Hello, Arthur!</CardTitle>
+                  <CardTitle>Hello, Sam!</CardTitle>
                   <CardDescription className="max-w-lg text-balance leading-relaxed">
                     Welcome back to StudyBuddy, your intelligent study companion! Start improving your learning with AI today!
                   </CardDescription>
@@ -121,7 +124,7 @@ const Dashboard: React.FC<DashboardProps> = ({ data, todayDate, weekData, lastWe
                 <CardDescription>Recent questions you answered this week.</CardDescription>
               </CardHeader>
               <CardContent>
-                {Array.isArray(data) ? <DataTable columns={columns} data={data} /> : <div>Invalid data type. Expected an array.</div>}
+                {Array.isArray(data) ? <DataTable columns={columns} data={data} /> : <div>You haven{`'`}t answered any questions today! Go practice!</div>}
               </CardContent>
             </Card>
           </div>

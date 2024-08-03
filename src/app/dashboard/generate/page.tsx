@@ -5,8 +5,13 @@ import { ChevronLeft, ChevronRight, Loader } from "lucide-react";
 import { flash_cards } from "@/actions/get-flashcard";
 import { gsap } from "gsap";
 
+interface Flashcard {
+  front: string;
+  back: string;
+  id: number;
+}
 const FlashcardApp = () => {
-  const [flashcards, setFlashcards] = useState([]);
+  const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
   const [question, setQuestion] = useState("");
@@ -53,7 +58,12 @@ const FlashcardApp = () => {
     const savedFlashcards = localStorage.getItem("flashcards");
     const savedIndex = localStorage.getItem("currentIndex");
     if (savedFlashcards) {
-      setFlashcards(JSON.parse(savedFlashcards));
+      try {
+        setFlashcards(JSON.parse(savedFlashcards));
+      } catch (error) {
+        console.error("Error parsing flashcards from localStorage:", error);
+        localStorage.removeItem("flashcards");
+      }
     }
     if (savedIndex) {
       setCurrentIndex(parseInt(savedIndex, 10));
@@ -62,12 +72,14 @@ const FlashcardApp = () => {
 
   // Save flashcards and current index to local storage whenever they change
   useEffect(() => {
-    localStorage.setItem("flashcards", JSON.stringify(flashcards));
-    localStorage.setItem("currentIndex", currentIndex.toString());
+    if (flashcards) {
+      localStorage.setItem("flashcards", JSON.stringify(flashcards));
+      localStorage.setItem("currentIndex", currentIndex.toString());
+    }
   }, [flashcards, currentIndex]);
 
   const nextCard = () => {
-    if (currentIndex < flashcards.length - 1) {
+    if (flashcards && currentIndex < flashcards.length - 1) {
       gsap.to(cardRef.current, {
         duration: 0.4,
         x: -300,
@@ -87,7 +99,7 @@ const FlashcardApp = () => {
   };
 
   const prevCard = () => {
-    if (currentIndex > 0) {
+    if (flashcards && currentIndex > 0) {
       gsap.to(cardRef.current, {
         duration: 0.4,
         x: 300,
@@ -110,7 +122,7 @@ const FlashcardApp = () => {
     setIsFlipped(!isFlipped);
   };
 
-  const progress = flashcards.length > 0 ? (currentIndex + 1) / flashcards.length * 100 : 0;
+  const progress = flashcards && flashcards.length > 0 ? (currentIndex + 1) / flashcards.length * 100 : 0;
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
@@ -125,11 +137,10 @@ const FlashcardApp = () => {
           disabled={!canGenerate || isLoading}
         />
         <button
-          className={`mt-2 w-full p-3 rounded transition-colors ${
-            canGenerate && !isLoading
-              ? "bg-blue-500 text-white hover:bg-blue-600"
-              : "bg-gray-300 text-gray-500 cursor-not-allowed"
-          }`}
+          className={`mt-2 w-full p-3 rounded transition-colors ${canGenerate && !isLoading
+            ? "bg-blue-500 text-white hover:bg-blue-600"
+            : "bg-gray-300 text-gray-500 cursor-not-allowed"
+            }`}
           onClick={handleGenerateFlashCard}
           disabled={!canGenerate || isLoading}
         >
@@ -146,7 +157,7 @@ const FlashcardApp = () => {
         </button>
       </div>
 
-      {flashcards.length > 0 ? (
+      {flashcards && flashcards.length > 0 ? (
         <div className="w-full max-w-md h-2 bg-gray-200 rounded-full mb-4">
           <div
             className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full transition-width duration-300"
@@ -157,7 +168,7 @@ const FlashcardApp = () => {
         <p>No flashcards available</p>
       )}
 
-      {flashcards.length > 0 && (
+      {flashcards && flashcards.length > 0 && (
         <AnimatePresence mode="wait">
           <motion.div
             key={currentIndex}
@@ -202,7 +213,7 @@ const FlashcardApp = () => {
         </motion.button>
 
         <div className="text-lg">
-          {flashcards.length > 0 ? currentIndex + 1 : 0} / {flashcards.length}
+          {flashcards && flashcards.length > 0 ? currentIndex + 1 : 0} / {flashcards ? flashcards.length : 0}
         </div>
 
         <motion.button
@@ -210,13 +221,13 @@ const FlashcardApp = () => {
           whileTap={{ scale: 0.9 }}
           className="p-2 rounded-full bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
           onClick={nextCard}
-          disabled={currentIndex === flashcards.length - 1}
+          disabled={flashcards && currentIndex === flashcards.length - 1}
         >
           <ChevronRight size={24} />
         </motion.button>
       </div>
 
-      {currentIndex === flashcards.length - 1 && (
+      {flashcards && currentIndex === flashcards.length - 1 && flashcards.length > 0 && (
         <button
           className="mt-8 w-full max-w-md p-3 rounded bg-blue-500 text-white hover:bg-blue-600 transition-colors"
           onClick={handleGenerateMoreFlashCards}

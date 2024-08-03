@@ -111,7 +111,7 @@ const Navbar = () => {
             </div>
 
             {/* Avatar and Dropdown Menu */}
-              <DropdownMenu>
+              {/* <DropdownMenu>
                <DropdownMenuTrigger>
                   <Avatar>
                     <AvatarImage src="https://github.com/shadcn.png" />
@@ -126,7 +126,7 @@ const Navbar = () => {
                 <DropdownMenuItem>Team</DropdownMenuItem>
                 <DropdownMenuItem>Subscription</DropdownMenuItem>
                 </DropdownMenuContent>
-              </DropdownMenu>
+              </DropdownMenu> */}
 
             <WaitlistButton />
           </motion.div>

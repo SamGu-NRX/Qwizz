@@ -21,11 +21,11 @@ client = OpenAI(api_key=OPENAI_API_KEY)
 #
 
 def delete_thread(thread_id):
-    url = f"https://api.openai.com/v1/threads/{thread_id}"
+    url = f"https://api.openai.com/v2/threads/{thread_id}"
     headers = {
         "Authorization": f"Bearer {OPENAI_API_KEY}",
         "Content-Type": "application/json",
-        "OpenAI-Beta": "assistants=v1"
+        "OpenAI-Beta": "assistants=v2"
     }
     response = requests.delete(url, headers=headers)
     

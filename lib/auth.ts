@@ -47,7 +47,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           });
           return `/onboarding`;
         }
-        return `/dashboard`;
+        return `/dashboard-force`;
       } else {
         // Handle the case where the user is not found
         // Create a new user if necessary

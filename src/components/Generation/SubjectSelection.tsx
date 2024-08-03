@@ -42,6 +42,7 @@ const subjects: Subject[] = [
   { value: "psychology", label: "Psychology" },
   { value: "computer_science", label: "Computer Science" },
   { value: "environmental_science", label: "Environmental Science" },
+  { value: "economics", label: "Economics" },
   // Add more subjects as needed
 ]
 
