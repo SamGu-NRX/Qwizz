@@ -4,7 +4,7 @@ Improve your learning skills with an all-in-one education assistant with unlimit
 
 ## Features
 Dashboard Overview
-![Dashboard and Statistics Page](https://github.com/user-attachments/assets/cdc9b76b-fbb6-4ea3-99d8-433935325c53)
+![Dashboard and Statistics Page](https://github.com/user-attachments/assets/33cfdb54-187d-4814-b175-21fbe5fedc0e)
 
 Responsive Onboarding
 ![Onboarding](https://github.com/user-attachments/assets/3617e8c8-9511-4462-90ef-a42773edd12e)
