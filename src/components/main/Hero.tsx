@@ -16,7 +16,7 @@ const Hero = () => {
       <div className='flex-grow flex justify-center items-center'>
         {/* Edit title so that the title is centered relative to vh */}
         <div
-          className="hero bg-blue-500 w-full h-[100vh] flex flex-col justify-center items-center py-10"
+          className="hero bg-homebackground w-full h-[100vh] flex flex-col justify-center items-center py-10"
           ref={heroRef}
         >
           <h1 className="text-white text-5xl font-bold" ref={el => { if (el) elementsRef.current[0] = el; }}>StudyBuddy</h1>

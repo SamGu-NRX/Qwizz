@@ -6,6 +6,7 @@ import '@mantine/core/styles.css';
 import { auth } from '@/../lib/auth'
 import '@mantine/dropzone/styles.css';
 import { ColorSchemeScript, createTheme, MantineProvider } from '@mantine/core';
+import { ChakraProvider } from "@chakra-ui/react";
 
 import Providers from "./providers"
 import { getSession } from "next-auth/react";
@@ -35,9 +36,11 @@ export default async function RootLayout({
           <ColorSchemeScript />
         </head>
         <body className={inter.className}>
+          <ChakraProvider theme={theme}>
           <MantineProvider>
             {children}
           </MantineProvider>
+          </ChakraProvider>
         </body>
       </html>
     </Providers>

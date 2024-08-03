@@ -11,7 +11,7 @@ interface FadeUpOptions extends gsap.TweenVars {
 }
 
 export const fadeUp = (targets: gsap.TweenTarget, trigger: gsap.DOMTarget, options?: FadeUpOptions) => {
-  const { start = 'top 80%', ease = 'power3.out', ...rest } = options || {};
+  const { start = 'top 90%', ease = 'power3.out', ...rest } = options || {};
   
   gsap.fromTo(
     targets,

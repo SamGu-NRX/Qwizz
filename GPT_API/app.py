@@ -83,6 +83,7 @@ def create_flashcards(context):
 
 @app.route("/<string:ctx>")
 def hello_world(ctx):
+    print(ctx)
     result = create_flashcards(ctx)
     if result:
         try:
