@@ -66,7 +66,7 @@ Document upload + OCR detection linking to local storage (refresh resistant)
 ## Lessons Learned
 
 Our team gained valuable experience in:
-- Effectively using NextJS for dynamic frontend development
+- Effectively using NextJS for dynamic **full-stack** development
 - Implementing AI tools on the backend, including GPT's APIs for content generation
 - Debugging and problem-solving in a hackathon environment
 - Project management and effective team communication
