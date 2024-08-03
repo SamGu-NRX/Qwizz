@@ -1,5 +1,11 @@
 import { Config } from "tailwindcss";
 
+const svgToDataUri = require("mini-svg-data-uri");
+const {
+  default: flattenColorPalette,
+} = require("tailwindcss/lib/util/flattenColorPalette");
+
+
 const config: Config = {
   darkMode: ["class"],
   content: [
@@ -19,6 +25,18 @@ const config: Config = {
       },
     },
     extend: {
+      perspective: {
+        '1000': '1000px',
+      },
+      transform: {
+        'preserve-3d': 'preserve-3d',
+      },
+      backface: {
+        hidden: 'hidden',
+      },
+      rotateY: {
+        '180': '180deg',
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -86,10 +104,40 @@ const config: Config = {
       },
       backgroundImage: {
         'rainbow-gradient': 'linear-gradient(100deg, #DD7DDF, #E1CD86, #BBCB92, #71C2EF, #3BFFFF, #DD7DFF)',
+        'homebackground': "url('/home-background.png')",
+        'analytics-image': "url('/Analytics.png')"
       },
     },
-    plugins: [require("tailwindcss-animate"), require("@tailwindcss/forms")],
+    plugins: [
+      require("tailwindcss-animate"), 
+      require("@tailwindcss/forms"),
+      addVariablesForColors,
+    function ({ matchUtilities, theme }: any) {
+      matchUtilities(
+        {
+          "bg-dot-thick": (value: any) => ({
+            backgroundImage: `url("${svgToDataUri(
+              `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="16" height="16" fill="none"><circle fill="${value}" id="pattern-circle" cx="10" cy="10" r="2.5"></circle></svg>`
+            )}")`,
+          }),
+        },
+        { values: flattenColorPalette(theme("backgroundColor")), type: "color" }
+      );
+    },
+    ],
   },
 }
+
+function addVariablesForColors({ addBase, theme }: any) {
+  let allColors = flattenColorPalette(theme("colors"));
+  let newVars = Object.fromEntries(
+    Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
+  );
+ 
+  addBase({
+    ":root": newVars,
+  });
+}
+
 
 export default config;

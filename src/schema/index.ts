@@ -64,6 +64,6 @@ export const NewPasswordSchema = z.object({
 
 export const FormDataSchema = z.object({
   gradeLevel: z.string().min(1, 'Grade level is required'),
-  // subject: z.string().min(1, 'Subject is required'),
+  subject: z.string().min(1, 'Subject is required'),
   uploadedText: z.string().optional(),
 })

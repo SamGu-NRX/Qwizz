@@ -16,18 +16,18 @@ const Hero = () => {
       <div className='flex-grow flex justify-center items-center'>
         {/* Edit title so that the title is centered relative to vh */}
         <div
-          className="hero bg-blue-500 w-full h-[100vh] flex flex-col justify-center items-center py-10"
+          className="hero bg-homebackground bg-[#444444] bg-cover bg-blend-multiply w-full h-[100vh] flex flex-col justify-center items-center py-10"
           ref={heroRef}
         >
           <h1 className="text-white text-5xl font-bold" ref={el => { if (el) elementsRef.current[0] = el; }}>StudyBuddy</h1>
-          <p className="text-white mt-4" ref={el => { if (el) elementsRef.current[1] = el; }}>Your Intelligent Study Companion</p>
+          <p className="text-white mt-4" ref={el => { if (el) elementsRef.current[1] = el; }}>Your All-in-One Intelligent Study Companion</p>
           <motion.button 
-            className="mt-6 px-4 py-2 bg-white text-blue-500 font-bold rounded-full "
+            className="mt-6 px-4 py-2 bg-white text-black-500 font-bold rounded-full "
             ref={el => { if (el) elementsRef.current[2] = el; }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => {
-              // Implement onClick function to redirect to dashboard/login based on auth
+              window.location.href = "/auth/login";
             }}
           >
             Get Started

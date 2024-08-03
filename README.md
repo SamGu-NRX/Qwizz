@@ -14,9 +14,7 @@ include a link and a screenshot (we're front end devs so we can actually see our
 
 **Backend**: MongoDB, Prisma ORM
 
-**APIs**: Resend (Emailing)
-
-**Authentication**: Firebase, NextAuth
+**APIs**: Resend (Emailing/Authentication), NextAuth (Authentication)
 
 **File Storage**: MongoDB Atlas
 
@@ -38,26 +36,47 @@ No matter what your experience level, being an engineer means continuously learn
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
 
-First, run the development server:
+## How to run
 
-```bash
-pnpm dev
-```
+### Requirements
 
+python 3 and pip
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+nodejs and a js package manager of your choise
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+for best results use pnpm for your package manager
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### Step 1
 
-## Learn More
+> node setup and run
 
-To learn more about Next.js, take a look at the following resources:
+run ` ./setup.sh ` or ` ./setup.bat ` depending on your os
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+or if not using pnpm
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+`<package manager> install`
+
+`<package manager run (ex: npx)> prisma generate`
+
+`<package manager run (ex: npx)> prisma db push`
+
+finally
+
+`pnpm dev` or `<package manager> run dev`
+
+### Step 2
+
+> python setup and run
+
+open a new terminal
+
+`cd ./GPT_API`
+
+`pip install -r ./reqirements.txt`
+
+`python -m flask run`
+
+make sure it is on port 5000 or update .env
+
+.env defualt is `FLASK_API_URL=http://127.0.0.1:5000/`

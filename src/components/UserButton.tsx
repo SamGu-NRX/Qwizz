@@ -1,7 +1,7 @@
 // User Button Avatar
 'use client'
 
-// import { Avatar } from '@mui/material'
+import { Avatar } from '@mui/material'
 import { useCurrentUser } from '@/hooks/user-current-user';
 import { useRouter } from 'next/navigation';
 import { LogOut, LogOutIcon } from 'lucide-react';

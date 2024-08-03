@@ -17,7 +17,7 @@ import { getUserByEmail } from "@/data/user"
 // import { getAnalytics } from "firebase/analytics";
 // import "firebase/compat/firestore";
 // import firebaseConfig from "./firebaseConfig"
-import { EmailAuthProvider } from "firebase/auth"
+// import { EmailAuthProvider } from "firebase/auth"
 
 
 // // TODO: install fireadmin-sdk and use new authjs: https://authjs.dev/getting-started/adapters/firebase
@@ -81,5 +81,6 @@ export default {
       }
     })
   ],
+  secret: process.env.AUTH_SECRET,
   // adapter: FirestoreAdapter(firestore),
 } satisfies NextAuthConfig

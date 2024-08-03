@@ -18,13 +18,21 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import {usePathname} from 'next/navigation'
-import Image from "next/image"
-
-import logoPic from '../assets/StudyBuddyLogo.png'
+import { usePathname } from 'next/navigation'
+import { useEffect, useRef } from "react";
+import { fadeUp } from "@/animations/gsap";
 
 export default function Sidebar() {
     const pathName = usePathname()
+    const iconRefs = useRef<HTMLAnchorElement[] | null>(null);
+
+    useEffect(() => {
+      if (iconRefs.current) {
+        iconRefs.current.forEach((icon, index) => {
+          fadeUp(icon, icon, { delay: index * 0.1 });
+        });
+      }
+    }, []);
 
     const accentIconStyle = "flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
     const mutedIconStyle = "flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
@@ -53,7 +61,8 @@ export default function Sidebar() {
               <nav className="grid gap-6 text-lg font-medium">
                 <Link
                   href="/"
-                  className = "flex items-center text-2xl gap-4 px-2.5 text-foreground"
+                  className = {accentLinkStyle}
+                  ref={(el) => { if (el) iconRefs.current![0] = el; }}
                 >
                   <Image
               src={logoPic}
@@ -63,6 +72,7 @@ export default function Sidebar() {
               />
                   StudyBuddy
                 </Link>
+
                 <Link
                   href="/dashboard-force"
                   className= {pathName == "/dashboard-force" ? accentLinkStyle : mutedLinkStyle}

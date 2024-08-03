@@ -7,14 +7,15 @@ import authConfig from "@/../auth.config"
 
 // auth
 // Configuration object
-const authOptions = {
+export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(db),
   pages: {
     signIn: '/auth/login',
     error: '/auth/error',
+
   },
   events: {
-    async linkAccount({ user }: { user: { id: string } }) {
+    async linkAccount({ user }) {
       await db.user.update({
         where: { id: user.id },
         data: { emailVerified: new Date() }
@@ -22,40 +23,75 @@ const authOptions = {
     }
   },
   callbacks: {
-    async signIn({ user, account }: { user: { id: string }; account: any }) {
-      if(account?.provider !== "credentials") return true;
-      const existingUser = await getUserById(user.id ?? '');
-      if(!existingUser?.emailVerified) return false;
-      return true;
+    signIn: async ({ user, account, profile }) => {
+      // if (account?.provider !== "credentials") return true;
+      // console.log(user + "signed in successfully");
+
+      // const existingUser = await getUserById(user.id ?? '');
+      // if (!existingUser?.emailVerified) return false;
+      // return true;
+
+      const dbUser = await db.user.findUnique({
+        where: { email: user.email },
+      });
+
+      if (dbUser) {
+        if (!dbUser.emailVerified) {
+          // If email is not confirmed, prevent sign-in
+          return `/confirm-email`;
+        }
+        if (dbUser.firstTime) {
+          await db.user.update({
+            where: { email: user.email },
+            data: { firstTime: false },
+          });
+          return `/onboarding`;
+        }
+        return `/dashboard-force`;
+      } else {
+        // Handle the case where the user is not found
+        // Create a new user if necessary
+        await db.user.create({
+          data: {
+            email: user.email,
+            name: user.name,
+            image: user.image,
+            emailVerified: user.emailVerified,
+            firstTime: true,
+          },
+        });
+        return `/onboarding`;
+      }
     },
-    async session({ session, token }: { session: any; token: any }) {
+
+    session: async ({ session, token }: { session: any; token: any }) => {
       if (token.sub && session.user) {
         session.user.id = token.sub;
       }
-      if(token.role && session.user) {
+      if (token.role && session.user) {
         session.user.role = token.role as UserRole;
-      }
+      }  
       return session;
     },
-    async jwt ({ token }: { token: { sub: string; role?: UserRole } }) {
-      if(!token.sub) return token;
+    jwt: async ({ token }) => {
+      if (!token.sub) return token;
       const existingUser = await getUserById(token.sub);
-      if(!existingUser) return token;
+      if (!existingUser) return token;
       token.role = existingUser.role;
       return token;
     },
   },
   session: { strategy: "jwt" },
   ...authConfig,
-}
+});
 
-// Log the return value of NextAuth to ensure it is as expected
-const authInstance = NextAuth(authOptions);
-console.log(authInstance);
+// // Log the return value of NextAuth to ensure it is as expected
+// const authInstance = NextAuth(authOptions);
+// console.log(authInstance);
 
-export const {
-  handlers,
-  auth,
-  signIn,
-  signOut,
-} = authInstance;
+// export const {
+//   handlers,
+//   auth,
+//   signIn,
+//   signOut,
+// } = authInstance;
