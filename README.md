@@ -1,7 +1,7 @@
 <h1 align="center">StudyBuddy</h1>
 
 <p align="center">
-  <strong>Improve your learning skills with an all-in-one education assistant.</strong><br>
+  <strong>Improve your learning skills with an all-in-one, personalized education assistant.</strong><br>
   Unlimited MCQ and flashcard generation for standardized tests, difficult subjects, and active recall.
 </p>
 
@@ -30,7 +30,7 @@ Document upload + OCR detection linking to local storage (refresh resistant)
   </tr>
   <tr>
     <td><strong>Back-end</strong></td>
-    <td>MongoDB, Prisma ORM</td>
+    <td>MongoDB, Prisma ORM, Flask</td>
   </tr>
   <tr>
     <td><strong>APIs</strong></td>
@@ -41,6 +41,27 @@ Document upload + OCR detection linking to local storage (refresh resistant)
     <td>Vercel (frontend)</td>
   </tr>
 </table>
+
+
+## Project Status
+
+### To-Do
+- [ ] Develop even more personalized shuffle algorithm for even better active recall
+- [ ] More robust fact-checking for optimal accuracy
+- [ ] Integrate with popular learning management systems (such as notion)
+- [ ] Deploy backend to sustainable service (GPU access)
+- [ ] Set up automated testing pipeline
+
+### Finished
+- [x] Design and implement dashboard UI
+- [x] Implement robust user authentication system with settings, confirmation emails, password changing, and more
+- [x] Set up MongoDB database with Prisma ORM, connected with OpenAI API using Flask
+- [x] **AI-powered learning system** accepting long context files for optimal question and flashcard generation
+- [x] Basic **fact-checking** for material generation
+- [x] Implement document upload functionality
+- [x] Integrate Tesseract.js for OCR capabilities
+- [x] Create mobile-responsive design
+
 
 ## Lessons Learned
 
