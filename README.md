@@ -1,12 +1,8 @@
 # StudyBuddy
 
-[Insert your description here]
-
-include a link and a screenshot (we're front end devs so we can actually see our work!).
 
 **Link to project:** [http://yourstudybuddy.vercel.app](http://yourstudybuddy.vercel.app)
 
-![alt tag](http://placecorgi.com/1200/650)
 
 ## How It's Made
 
@@ -22,15 +18,8 @@ include a link and a screenshot (we're front end devs so we can actually see our
 
 Here's where you can go to town on how you actually built this thing. Write as much as you can here, it's totally fine if it's not too much just make sure you write _something_. If you don't have too much experience on your resume working on the front end that's totally fine. This is where you can really show off your passion and make up for that ten fold.
 
-## Optimizations
-
-_(optional)_
-
-You don't have to include this section but interviewers _love_ that you can not only deliver a final product that looks great but also functions efficiently. Did you write something then refactor it later and the result was 5x faster than the original implementation? Did you cache your assets? Things that you write in this section are **GREAT** to bring up in interviews and you can use this section as reference when studying for technical interviews!
-
-## Lessons Learned:
-
-No matter what your experience level, being an engineer means continuously learning. Every time you build something you always have those _whoa this is awesome_ or _wow I actually did it!_ moments. This is where you should share those moments! Recruiters and interviewers love to see that you're self-aware and passionate about growing.
+## Lessons Learned
+Most of the team members learned how to effectively use NextJS to develop a dynamic frontend and easy-to-use UI for users even though it was the first time deploying it onto a project for some of us.  We were also now more experienced with using AI tools on the backend including using GPT's APIs to generate content in flashcards, and all of us sharpened our skills in debugging and problem solving as we stumbled across errors and challenges throughout the hackathon. We learned to manage a project together as a team and communicate effectively with each other while working on the website. 
 
 ## Next.js
 
