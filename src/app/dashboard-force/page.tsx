@@ -45,6 +45,11 @@ interface DashboardProps {
 const Dashboard: React.FC<DashboardProps> = ({ data, todayDate, weekData, lastWeekData, monthData, yearData }) => {
   const dashboardRef = useRef<HTMLDivElement>(null);
   const elementsRef = useRef<(HTMLHeadingElement | HTMLParagraphElement | HTMLButtonElement)[]>([]);
+
+  const redirectGenerate = () => {
+    window.location.href = '/dashboard/generate';
+  }
+
   useEffect(() => {
       if (dashboardRef.current) {
         fadeUp(elementsRef.current.filter(el => el !== null) as HTMLElement[], dashboardRef.current, { delay: 0.05, start: 'top 80%', ease: 'power3.inOut', stagger: 0.1 });
@@ -92,7 +97,8 @@ const Dashboard: React.FC<DashboardProps> = ({ data, todayDate, weekData, lastWe
                   </CardDescription>
                 </CardHeader>
                 <CardFooter>
-                  <Button id="start-studying">Start Studying</Button>
+                  <Button id="start-studying" onClick={redirectGenerate}>
+                    Start Studying</Button>
                 </CardFooter>
               </Card>
               <ProgressBars

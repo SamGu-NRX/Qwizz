@@ -219,7 +219,9 @@ export default function Onboarding() {
               </div>
 
               <div className='sm:col-span-3 flex flex-col pt-[36px]'>
-                <SubjectSelection />
+                <SubjectSelection 
+                  onSelect={handleSubjectSelect}
+                />
                 {errors.subject?.message && (
                   <p className='mt-2 text-sm text-red-400'>
                     {errors.subject.message}

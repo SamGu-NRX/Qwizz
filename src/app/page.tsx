@@ -13,6 +13,7 @@ import Hero from '@/components/main/Hero';
 // import CTA from '@/components/main/CTA';
 import Footer from '@/components/Footer';
 import FeatureCardsDeck from '@/components/main/Features';
+import HomeGrid from "@/components/main/HomeCards";
 
 const HomePage = () => {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -29,7 +30,6 @@ const HomePage = () => {
       {/* Check bugs for Dynamic Navbar, i.e. fade out when scrolling and show up when scrolling up */}
       <Navbar />
       <Hero />
-      <Pricing />
       <FeatureCardsDeck />
       <Footer />
     </div>

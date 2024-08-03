@@ -86,7 +86,7 @@ const config: Config = {
       },
       backgroundImage: {
         'rainbow-gradient': 'linear-gradient(100deg, #DD7DDF, #E1CD86, #BBCB92, #71C2EF, #3BFFFF, #DD7DFF)',
-        'homebackground': "url('/../app/assets/home-background.png')",
+        'homebackground': "url('/home-background.png')",
       },
     },
     plugins: [require("tailwindcss-animate"), require("@tailwindcss/forms")],

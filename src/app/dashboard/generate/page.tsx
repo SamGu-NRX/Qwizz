@@ -1,37 +1,97 @@
 "use client"
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button, Box, Input, VStack } from "@chakra-ui/react";
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Loader } from 'lucide-react';
 import { flash_cards } from "@/actions/get-flashcard";
-
-const handleGenerateFlashCard = async (question: string, setQuestion: Function) => {
-  setQuestion(await flash_cards(question));
-};
+import { gsap } from "gsap";
 
 const FlashcardApp = () => {
   const [flashcards, setFlashcards] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
-  const [question, setQuestion] = useState<string>("math question");
+  const [question, setQuestion] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [canGenerate, setCanGenerate] = useState(true);
 
+  const cardRef = useRef(null);
+
+  const handleGenerateFlashCard = async () => {
+    setIsLoading(true);
+    setCanGenerate(false);
+    try {
+      const newFlashcardss = await flash_cards(question)
+      const newFlashcards = newFlashcardss["flashcards"];
+      console.log(newFlashcards);
+      setFlashcards(newFlashcards);
+      setCurrentIndex(0);
+    } catch (error) {
+      console.error("Error generating flashcards:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // useEffect(() => {
+  //   // Initialize flashcards if they're available globally
+  //   if (typeof window !== 'undefined' && window.initialFlashcards) {
+  //     setFlashcards(window.initialFlashcards);
+  //   }
+  // }, []);
+
+  useEffect(() => {
+    if (cardRef.current) {
+      gsap.set(cardRef.current, { rotationY: isFlipped ? 180 : 0 });
+    }
+  }, [currentIndex]);
+
+  const flipCard = () => {
+    if (cardRef.current) {
+      gsap.to(cardRef.current, {
+        duration: 0.5,
+        rotationY: isFlipped ? 0 : 180,
+        ease: "power3.inOut",
+        onComplete: () => setIsFlipped(!isFlipped)
+      });
+    }
+  };
 
   const nextCard = () => {
     if (currentIndex < flashcards.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-      setIsFlipped(false);
+      gsap.to(cardRef.current, {
+        duration: 0.3,
+        x: -300,
+        opacity: 0,
+        onComplete: () => {
+          setCurrentIndex(currentIndex + 1);
+          setIsFlipped(false);
+          gsap.fromTo(cardRef.current, 
+            { x: 300, opacity: 0 },
+            { duration: 0.3, x: 0, opacity: 1 }
+          );
+        }
+      });
+    } else {
+      setCanGenerate(true);
     }
   };
 
   const prevCard = () => {
     if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
-      setIsFlipped(false);
+      gsap.to(cardRef.current, {
+        duration: 0.3,
+        x: 300,
+        opacity: 0,
+        onComplete: () => {
+          setCurrentIndex(currentIndex - 1);
+          setIsFlipped(false);
+          gsap.fromTo(cardRef.current, 
+            { x: -300, opacity: 0 },
+            { duration: 0.3, x: 0, opacity: 1 }
+          );
+        }
+      });
     }
-  };
-
-  const flipCard = () => {
-    setIsFlipped(!isFlipped);
   };
 
   return (
@@ -41,15 +101,30 @@ const FlashcardApp = () => {
       <div className="w-full max-w-md mb-8">
         <input
           className="w-full p-2 border border-gray-300 rounded"
-          placeholder="Additional context for flashcard generation"
+          placeholder="Enter a topic for flashcards"
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
+          disabled={!canGenerate || isLoading}
         />
         <button
-          className="mt-2 w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition-colors"
-          onClick={() => {handleGenerateFlashCard(question, setQuestion)}}
+          className={`mt-2 w-full p-3 rounded transition-colors ${
+            canGenerate && !isLoading
+              ? 'bg-blue-500 text-white hover:bg-blue-600'
+              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+          }`}
+          onClick={handleGenerateFlashCard}
+          disabled={!canGenerate || isLoading}
         >
-          Generate Flashcards
+          {isLoading ? (
+            <div className="">
+              <Loader className="animate-spin mx-auto" />
+              <p className="p-2">
+                Generating flashcards...  Estimated time: 15 seconds
+              </p>
+            </div>
+          ) : (
+            'Generate Flashcards'
+          )}
         </button>
       </div>
 
@@ -71,10 +146,10 @@ const FlashcardApp = () => {
               style={{ transformStyle: "preserve-3d" }}
             >
               <div className="absolute w-full h-full backface-hidden bg-white p-6 rounded-lg shadow-lg flex items-center justify-center text-center">
-                <p className="text-xl">{flashcards[currentIndex].front}</p>
+                <p className="text-xl">{flashcards[currentIndex]["front"]}</p>
               </div>
               <div className="absolute w-full h-full backface-hidden bg-blue-100 p-6 rounded-lg shadow-lg flex items-center justify-center text-center" style={{ transform: "rotateY(180deg)" }}>
-                <p className="text-xl">{flashcards[currentIndex].back}</p>
+                <p className="text-xl">{flashcards[currentIndex]["back"]}</p>
               </div>
             </motion.div>
           </motion.div>
@@ -87,11 +162,10 @@ const FlashcardApp = () => {
           whileTap={{ scale: 0.9 }}
           className="p-2 rounded-full bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
           onClick={prevCard}
-          disabled={currentIndex === -1}
+          disabled={currentIndex === 0}
         >
           <ChevronLeft size={24} />
         </motion.button>
-
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
