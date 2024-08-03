@@ -1,77 +1,85 @@
-# StudyBuddy
+<h1 align="center">StudyBuddy</h1>
 
-Improve your learning skills with an all-in-one education assistant with unlimited MCQ and flashcard generation. Practice for standardized tests, difficult subjects, and active recall.
+<p align="center">
+  <strong>Improve your learning skills with an all-in-one education assistant.</strong><br>
+  Unlimited MCQ and flashcard generation for standardized tests, difficult subjects, and active recall.
+</p>
+
+---
 
 ## Features
-Dashboard Overview: Smooth Animations and Real-time statistics
 
-![Dashboard and Statistics Page](https://github.com/user-attachments/assets/33cfdb54-187d-4814-b175-21fbe5fedc0e)
+### Dashboard Overview
+Smooth animations and real-time statistics
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/33cfdb54-187d-4814-b175-21fbe5fedc0e" alt="Dashboard and Statistics Page" width="600">
+</p>
 
-Responsive Onboarding: Document Upload + OCR detection linking to local storage (refresh resistant)
-![Onboarding](https://github.com/user-attachments/assets/3617e8c8-9511-4462-90ef-a42773edd12e)
-
-<!--
-**Link to project:** [http://yourstudybuddy.vercel.app](http://yourstudybuddy.vercel.app)
--->
+### Responsive Onboarding
+Document upload + OCR detection linking to local storage (refresh resistant)
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/3617e8c8-9511-4462-90ef-a42773edd12e" alt="Onboarding" width="600">
+</p>
 
 ## How It's Made
 
-**Front-end**: React, Next.js, Tailwind CSS
-
-**Backend**: MongoDB, Prisma ORM
-
-**APIs**: Resend (Emailing/Authentication), NextAuth (Authentication), Tesseract.js (OCR)
-
-**Hosting**: Vercel (frontend)
+<table>
+  <tr>
+    <td><strong>Front-end</strong></td>
+    <td>React, Next.js, Tailwind CSS</td>
+  </tr>
+  <tr>
+    <td><strong>Back-end</strong></td>
+    <td>MongoDB, Prisma ORM</td>
+  </tr>
+  <tr>
+    <td><strong>APIs</strong></td>
+    <td>Resend (Emailing/Authentication), NextAuth (Authentication), Tesseract.js (OCR)</td>
+  </tr>
+  <tr>
+    <td><strong>Hosting</strong></td>
+    <td>Vercel (frontend)</td>
+  </tr>
+</table>
 
 ## Lessons Learned
-Most of the team members learned how to effectively use NextJS to develop a dynamic frontend and easy-to-use UI for users even though it was the first time deploying it onto a project for some of us.  We were also now more experienced with using AI tools on the backend including using GPT's APIs to generate content in flashcards, and all of us sharpened our skills in debugging and problem solving as we stumbled across errors and challenges throughout the hackathon. We learned to manage a project together as a team and communicate effectively with each other while working on the website. 
 
-## Next.js
+Our team gained valuable experience in:
+- Effectively using NextJS for dynamic frontend development
+- Implementing AI tools on the backend, including GPT's APIs for content generation
+- Debugging and problem-solving in a hackathon environment
+- Project management and effective team communication
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
-
-## How to run
+## How to Run
 
 ### Requirements
+- Python 3 and pip
+- Node.js and a JS package manager (pnpm recommended)
 
-python 3 and pip
+### Step 1: Node Setup and Run
+```bash
+# Using pnpm (recommended)
+./setup.sh  # or ./setup.bat on Windows
 
-nodejs and a js package manager of your choise
+# Or, if not using pnpm
+<package manager> install
+<package manager run (ex: npx)> prisma generate
+<package manager run (ex: npx)> prisma db push
+<package manager> run dev
+```
 
-for best results use pnpm for your package manager
+### Step 2: Python Setup and Run
+```bash
+cd ./GPT_API
+pip install -r ./requirements.txt
+python -m flask run
+```
+> Ensure the Flask app runs on port 5000 or update the `.env` file accordingly.
+> Default: `FLASK_API_URL=http://127.0.0.1:5000/`
 
-### Step 1
+---
 
-> node setup and run
-
-run ` ./setup.sh ` or ` ./setup.bat ` depending on your os
-
-or if not using pnpm
-
-`<package manager> install`
-
-`<package manager run (ex: npx)> prisma generate`
-
-`<package manager run (ex: npx)> prisma db push`
-
-finally
-
-`pnpm dev` or `<package manager> run dev`
-
-### Step 2
-
-> python setup and run
-
-open a new terminal
-
-`cd ./GPT_API`
-
-`pip install -r ./reqirements.txt`
-
-`python -m flask run`
-
-make sure it is on port 5000 or update .env
-
-.env defualt is `FLASK_API_URL=http://127.0.0.1:5000/`
+<p align="center">
+  <a href="https://nextjs.org/">Next.js</a> •
+  <a href="https://github.com/vercel/next.js/tree/canary/packages/create-next-app">create-next-app</a>
+</p>
