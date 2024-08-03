@@ -19,6 +19,18 @@ const config: Config = {
       },
     },
     extend: {
+      perspective: {
+        '1000': '1000px',
+      },
+      transform: {
+        'preserve-3d': 'preserve-3d',
+      },
+      backface: {
+        hidden: 'hidden',
+      },
+      rotateY: {
+        '180': '180deg',
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

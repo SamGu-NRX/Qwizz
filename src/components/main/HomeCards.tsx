@@ -11,7 +11,7 @@ import {
   IconTableColumn,
 } from "@tabler/icons-react";
 
-export function HomeGrid() {
+export default function HomeGrid() {
     return (
       <BentoGrid className="max-w-4xl mx-auto">
         {items.map((item, i) => (
@@ -32,46 +32,34 @@ export function HomeGrid() {
   );
   const items = [
     {
-      title: "The Dawn of Innovation",
-      description: "Explore the birth of groundbreaking ideas and inventions.",
+      title: "AI-Generated Question Difficulties",
+      description: "Adaptive AI assesses the difficulty level of each question, ensuring a balanced and effective study experience.",
       header: <Skeleton />,
       icon: <IconClipboardCopy className="h-4 w-4 text-neutral-500" />,
     },
     {
-      title: "The Digital Revolution",
-      description: "Dive into the transformative power of technology.",
+      title: "Popup for Saving Questions",
+      description: "Users can save questions to a shared database, contributing to a communal study resource.",
       header: <Skeleton />,
       icon: <IconFileBroken className="h-4 w-4 text-neutral-500" />,
     },
     {
-      title: "The Art of Design",
-      description: "Discover the beauty of thoughtful and functional design.",
+      title: "Mobile-Friendly Design",
+      description: "Ensures the platform is accessible and fully functional on mobile devices.",
       header: <Skeleton />,
       icon: <IconSignature className="h-4 w-4 text-neutral-500" />,
     },
     {
-      title: "The Power of Communication",
+      title: "Customizable Study Plans",
       description:
-        "Understand the impact of effective communication in our lives.",
+        "Allows users to create and follow personalized study plans based on their goals and schedules.",
       header: <Skeleton />,
       icon: <IconTableColumn className="h-4 w-4 text-neutral-500" />,
     },
     {
-      title: "The Pursuit of Knowledge",
-      description: "Join the quest for understanding and enlightenment.",
+      title: "Progress Tracking and Analytics",
+      description: "See your study insights, track performance and study habits to learn more effectively and efficiently.",
       header: <Skeleton />,
       icon: <IconArrowWaveRightUp className="h-4 w-4 text-neutral-500" />,
-    },
-    {
-      title: "The Joy of Creation",
-      description: "Experience the thrill of bringing ideas to life.",
-      header: <Skeleton />,
-      icon: <IconBoxAlignTopLeft className="h-4 w-4 text-neutral-500" />,
-    },
-    {
-      title: "The Spirit of Adventure",
-      description: "Embark on exciting journeys and thrilling discoveries.",
-      header: <Skeleton />,
-      icon: <IconBoxAlignRightFilled className="h-4 w-4 text-neutral-500" />,
     },
   ];

@@ -30,6 +30,7 @@ const HomePage = () => {
       {/* Check bugs for Dynamic Navbar, i.e. fade out when scrolling and show up when scrolling up */}
       <Navbar />
       <Hero />
+      <HomeGrid/>
       <FeatureCardsDeck />
       <Footer />
     </div>

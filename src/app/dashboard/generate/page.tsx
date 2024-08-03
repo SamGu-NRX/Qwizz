@@ -2,9 +2,10 @@
 import { useState, useEffect, useRef } from "react";
 import { Button, Box, Input, VStack } from "@chakra-ui/react";
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Loader } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { flash_cards } from "@/actions/get-flashcard";
 import { gsap } from "gsap";
+import { Loader } from "lucide-react";
 
 const FlashcardApp = () => {
   const [flashcards, setFlashcards] = useState([]);
@@ -40,21 +41,17 @@ const FlashcardApp = () => {
   // }, []);
 
   useEffect(() => {
-    if (cardRef.current) {
-      gsap.set(cardRef.current, { rotationY: isFlipped ? 180 : 0 });
+    // Load flashcards from local storage on component mount
+    const savedFlashcards = localStorage.getItem('flashcards');
+    if (savedFlashcards) {
+      setFlashcards(JSON.parse(savedFlashcards));
     }
-  }, [currentIndex]);
+  }, []);
 
-  const flipCard = () => {
-    if (cardRef.current) {
-      gsap.to(cardRef.current, {
-        duration: 0.5,
-        rotationY: isFlipped ? 0 : 180,
-        ease: "power3.inOut",
-        onComplete: () => setIsFlipped(!isFlipped)
-      });
-    }
-  };
+  useEffect(() => {
+    // Save flashcards to local storage whenever they change
+    localStorage.setItem('flashcards', JSON.stringify(flashcards));
+  }, [flashcards]);
 
   const nextCard = () => {
     if (currentIndex < flashcards.length - 1) {
@@ -94,14 +91,18 @@ const FlashcardApp = () => {
     }
   };
 
+  const flipCard = () => {
+    setIsFlipped(!isFlipped);
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
       <h1 className="text-3xl font-bold mb-8">Flashcard Study App</h1>
       
       <div className="w-full max-w-md mb-8">
         <input
-          className="w-full p-2 border border-gray-300 rounded"
-          placeholder="Enter a topic for flashcards"
+          className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+          placeholder="Enter a question for a new flashcard"
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
           disabled={!canGenerate || isLoading}
@@ -148,8 +149,12 @@ const FlashcardApp = () => {
               <div className="absolute w-full h-full backface-hidden bg-white p-6 rounded-lg shadow-lg flex items-center justify-center text-center">
                 <p className="text-xl">{flashcards[currentIndex]["front"]}</p>
               </div>
-              <div className="absolute w-full h-full backface-hidden bg-blue-100 p-6 rounded-lg shadow-lg flex items-center justify-center text-center" style={{ transform: "rotateY(180deg)" }}>
-                <p className="text-xl">{flashcards[currentIndex]["back"]}</p>
+              
+              <div 
+                className="absolute w-full h-full backface-hidden bg-blue-100 p-6 rounded-lg shadow-lg flex items-center justify-center text-center" 
+                style={{ transform: "rotateY(180deg)" }}
+              >
+                <p className="text-xl" style={{ transform: "rotateY(180deg)" }}>{flashcards[currentIndex]["back"]}</p>
               </div>
             </motion.div>
           </motion.div>
