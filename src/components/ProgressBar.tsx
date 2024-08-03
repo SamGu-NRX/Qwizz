@@ -40,7 +40,7 @@ export default function ProgressBars({ percent1, percent2 }: { percent1: number;
   return (
     <>
       <Card x-chunk="dashboard-05-chunk-1" id="this-week"
-        ref={(el) => { if (el) { cardRefs.current[5] = el; }}}>
+        ref={(el) => { if (el) { cardRefs.current[6] = el; }}}>
           <CardHeader className="pb-2">
             <CardDescription>This Week</CardDescription>
             <CardTitle className="text-4xl">{percent1}%</CardTitle>
@@ -55,7 +55,7 @@ export default function ProgressBars({ percent1, percent2 }: { percent1: number;
           </CardFooter>
       </Card>
 
-      <Card x-chunk="dashboard-05-chunk-2" id="this-month" ref={(el) => { if (el) { cardRefs.current[6] = el; }}}>
+      <Card x-chunk="dashboard-05-chunk-2" id="this-month" ref={(el) => { if (el) { cardRefs.current[7] = el; }}}>
         <CardHeader className="pb-2">
           <CardDescription>This Month</CardDescription>
           <CardTitle className="text-4xl">{percent2}%</CardTitle>

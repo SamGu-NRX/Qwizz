@@ -42,7 +42,7 @@ interface DashboardProps {
   yearData: Question[];
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ data, todayDate, weekData, lastWeekData, monthData, yearData }) => {
+const Dashboard: React.FC<DashboardProps>= () => {
   const dashboardRef = useRef<HTMLDivElement>(null);
   const elementsRef = useRef<(HTMLHeadingElement | HTMLParagraphElement | HTMLButtonElement)[]>([]);
 
@@ -76,7 +76,7 @@ const Dashboard: React.FC<DashboardProps> = ({ data, todayDate, weekData, lastWe
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
-      <ClientOverlay />
+      {/* <ClientOverlay /> */}
       <Sidebar />
       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
         <Header />
@@ -90,7 +90,7 @@ const Dashboard: React.FC<DashboardProps> = ({ data, todayDate, weekData, lastWe
                 className="sm:col-span-2"
                 x-chunk="dashboard-05-chunk-0"
                 ref={(el) => {
-                  if (el) elementsRef.current[0] = el;
+                  if (el) elementsRef.current[1] = el;
                 }}
               >
                 <CardHeader className="pb-3">
@@ -108,7 +108,7 @@ const Dashboard: React.FC<DashboardProps> = ({ data, todayDate, weekData, lastWe
                 percent1={getAccuracy(weekData)}
                 percent2={getAccuracy(monthData)}
                 ref={(el: HTMLHeadingElement | HTMLParagraphElement | HTMLButtonElement) => {
-                  if (el) elementsRef.current[1] = el;
+                  if (el) elementsRef.current[2] = el;
                 }}
               />
             </div>
@@ -116,7 +116,7 @@ const Dashboard: React.FC<DashboardProps> = ({ data, todayDate, weekData, lastWe
               x-chunk="dashboard-05-chunk-3"
               id="questions"
               ref={(el) => {
-                if (el) elementsRef.current[2] = el;
+                if (el) elementsRef.current[3] = el;
               }}
             >
               <CardHeader className="px-7">
@@ -124,13 +124,15 @@ const Dashboard: React.FC<DashboardProps> = ({ data, todayDate, weekData, lastWe
                 <CardDescription>Recent questions you answered this week.</CardDescription>
               </CardHeader>
               <CardContent>
-                {Array.isArray(data) ? <DataTable columns={columns} data={data} /> : <div>You haven{`'`}t answered any questions today! Go practice!</div>}
+                {/* {Array.isArray(data) ? <DataTable columns={columns} data={data} /> : <div>You haven{`'`}t answered any questions today! Go practice!</div>} */}
+
+                <DataTable columns={columns} data={data} /> 
               </CardContent>
             </Card>
           </div>
           <div>
             <Card className="overflow-hidden" x-chunk="dashboard-05-chunk-4" id="your-performance">
-              <CardHeader className="flex flex-row items-start bg-muted/50" ref={(el) => { if (el) elementsRef.current[3] = el; }}>
+              <CardHeader className="flex flex-row items-start bg-muted/50" ref={(el) => { if (el) elementsRef.current[4] = el; }}>
                 <div className="grid gap-0.5">
                   <CardTitle className="group flex items-center gap-2 text-lg">
                     Weekly Performance
@@ -154,7 +156,7 @@ const Dashboard: React.FC<DashboardProps> = ({ data, todayDate, weekData, lastWe
                   </DropdownMenu>
                 </div>
               </CardHeader>
-              <CardContent className="p-6 text-sm" ref={(el) => { if (el) elementsRef.current[4] = el; }}>
+              <CardContent className="p-6 text-sm" ref={(el) => { if (el) elementsRef.current[5] = el; }}>
                 <StatCharts weekData={weekData} lastWeekData={lastWeekData} />
               </CardContent>
             </Card>

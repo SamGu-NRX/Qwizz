@@ -21,6 +21,8 @@ import { Button } from "@/components/ui/button"
 import { usePathname } from 'next/navigation'
 import { useEffect, useRef } from "react";
 import { fadeUp } from "@/animations/gsap";
+import logoPic from '../assets/StudyBuddyLogo.png'
+import Image from "next/image";
 
 export default function Sidebar() {
     const pathName = usePathname()
@@ -62,14 +64,14 @@ export default function Sidebar() {
                 <Link
                   href="/"
                   className = {accentLinkStyle}
-                  ref={(el) => { if (el) iconRefs.current![0] = el; }}
+                  // ref={(el) => { if (el) iconRefs.current![0] = el; }}
                 >
                   <Image
-              src={logoPic}
-            width={40}
-            height={40}
-              alt="logo"
-              />
+                    src={logoPic}
+                    width={40}
+                    height={40}
+                    alt="logo"
+                    />
                   StudyBuddy
                 </Link>
 
