@@ -31,7 +31,7 @@ const HomePage = () => {
       <Navbar />
       <Hero />
       <HomeGrid/>
-      <FeatureCardsDeck />
+      {/* <FeatureCardsDeck /> */}
       <Footer />
     </div>
   );

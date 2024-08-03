@@ -1,11 +1,9 @@
-"use client"
+"use client";
 import { useState, useEffect, useRef } from "react";
-import { Button, Box, Input, VStack } from "@chakra-ui/react";
-import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { motion, AnimatePresence } from "framer-motion";
+import { ChevronLeft, ChevronRight, Loader } from "lucide-react";
 import { flash_cards } from "@/actions/get-flashcard";
 import { gsap } from "gsap";
-import { Loader } from "lucide-react";
 
 const FlashcardApp = () => {
   const [flashcards, setFlashcards] = useState([]);
@@ -21,11 +19,13 @@ const FlashcardApp = () => {
     setIsLoading(true);
     setCanGenerate(false);
     try {
-      const newFlashcardss = await flash_cards(question)
+      const newFlashcardss = await flash_cards(question);
       const newFlashcards = newFlashcardss["flashcards"];
       console.log(newFlashcards);
       setFlashcards(newFlashcards);
       setCurrentIndex(0);
+      localStorage.setItem("flashcards", JSON.stringify(newFlashcards));
+      localStorage.setItem("currentIndex", "0");
     } catch (error) {
       console.error("Error generating flashcards:", error);
     } finally {
@@ -33,40 +33,41 @@ const FlashcardApp = () => {
     }
   };
 
-  // useEffect(() => {
-  //   // Initialize flashcards if they're available globally
-  //   if (typeof window !== 'undefined' && window.initialFlashcards) {
-  //     setFlashcards(window.initialFlashcards);
-  //   }
-  // }, []);
-
+  // Load flashcards and current index from local storage on component mount
   useEffect(() => {
-    // Load flashcards from local storage on component mount
-    const savedFlashcards = localStorage.getItem('flashcards');
+    const savedFlashcards = localStorage.getItem("flashcards");
+    const savedIndex = localStorage.getItem("currentIndex");
     if (savedFlashcards) {
       setFlashcards(JSON.parse(savedFlashcards));
     }
+    if (savedIndex) {
+      setCurrentIndex(parseInt(savedIndex, 10));
+    }
   }, []);
 
+  // Save flashcards and current index to local storage whenever they change
   useEffect(() => {
-    // Save flashcards to local storage whenever they change
-    localStorage.setItem('flashcards', JSON.stringify(flashcards));
-  }, [flashcards]);
+    localStorage.setItem("flashcards", JSON.stringify(flashcards));
+    localStorage.setItem("currentIndex", currentIndex.toString());
+  }, [flashcards, currentIndex]);
+  
 
   const nextCard = () => {
     if (currentIndex < flashcards.length - 1) {
       gsap.to(cardRef.current, {
         duration: 0.3,
-        x: -300,
+        x: -100,
         opacity: 0,
+        ease: "power3.out",
         onComplete: () => {
           setCurrentIndex(currentIndex + 1);
           setIsFlipped(false);
-          gsap.fromTo(cardRef.current, 
+          gsap.fromTo(
+            cardRef.current,
             { x: 300, opacity: 0 },
             { duration: 0.3, x: 0, opacity: 1 }
           );
-        }
+        },
       });
     } else {
       setCanGenerate(true);
@@ -79,14 +80,16 @@ const FlashcardApp = () => {
         duration: 0.3,
         x: 300,
         opacity: 0,
+        ease: "power3.out",
         onComplete: () => {
           setCurrentIndex(currentIndex - 1);
           setIsFlipped(false);
-          gsap.fromTo(cardRef.current, 
+          gsap.fromTo(
+            cardRef.current,
             { x: -300, opacity: 0 },
             { duration: 0.3, x: 0, opacity: 1 }
           );
-        }
+        },
       });
     }
   };
@@ -98,7 +101,7 @@ const FlashcardApp = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
       <h1 className="text-3xl font-bold mb-8">Flashcard Study App</h1>
-      
+
       <div className="w-full max-w-md mb-8">
         <input
           className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
@@ -110,8 +113,8 @@ const FlashcardApp = () => {
         <button
           className={`mt-2 w-full p-3 rounded transition-colors ${
             canGenerate && !isLoading
-              ? 'bg-blue-500 text-white hover:bg-blue-600'
-              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              ? "bg-blue-500 text-white hover:bg-blue-600"
+              : "bg-gray-300 text-gray-500 cursor-not-allowed"
           }`}
           onClick={handleGenerateFlashCard}
           disabled={!canGenerate || isLoading}
@@ -120,11 +123,11 @@ const FlashcardApp = () => {
             <div className="">
               <Loader className="animate-spin mx-auto" />
               <p className="p-2">
-                Generating flashcards...  Estimated time: 15 seconds
+                Generating flashcards... Estimated time: 15 seconds
               </p>
             </div>
           ) : (
-            'Generate Flashcards'
+            "Generate Flashcards"
           )}
         </button>
       </div>
@@ -140,22 +143,29 @@ const FlashcardApp = () => {
             className="w-full max-w-md h-64 perspective"
           >
             <motion.div
-              className="w-full h-full cursor-pointer"
+              ref={cardRef}
+              className="relative w-full h-full cursor-pointer"
               onClick={flipCard}
               animate={{ rotateY: isFlipped ? 180 : 0 }}
               transition={{ duration: 0.6 }}
-              style={{ transformStyle: "preserve-3d" }}
+              // style={{ transformStyle: "preserve-3d" }}
             >
+             {!isFlipped && (
               <div className="absolute w-full h-full backface-hidden bg-white p-6 rounded-lg shadow-lg flex items-center justify-center text-center">
                 <p className="text-xl">{flashcards[currentIndex]["front"]}</p>
               </div>
+              )} 
               
-              <div 
-                className="absolute w-full h-full backface-hidden bg-blue-100 p-6 rounded-lg shadow-lg flex items-center justify-center text-center" 
-                style={{ transform: "rotateY(180deg)" }}
+              {isFlipped && (
+              <motion.div
+                animate={{ rotateY: isFlipped ? 180 : 0 }}
+                transition={{ duration: 0.6 }}
+                className="absolute w-full h-full backface-hidden bg-white p-6 rounded-lg shadow-lg flex items-center justify-center text-center"
               >
-                <p className="text-xl" style={{ transform: "rotateY(180deg)" }}>{flashcards[currentIndex]["back"]}</p>
-              </div>
+                <p className="text-xl">{flashcards[currentIndex]["back"]}</p>
+              </motion.div>
+              )}
+
             </motion.div>
           </motion.div>
         </AnimatePresence>

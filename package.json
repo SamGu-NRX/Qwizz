@@ -51,6 +51,7 @@
     "gsap": "^3.12.5",
     "intro.js": "8.0.0-beta.1",
     "lucide-react": "^0.414.0",
+    "mini-svg-data-uri": "^1.4.4",
     "mongodb": "^6.8.0",
     "next-auth": "5.0.0-beta.18",
     "nodemailer": "^6.9.14",
