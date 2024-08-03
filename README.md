@@ -2,7 +2,7 @@
 
 Improve your learning skills with an all-in-one education assistant with unlimited MCQ and flashcard generation. Practice for standardized test, difficult subjects, and active recall.
 
-# # Features
+## Features
 Dashboard Overview
 ![Dashboard and Statistics Page](https://github.com/user-attachments/assets/cdc9b76b-fbb6-4ea3-99d8-433935325c53)
 
