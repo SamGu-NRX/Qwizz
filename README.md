@@ -6,7 +6,7 @@ Improve your learning skills with an all-in-one education assistant with unlimit
 Dashboard Overview
 ![Dashboard and Statistics Page](https://github.com/user-attachments/assets/33cfdb54-187d-4814-b175-21fbe5fedc0e)
 
-Responsive Onboarding
+Responsive Onboarding: Document Upload + OCR detection linking to local storage (refresh resistant)
 ![Onboarding](https://github.com/user-attachments/assets/3617e8c8-9511-4462-90ef-a42773edd12e)
 
 <!--
@@ -19,9 +19,7 @@ Responsive Onboarding
 
 **Backend**: MongoDB, Prisma ORM
 
-**APIs**: Resend (Emailing/Authentication), NextAuth (Authentication)
-
-**File Storage**: MongoDB Atlas
+**APIs**: Resend (Emailing/Authentication), NextAuth (Authentication), Tesseract.js (OCR)
 
 **Hosting**: Vercel (frontend)
 
