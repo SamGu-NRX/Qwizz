@@ -90,6 +90,7 @@ def hello_world(ctx):
             result2 = json.loads(result)
             print("Generated flashcards:")
             result2["error"] = False
+            delete_thread(thread_id=result2["id"])
             return result2
         except:
             return {"error": True}
