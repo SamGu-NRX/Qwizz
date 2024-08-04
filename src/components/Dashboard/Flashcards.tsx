@@ -24,6 +24,7 @@ const FlashcardApp = () => {
   const [question, setQuestion] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [canGenerate, setCanGenerate] = useState(true);
+  const [isSaved, setIsSaved] = useState(false);
 
   const cardRef = useRef(null);
 
@@ -32,10 +33,11 @@ const FlashcardApp = () => {
     setCanGenerate(false);
     try {
       const newFlashcardss = await flash_cards(question);
-      const newFlashcards = newFlashcardss["flashcards"].map((card: Omit<Flashcard, 'isSaved'>) => ({
-        ...card,
-        isSaved: false
-      }));
+      const newFlashcards = newFlashcardss["flashcards"]
+      // .map((card: Omit<Flashcard, 'isSaved'>) => ({
+      //   ...card,
+      //   isSaved: false
+      // }));
       setFlashcards(newFlashcards);
       setCurrentIndex(0);
       localStorage.setItem("flashcards", JSON.stringify(newFlashcards));
@@ -51,10 +53,11 @@ const FlashcardApp = () => {
     setIsLoading(true);
     try {
       const newFlashcardss = await flash_cards(question);
-      const newFlashcards = newFlashcardss["flashcards"].map((card: Omit<Flashcard, 'isSaved'>) => ({
-        ...card,
-        isSaved: false
-      }));
+      const newFlashcards = newFlashcardss["flashcards"]
+      // .map((card: Omit<Flashcard, 'isSaved'>) => ({
+      //   ...card,
+      //   isSaved: false
+      // }));
       setFlashcards((prevFlashcards) => [...prevFlashcards, ...newFlashcards]);
       localStorage.setItem("flashcards", JSON.stringify([...flashcards, ...newFlashcards]));
     } catch (error) {
@@ -99,6 +102,7 @@ const FlashcardApp = () => {
         onComplete: () => {
           setCurrentIndex(currentIndex + 1);
           setIsFlipped(false);
+          setIsSaved(false);
           gsap.fromTo(
             cardRef.current,
             { x: 300, opacity: 0 },
@@ -140,25 +144,27 @@ const FlashcardApp = () => {
   };
 
   const toggleSaveCard = async (id: number) => {
-    try {
-      const response = await fetch('/api/flashcards/save', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ id, isSaved: !flashcards[currentIndex].isSaved }),
-      });
+    // try {
+    //   const response = await fetch('/api/flashcards/save', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({ id, isSaved: !flashcards[currentIndex].isSaved }),
+    //   });
 
-      if (response.ok) {
-        setFlashcards(flashcards.map(card =>
-          card.id === id ? { ...card, isSaved: !card.isSaved } : card
-        ));
-      } else {
-        console.error('Failed to save flashcard');
-      }
-    } catch (error) {
-      console.error('Error saving flashcard:', error);
-    }
+    //   if (response.ok) {
+    //     setFlashcards(flashcards.map(card =>
+    //       card.id === id ? { ...card, isSaved: !card.isSaved } : card
+    //     ));
+    //   } else {
+    //     console.error('Failed to save flashcard');
+    //   }
+    // } catch (error) {
+    //   console.error('Error saving flashcard:', error);
+    // }
+
+    setIsSaved(!isSaved);
   };
 
   const progress = flashcards && flashcards.length > 0 ? ((currentIndex + 1) / flashcards.length) * 100 : 0;
@@ -245,7 +251,8 @@ const FlashcardApp = () => {
                     }}
                   >
                     <Star
-                      className={`h-6 w-6 ${flashcards[currentIndex].isSaved ? 'text-yellow-400 fill-yellow-400' : 'text-gray-400'}`}
+                      // className={`h-6 w-6 ${flashcards[currentIndex].isSaved ? 'text-yellow-400 fill-yellow-400' : 'text-gray-400'}`}
+                      className={`h-6 w-6 ${isSaved ? 'text-yellow-400 fill-yellow-400' : 'text-gray-400'}`}
                     />
       
                 </Button>

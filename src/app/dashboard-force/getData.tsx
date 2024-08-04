@@ -1,7 +1,8 @@
 "use server";
 
 import dataJson from "@/app/dashboard.json";
-import { Question } from "./columns";
+import { Question, columns } from "./columns";
+import { DataTable } from "./data-table";
 
 export async function getData(): Promise<Question[]> {
   console.log("Fetching data...");
@@ -19,7 +20,7 @@ export async function getData(): Promise<Question[]> {
       title: flashcardContent.title,
       id: flashcardContent.ID,
       type: flashcardContent.subject,
-      date: new Date(flashcardContent.date.year, flashcardContent.date.month-1, flashcardContent.date.day),
+      date: new Date(flashcardContent.date.year, flashcardContent.date.month - 1, flashcardContent.date.day),
       accuracy: correct,
       "set-size": flashcardContent.cards.length
     };
@@ -28,16 +29,19 @@ export async function getData(): Promise<Question[]> {
   }
   
   console.log("Data fetched:", dataTableInfo);
+
   return dataTableInfo;
 }
 
-export async function fetchData() {
+export async function fetchTable() {
   const data = await getData();
   console.log("Fetched Data:", data);
-  return data;
+  return (
+    <DataTable columns={columns} data={data} />
+  );
 }
 
-export const data = await fetchData();  // Ensure this is awaited
+export const data = await getData();
 export const todayDate = new Date(Date.now());
 export const weekData = [];
 export const lastWeekData = [];

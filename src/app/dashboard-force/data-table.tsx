@@ -33,7 +33,7 @@ interface Data {
   title: string
   id: string
   type: string
-  date: string
+  date: Date
   accuracy: number
   'set-size': number
 }

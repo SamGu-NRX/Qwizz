@@ -16,12 +16,12 @@ const Home = () => {
   }, []);
   
   return (
-    <div className="flex min-h-screen w-full flex-col bg-muted/40">
+    <div className="flex w-full flex-col bg-muted/40">
       <Sidebar />
-      <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
+      <div className="sm:gap-4 sm:py-4 sm:pl-14">
         <Header />
         <main
-          className="justify-center items-center p-4"
+          className="justify-center items-center "
           ref={dashboardRef}
         >
           <FlashcardApp />
