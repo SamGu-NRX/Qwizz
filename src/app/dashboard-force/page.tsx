@@ -5,7 +5,7 @@ import Tutorial from '@/components/Onboarding/Tutorial';
 import ClientOverlay from '@/components/Onboarding/ClientOverlay';
 import { ChevronLeft, ChevronRight, Copy, MoreVertical } from 'lucide-react';
 import Script from 'next/script';
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import Sidebar from "@/components/SidebarDash";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,7 +13,7 @@ import { Separator } from "@/components/ui/separator";
 import { Question, columns } from "./columns";
 import { DataTable } from "./data-table";
 import Header from "@/components/HeaderDash";
-import { data, todayDate, weekData, lastWeekData, monthData, yearData } from './getData';
+import { data, todayDate, weekData, lastWeekData, monthData, yearData, getData } from './getData';
 import { DropdownMenu, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import ProgressBars from '@/components/ProgressBar';
 import StatCharts from '@/components/StatGraphs';
@@ -45,10 +45,11 @@ interface DashboardProps {
 const Dashboard: React.FC<DashboardProps>= () => {
   const dashboardRef = useRef<HTMLDivElement>(null);
   const elementsRef = useRef<(HTMLHeadingElement | HTMLParagraphElement | HTMLButtonElement)[]>([]);
-
+  const [loading, setLoading] = useState(true);
   const redirectGenerate = () => {
     window.location.href = '/dashboard-force/flashcards';
   }
+
 
   useEffect(() => {
       if (dashboardRef.current) {
@@ -113,20 +114,24 @@ const Dashboard: React.FC<DashboardProps>= () => {
               />
             </div>
             <Card
-              x-chunk="dashboard-05-chunk-3"
-              id="questions"
-              ref={(el) => {
-                if (el) elementsRef.current[3] = el;
-              }}
+            x-chunk="dashboard-05-chunk-3"
+            id="questions"
+            ref={(el) => {
+            if (el) elementsRef.current[3] = el;
+            }}
             >
               <CardHeader className="px-7">
                 <CardTitle>Questions</CardTitle>
-                <CardDescription>Recent questions you answered this week.</CardDescription>
+                  <CardDescription>Recent questions you answered this week.</CardDescription>
               </CardHeader>
               <CardContent>
-                {/* {Array.isArray(data) ? <DataTable columns={columns} data={data} /> : <div>You haven{`'`}t answered any questions today! Go practice!</div>} */}
-
-                <DataTable columns={columns} data={data} /> 
+                {/* {loading ? (
+               <div>Loading...</div>
+                ) : Array.isArray(data) && data.length > 0 ? ( */}
+                <DataTable columns={columns} data={data} />
+                {/* ) : (
+                <div>You haven't answered any questions today! Go practice!</div>
+                )} */}
               </CardContent>
             </Card>
           </div>

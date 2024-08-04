@@ -9,21 +9,21 @@ datasource db {
   // relationMode = "prisma"
 }
 
-model Flashcards {
+model FlashcardSet {
   id         String                 @id @default(auto()) @map("_id") @db.ObjectId
-  flashcards FlashcardsFlashcards[]
+  flashcards Flashcard[]
 }
 
-type FlashcardsFlashcards {
-  ID     String
-  date   FlashcardsFlashcardsDate
-  title  String
-  front  String
-  back   String
-  source String
+type Flashcard {
+  id       String
+  date     FlashcardDate
+  title    String
+  front    String
+  back     String
+  source   String
 }
 
-type FlashcardsFlashcardsDate {
+type FlashcardDate {
   day   Int
   month Int
   time  String

@@ -1,8 +1,6 @@
 "use client"
 import { Button } from "@/components/ui/button"
-
 import * as React from "react"
-
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -14,7 +12,6 @@ import {
   getFilteredRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-
 import {
   Table,
   TableBody,
@@ -23,24 +20,31 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
+// Define the data type
+interface Data {
+  title: string
+  id: string
+  type: string
+  date: string
+  accuracy: number
+  'set-size': number
+}
 
-
+// Define the props type
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable<TData extends Data, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -69,52 +73,35 @@ export function DataTable<TData, TValue>({
     <div>
       <div className="flex items-center py-4">
         <DropdownMenu>
-        <DropdownMenuTrigger asChild>
+          <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
               Filter Type
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuRadioGroup value={position} onValueChange={setPosition}>
-          <DropdownMenuRadioItem onClick = {(event) =>
-            table.getColumn("type")?.setFilterValue("Math")
-          }
-          value="Math"
-          className="max-w-sm">
-            Math
-          </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem onClick = {(event) =>
-            table.getColumn("type")?.setFilterValue("Reading")
-          }
-          value="Reading"
-          className="max-w-sm">
-            Reading
-          </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem onClick = {(event) =>
-            table.getColumn("type")?.setFilterValue("Writing")
-          }
-          value="Writing"
-          className="max-w-sm">
-            Writing
-          </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem onClick = {(event) =>
-            table.getColumn("type")?.setFilterValue("")
-          }
-          value="none"
-          className="max-w-sm">
-            None
-          </DropdownMenuRadioItem>
-          </DropdownMenuRadioGroup>
+              <DropdownMenuRadioItem onClick={() => table.getColumn("type")?.setFilterValue("Math")} value="Math" className="max-w-sm">
+                Math
+              </DropdownMenuRadioItem>
+              <DropdownMenuRadioItem onClick={() => table.getColumn("type")?.setFilterValue("Reading")} value="Reading" className="max-w-sm">
+                Reading
+              </DropdownMenuRadioItem>
+              <DropdownMenuRadioItem onClick={() => table.getColumn("type")?.setFilterValue("Writing")} value="Writing" className="max-w-sm">
+                Writing
+              </DropdownMenuRadioItem>
+              <DropdownMenuRadioItem onClick={() => table.getColumn("type")?.setFilterValue("")} value="none" className="max-w-sm">
+                None
+              </DropdownMenuRadioItem>
+            </DropdownMenuRadioGroup>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-    <div className="rounded-md border">
-      <Table>
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
                   <TableHead key={header.id}>
                     {header.isPlaceholder
                       ? null
@@ -123,36 +110,32 @@ export function DataTable<TData, TValue>({
                           header.getContext()
                         )}
                   </TableHead>
-                )
-              })}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && "selected"}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
                 ))}
               </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-    </div>
-    <div className="flex items-center justify-end space-x-2 py-4">
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="h-24 text-center">
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+      <div className="flex items-center justify-end space-x-2 py-4">
         <Button
           variant="outline"
           size="sm"
