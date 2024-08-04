@@ -47,7 +47,7 @@ const Dashboard: React.FC<DashboardProps>= () => {
   const elementsRef = useRef<(HTMLHeadingElement | HTMLParagraphElement | HTMLButtonElement)[]>([]);
 
   const redirectGenerate = () => {
-    window.location.href = '/dashboard/generate';
+    window.location.href = '/dashboard-force/flashcards';
   }
 
   useEffect(() => {

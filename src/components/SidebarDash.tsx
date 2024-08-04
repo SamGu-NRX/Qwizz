@@ -13,6 +13,7 @@ import {
   Package2,
   Settings,
   ShoppingCart,
+  BookPlus,
   BookOpenCheck,
   Menu
 } from "lucide-react"
@@ -82,6 +83,15 @@ export default function Sidebar() {
                   <Home className="h-5 w-5" />
                   Dashboard
                 </Link>
+
+                <Link
+                  href="/dashboard-force/flashcards"
+                  className= {pathName.startsWith("/dashboard-force/flashcards") ? accentLinkStyle : mutedLinkStyle}
+                >
+                  <BookPlus className="h-5 w-5" />
+                  Learn with Flashcards
+                </Link>
+
                 <Link
                   href="/dashboard-force/review"
                   className= {pathName.startsWith("/dashboard-force/review") ? accentLinkStyle : mutedLinkStyle}
@@ -89,6 +99,7 @@ export default function Sidebar() {
                   <BookOpenCheck className="h-5 w-5" />
                   Review Flashcards
                 </Link>
+
                 {/* <Link
                   href="/dashboard-force/stats"
                   className= {pathName.startsWith("/dashboard-force/stats") ? accentLinkStyle : mutedLinkStyle}
@@ -96,13 +107,15 @@ export default function Sidebar() {
                   <LineChart className="h-5 w-5" />
                   Stats
                 </Link> */}
-                <Link
+    
+                {/* <Link
                   href="/dashboard-force/upgrade"
                   className= {pathName.startsWith("/dashboard-force/upgrade") ? accentLinkStyle : mutedLinkStyle}
                 >
                   <ShoppingCart className="h-5 w-5" />
                   Upgrade
-                </Link>
+                </Link> */}
+
                 <Link
                   href="/dashboard-force/settings"
                   className= {pathName.startsWith("/dashboard-force/settings") ? accentLinkStyle : mutedLinkStyle}
@@ -114,6 +127,7 @@ export default function Sidebar() {
             </SheetContent>
           </Sheet>
           <TooltipProvider>
+
           <Tooltip>
             <TooltipTrigger asChild id='dashboard'>
               <Link
@@ -127,6 +141,7 @@ export default function Sidebar() {
             <TooltipContent side="right">Dashboard</TooltipContent>
           </Tooltip>
           </TooltipProvider>
+
           <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild id="review">
@@ -141,6 +156,7 @@ export default function Sidebar() {
             <TooltipContent side="right">Review Flashcards</TooltipContent>
           </Tooltip>
           </TooltipProvider>
+
           {/* <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild id="stats">
@@ -155,7 +171,23 @@ export default function Sidebar() {
             <TooltipContent side="right">Stats</TooltipContent>
           </Tooltip>
           </TooltipProvider> */}
+
           <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild id="flashcards">
+              <Link
+                href="/dashboard-force/flashcards"
+                className={pathName.startsWith("/dashboard-force/flashcards") ? accentIconStyle : mutedIconStyle}
+              >
+                <BookPlus className="h-5 w-5" />
+                <span className="sr-only">Learn with Flashcards</span>
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent side="right">Learn with Flashcards</TooltipContent>
+          </Tooltip>
+          </TooltipProvider>
+
+          {/* <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild id="upgrade">
               <Link
@@ -168,7 +200,8 @@ export default function Sidebar() {
             </TooltipTrigger>
             <TooltipContent side="right">Upgrade</TooltipContent>
           </Tooltip>
-          </TooltipProvider>
+          </TooltipProvider> */}
+
           <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild id="settings">
