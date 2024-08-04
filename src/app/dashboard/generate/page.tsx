@@ -1,15 +1,21 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Loader } from "lucide-react";
-import { flash_cards } from "@/actions/get-flashcard";
 import { gsap } from "gsap";
+import confetti from 'canvas-confetti';
+import { flash_cards } from "@/actions/get-flashcard";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 
 interface Flashcard {
   front: string;
   back: string;
   id: number;
 }
+
 const FlashcardApp = () => {
   const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -95,6 +101,12 @@ const FlashcardApp = () => {
           );
         },
       });
+    } else if (flashcards && currentIndex === flashcards.length - 1) {
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
     }
   };
 
@@ -122,48 +134,37 @@ const FlashcardApp = () => {
     setIsFlipped(!isFlipped);
   };
 
-  const progress = flashcards && flashcards.length > 0 ? (currentIndex + 1) / flashcards.length * 100 : 0;
+  const progress = flashcards && flashcards.length > 0 ? ((currentIndex + 1) / flashcards.length) * 100 : 0;
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-      <h1 className="text-3xl font-bold mb-8">Flashcard Study App</h1>
+      <h1 className="text-3xl font-bold mb-8">Generate Flashcards</h1>
 
-      <div className="w-full max-w-md mb-8">
-        <input
-          className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-          placeholder="Enter a question for a new flashcard"
+      <div className="w-full max-w-md mb-8 space-y-4">
+        <Input
+          placeholder="Add additional context to generate flashcards"
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
           disabled={!canGenerate || isLoading}
         />
-        <button
-          className={`mt-2 w-full p-3 rounded transition-colors ${canGenerate && !isLoading
-            ? "bg-blue-500 text-white hover:bg-blue-600"
-            : "bg-gray-300 text-gray-500 cursor-not-allowed"
-            }`}
+        <Button
+          className="w-full"
           onClick={handleGenerateFlashCard}
           disabled={!canGenerate || isLoading}
         >
           {isLoading ? (
-            <div className="">
-              <Loader className="animate-spin mx-auto" />
-              <p className="p-2">
-                Generating flashcards... Estimated time: 15 seconds
-              </p>
+            <div className="flex items-center justify-center">
+              <Loader className="animate-spin mr-2" />
+              <span>Generating flashcards... (Est. 15s)</span>
             </div>
           ) : (
             "Generate Flashcards"
           )}
-        </button>
+        </Button>
       </div>
 
       {flashcards && flashcards.length > 0 ? (
-        <div className="w-full max-w-md h-2 bg-gray-200 rounded-full mb-4">
-          <div
-            className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full transition-width duration-300"
-            style={{ width: `${progress}%` }}
-          ></div>
-        </div>
+        <Progress value={progress} className="w-full max-w-md mb-4" />
       ) : (
         <p>No flashcards available</p>
       )}
@@ -205,7 +206,7 @@ const FlashcardApp = () => {
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
-          className="p-2 rounded-full bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
+          className="p-2 rounded-lg bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
           onClick={prevCard}
           disabled={currentIndex === 0}
         >
@@ -228,20 +229,20 @@ const FlashcardApp = () => {
       </div>
 
       {flashcards && currentIndex === flashcards.length - 1 && flashcards.length > 0 && (
-        <button
-          className="mt-8 w-full max-w-md p-3 rounded bg-blue-500 text-white hover:bg-blue-600 transition-colors"
+        <Button
+          className="mt-8 w-full max-w-md"
           onClick={handleGenerateMoreFlashCards}
           disabled={isLoading}
         >
           {isLoading ? (
-            <div className="">
-              <Loader className="animate-spin mx-auto" />
-              <p className="p-2">Generating more flashcards...</p>
+            <div className="flex items-center justify-center">
+              <Loader className="animate-spin mr-2" />
+              <span>Generating more flashcards...</span>
             </div>
           ) : (
             "Generate More Flashcards"
           )}
-        </button>
+        </Button>
       )}
     </div>
   );
