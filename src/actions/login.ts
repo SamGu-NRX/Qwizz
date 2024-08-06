@@ -2,12 +2,12 @@
 "use server"
 import * as z from "zod";
 import { LoginSchema } from "@/schema";
-import { signIn } from "@/../lib/auth";
-import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
+import { signIn } from "@/lib/auth";
+import { DEFAULT_LOGIN_REDIRECT } from "@/index";
 import AuthError from "next-auth"; 
-import { generateVerificationToken } from "@/../lib/tokens";
+import { generateVerificationToken } from "@/lib/tokens";
 import { getUserByEmail } from "@/data/user";
-import { sendVerificationEmail } from "@/../lib/mail";
+import { sendVerificationEmail } from "@/lib/mail";
 
 
 export const login = async (values: z.infer<typeof LoginSchema>) => {
@@ -60,4 +60,4 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
     }
 };
 
-// export { GET, POST } from "@/../lib/auth"
+// export { GET, POST } from "@/lib/auth"

@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { LogOut, LogOutIcon } from 'lucide-react';
 import { signIn, signOut } from 'next-auth/react';
 import { GoogleSignInButton, DiscordSignInButton, GithubSignInButton } from './auth/AuthButtons';
-import { DEFAULT_LOGIN_REDIRECT } from '@/routes';
+import { DEFAULT_LOGIN_REDIRECT } from '@/index';
 
 const UserButton = () => {
   const session = useCurrentUser()

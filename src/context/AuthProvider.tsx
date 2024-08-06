@@ -4,7 +4,7 @@
 import { useState, useEffect, useContext, createContext, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'firebase/auth';
-import { auth } from '@/../lib/auth';
+import { auth } from '@/lib/auth';
 
 // Define the AuthContextType interface
 interface AuthContextType {

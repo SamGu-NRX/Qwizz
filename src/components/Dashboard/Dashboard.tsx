@@ -45,7 +45,7 @@ import ProgressBars from '@/components/ProgressBar';
 
 import StatCharts from '@/components/StatGraphs';
 
-import { db } from "@/../lib/db"
+import { db } from "@/lib/db"
 
 
 async function fetchFlashcards() {
