@@ -4,7 +4,7 @@ const svgToDataUri = require("mini-svg-data-uri");
 const {
   default: flattenColorPalette,
 } = require("tailwindcss/lib/util/flattenColorPalette");
-
+const {nextui} = require("@nextui-org/theme");
 
 const config: Config = {
   darkMode: ["class"],
@@ -138,6 +138,21 @@ function addVariablesForColors({ addBase, theme }: any) {
     ":root": newVars,
   });
 }
+
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    // single component styles
+    "./node_modules/@nextui-org/theme/dist/components/button.js",
+    // or you can use a glob pattern (multiple component styles)
+    './node_modules/@nextui-org/theme/dist/components/(button|snippet|code|input).js'
+  ],
+  theme: {
+    extend: {},
+  },
+  darkMode: "class",
+  plugins: [nextui()],
+};
 
 
 export default config;
