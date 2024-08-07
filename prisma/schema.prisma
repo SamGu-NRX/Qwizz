@@ -10,55 +10,54 @@ datasource db {
 }
 
 model FlashcardSet {
-  id         String                 @id @default(auto()) @map("_id") @db.ObjectId
+  id         String      @id @default(auto()) @map("_id") @db.ObjectId
   title      String
   flashcards Flashcard[]
   subject    String
 
-  quizzes    Quiz[]?
+  quiz       Quiz?       @relation(name: "QuizToFlashcardSet", fields: [quizId], references: [id])
+  quizId    String?      @db.ObjectId
 }
 
 model Flashcard {
-  id       String          @id @default(auto()) @map("_id") @db.ObjectId
-  title    String
-  front    String
-  back     String
-  source   String
-  date     FlashcardDate @relation(fields: [dateid], references: [id])
-  dateid   String        @db.ObjectId
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  title          String
+  front          String
+  back           String
+  source         String
+  date           FlashcardDate @relation(fields: [dateid], references: [id])
+  dateid         String        @db.ObjectId
 
-  flashcardSetId String    @db.ObjectId
-  flashcardSet   FlashcardSet @relation(fields: [flashcardSetId], references: [id], onDelete: Cascade)
+  flashcardSetId String        @db.ObjectId
+  flashcardSet   FlashcardSet  @relation(fields: [flashcardSetId], references: [id], onDelete: Cascade)
 
-  quizQuestion QuizQuestion?
+  quizQuestion   QuizQuestion?
 }
 
 model FlashcardDate {
-  id    String  @id @default(auto()) @map("_id") @db.ObjectId
-  day   Int
-  month Int
-  time  String
-  year  Int
+  id        String      @id @default(auto()) @map("_id") @db.ObjectId
+  day       Int
+  month     Int
+  time      String
+  year      Int
 
-  Flashcard Flashcard[]
+  flashcard Flashcard[]
 }
 
 model ContextFiles {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  gradeLevel String
-  subject String
+  id           String        @id @default(auto()) @map("_id") @db.ObjectId
+  gradeLevel   String
+  subject      String
   
   syllabusText String
-  notesText String
+  notesText    String
 
-  // Each user can have multiuple context files and each file can only belong to one user
-  userId String @db.ObjectId
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // Each user can have multiple context files and each file can only belong to one user
+  userId       String        @db.ObjectId
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-
-  Quiz Quiz[]
+  quizzes      Quiz[]
 }
-
 
 enum QuestionType {
   MULTIPLE_CHOICE
@@ -81,20 +80,29 @@ model Quiz {
   contextFileId  String?       @db.ObjectId
   contextFile    ContextFiles? @relation(fields: [contextFileId], references: [id], onDelete: SetNull)
 
-  QuizResponse QuizResponse[]
+  quizResponses  QuizResponse[]
+
+  flashcardSet   FlashcardSet? @relation(name: "FlashcardSetToQuiz", fields: [flashcardSetID], references: [id])
+  flashcardSetID  String?   @db.ObjectId
 }
 
 model QuizQuestion {
-  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
   question    String
   type        QuestionType
-  options     String[]     // For MULTIPLE_CHOICE and MATCHING
-  answers     String[]     // Correct answers for MULTIPLE_CHOICE and MATCHING pairs
-  keywords    String[]     // For SHORT_RESPONSE grading
-  imagePath   String?      // For IMAGE_UPLOAD questions
+  options     String[]      // For MULTIPLE_CHOICE and MATCHING
+  answers     String[]      // Correct answers for MULTIPLE_CHOICE and MATCHING pairs
+  keywords    String[]      // For SHORT_RESPONSE grading
+  imagePath   String?       // For IMAGE_UPLOAD questions
 
-  quizId      String       @db.ObjectId
-  quiz        Quiz         @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  quizId      String        @db.ObjectId
+  quiz        Quiz          @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  flashcardId String?       @db.ObjectId @unique
+  flashcard   Flashcard?    @relation(fields: [flashcardId], references: [id], onDelete: SetNull)
+
+  QuizResponse QuizResponse? @relation("IncorrectQuestions", fields: [QuizResponseid], references: [id])
+  QuizResponseid String?     @db.ObjectId
 }
 
 model QuizResponse {
@@ -110,6 +118,8 @@ model QuizResponse {
   score       Float
   createdAt   DateTime      @default(now())
   feedback    String[]      // Teacher or AI-generated feedback per question
+
+  incorrectQuestions QuizQuestion[] @relation("IncorrectQuestions")
 }
 
 // User Info starts here
@@ -128,28 +138,29 @@ model User {
   phoneNumber   String?
   image         String?
   hashedPassword      String?
-  role          UserRole      // TODO: make the default null and assign based on registering as ..
+  role          UserRole      // STUDENT, TEACHER, ADMIN
   accounts      Account[]
   sessions      Session[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 
   // Adding relations to ContextFiles
-  contextFiles ContextFiles[]
+  contextFiles  ContextFiles[]
   quizzesCreated Quiz[] @relation("TeacherQuizzes")
-  quizzesTaken QuizResponse[] @relation("StudentResponses")
+  quizzesTaken  QuizResponse[] @relation("StudentResponses")
 
   // Relations for conversations and messages
   conversationIds String[] @db.ObjectId
   conversations Conversation[] @relation(fields: [conversationIds], references: [id])
 
-  messages Message[]
+  messages      Message[]
   seenMessageIds String[] @db.ObjectId
-  seenMessages Message[] @relation("Seen", fields: [seenMessageIds], references: [id])
+  seenMessages  Message[] @relation("Seen", fields: [seenMessageIds], references: [id])
 
   @@map("users")
 }
+
 model Account {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId
   userId            String  @db.ObjectId
@@ -204,7 +215,7 @@ model PasswordResetToken {
   @@unique([email, token])
 }
 
-model Conversation{
+model Conversation {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   createdAt DateTime @default(now())
   lastMessageAt DateTime @default(now())
