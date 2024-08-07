@@ -5,7 +5,7 @@ import Header from "@/components/HeaderDash";
 import { fadeUp } from "@/animations/gsap";
 import { useEffect, useRef } from "react";
 
-const Home = () => {
+const GenerateFlashcards = () => {
   const dashboardRef = useRef<HTMLDivElement>(null);
   const elementsRef = useRef<(HTMLHeadingElement | HTMLParagraphElement | HTMLButtonElement)[]>([]);
 
@@ -31,4 +31,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default GenerateFlashcards
