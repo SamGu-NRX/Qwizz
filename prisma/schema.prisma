@@ -14,6 +14,8 @@ model FlashcardSet {
   title      String
   flashcards Flashcard[]
   subject    String
+
+  quizzes    Quiz[]?
 }
 
 model Flashcard {
@@ -27,6 +29,8 @@ model Flashcard {
 
   flashcardSetId String    @db.ObjectId
   flashcardSet   FlashcardSet @relation(fields: [flashcardSetId], references: [id], onDelete: Cascade)
+
+  quizQuestion QuizQuestion?
 }
 
 model FlashcardDate {
@@ -51,24 +55,80 @@ model ContextFiles {
   userId String @db.ObjectId
   user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+
+  Quiz Quiz[]
+}
+
+
+enum QuestionType {
+  MULTIPLE_CHOICE
+  MATCHING
+  SHORT_RESPONSE
+  IMAGE_UPLOAD
+}
+
+model Quiz {
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  title          String
+  description    String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  teacherId      String        @db.ObjectId
+  teacher        User          @relation("TeacherQuizzes", fields: [teacherId], references: [id], onDelete: Cascade)
+
+  questions      QuizQuestion[]
+  contextFileId  String?       @db.ObjectId
+  contextFile    ContextFiles? @relation(fields: [contextFileId], references: [id], onDelete: SetNull)
+
+  QuizResponse QuizResponse[]
+}
+
+model QuizQuestion {
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  question    String
+  type        QuestionType
+  options     String[]     // For MULTIPLE_CHOICE and MATCHING
+  answers     String[]     // Correct answers for MULTIPLE_CHOICE and MATCHING pairs
+  keywords    String[]     // For SHORT_RESPONSE grading
+  imagePath   String?      // For IMAGE_UPLOAD questions
+
+  quizId      String       @db.ObjectId
+  quiz        Quiz         @relation(fields: [quizId], references: [id], onDelete: Cascade)
+}
+
+model QuizResponse {
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
+  studentId   String        @db.ObjectId
+  student     User          @relation("StudentResponses", fields: [studentId], references: [id], onDelete: Cascade)
+
+  quizId      String        @db.ObjectId
+  quiz        Quiz          @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  answers     String[]      // Store answers as array of strings or custom type if needed
+  imagePaths  String[]      // Paths to uploaded images for IMAGE_UPLOAD questions
+  score       Float
+  createdAt   DateTime      @default(now())
+  feedback    String[]      // Teacher or AI-generated feedback per question
 }
 
 // User Info starts here
 
 enum UserRole {
-  USER
+  STUDENT
+  TEACHER
   ADMIN
 }
 
 model User {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
   name          String?
-  email         String?   @unique
-  emailVerified DateTime? @map("email_verified")
+  email         String?       @unique
+  emailVerified DateTime?     @map("email_verified")
   phoneNumber   String?
   image         String?
   hashedPassword      String?
-  role          UserRole  @default(USER)
+  role          UserRole      // TODO: make the default null and assign based on registering as ..
   accounts      Account[]
   sessions      Session[]
 
@@ -77,6 +137,8 @@ model User {
 
   // Adding relations to ContextFiles
   contextFiles ContextFiles[]
+  quizzesCreated Quiz[] @relation("TeacherQuizzes")
+  quizzesTaken QuizResponse[] @relation("StudentResponses")
 
   // Relations for conversations and messages
   conversationIds String[] @db.ObjectId
@@ -88,7 +150,6 @@ model User {
 
   @@map("users")
 }
-
 model Account {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId
   userId            String  @db.ObjectId
