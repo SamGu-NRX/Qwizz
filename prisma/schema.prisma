@@ -15,8 +15,7 @@ model FlashcardSet {
   flashcards Flashcard[]
   subject    String
 
-  quiz       Quiz?       @relation(name: "QuizToFlashcardSet", fields: [quizId], references: [id])
-  quizId    String?      @db.ObjectId
+  quizzes    Quiz[] @relation(name: "QuizToFlashcardSet")
 }
 
 model Flashcard {
@@ -25,13 +24,13 @@ model Flashcard {
   front          String
   back           String
   source         String
-  date           FlashcardDate @relation(fields: [dateid], references: [id])
-  dateid         String        @db.ObjectId
+  date           FlashcardDate @relation(fields: [dateId], references: [id])
+  dateId         String        @db.ObjectId
 
   flashcardSetId String        @db.ObjectId
   flashcardSet   FlashcardSet  @relation(fields: [flashcardSetId], references: [id], onDelete: Cascade)
 
-  quizQuestion   QuizQuestion?
+  quizQuestion   QuizQuestion? @relation(name: "FlashcardToQuizQuestion")
 }
 
 model FlashcardDate {
@@ -41,7 +40,7 @@ model FlashcardDate {
   time      String
   year      Int
 
-  flashcard Flashcard[]
+  flashcards Flashcard[]
 }
 
 model ContextFiles {
@@ -82,8 +81,8 @@ model Quiz {
 
   quizResponses  QuizResponse[]
 
-  flashcardSet   FlashcardSet? @relation(name: "FlashcardSetToQuiz", fields: [flashcardSetID], references: [id])
-  flashcardSetID  String?   @db.ObjectId
+  flashcardSetId String?       @db.ObjectId
+  flashcardSet   FlashcardSet? @relation(name: "QuizToFlashcardSet", fields: [flashcardSetId], references: [id])
 }
 
 model QuizQuestion {
@@ -99,10 +98,10 @@ model QuizQuestion {
   quiz        Quiz          @relation(fields: [quizId], references: [id], onDelete: Cascade)
 
   flashcardId String?       @db.ObjectId @unique
-  flashcard   Flashcard?    @relation(fields: [flashcardId], references: [id], onDelete: SetNull)
+  flashcard   Flashcard?    @relation(name: "FlashcardToQuizQuestion", fields: [flashcardId], references: [id], onDelete: SetNull)
 
-  QuizResponse QuizResponse? @relation("IncorrectQuestions", fields: [QuizResponseid], references: [id])
-  QuizResponseid String?     @db.ObjectId
+  quizResponseId String?     @db.ObjectId
+  quizResponse   QuizResponse? @relation("IncorrectQuestions", fields: [quizResponseId], references: [id])
 }
 
 model QuizResponse {
