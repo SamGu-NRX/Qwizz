@@ -1,10 +1,10 @@
 "use client";
 import { cn } from "@/lib/utils";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { BentoGrid, BentoGridItem } from "../ui/bento-grid";
 import { motion } from "framer-motion";
 import { HeroHighlight, Highlight } from "../ui/hero-highlight";
-import {AIQuestionDifficulty, SaveQuestions, ProgressTracking, MobileFriendly, CustomizableStudyPlans} from "@/components/icons"
+import { AIQuestionDifficulty, SaveQuestions, ProgressTracking, MobileFriendly, CustomizableStudyPlans } from "@/components/icons"
 import {
   Bot,
   Save,
@@ -13,9 +13,19 @@ import {
   ChartNoAxesCombined
 } from "lucide-react"
 import Image from "next/image"
+import { fadeUp } from "@/animations/gsap";
 // import statsImage from "@/assets/analytics.png"
 
-export default function HomeGrid() {
+ const HomeGrid =() => {
+
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    cardRefs.current.forEach((card, index) => {
+      fadeUp(card, card, { delay: index * 0.1 });
+    });
+  }, []);
+
     return (
       <div>
         <motion.div
@@ -35,24 +45,28 @@ export default function HomeGrid() {
           StudyBuddy offers a variety of functionalities that allow efficient studying for students and an automated process of generating study flashcards.   
         </div>
       </motion.div>
-      <BentoGrid className="max-w-5xl mx-auto">
-        {items.map((item, i) => (
-          <BentoGridItem
-            key={i}
-            title={item.title}
-            description={item.description}
-            header={item.header}
-            icon={item.icon}
-            className={i === 4? "md:col-span-2 " : ""}
-          />
-        ))}
-      </BentoGrid>
+
+        <BentoGrid className="max-w-5xl mx-auto">
+          {items.map((item, index) => (
+            <div key={item.title}   
+            ref={el => { if (el) cardRefs.current[index] = el; }} className={index === 4? "md:col-span-2 " : ""}>
+              <BentoGridItem
+                key={index}
+                title={item.title}
+                description={item.description}
+                header={item.header}
+                icon={item.icon}
+              />
+            </div>
+          ))}
+        </BentoGrid>
       </div>
     );
   }
   const Skeleton = () => (
     <div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl bg-gradient-to-br from-neutral-200 dark:from-neutral-900 dark:to-neutral-800 to-neutral-100"></div>
   );
+  
   const items = [
     {
       title: "AI-Generated Question Difficulties",
@@ -86,3 +100,5 @@ export default function HomeGrid() {
       icon: <Settings className="h-4 w-4 text-neutral-500" />,
     },
   ];
+
+export default HomeGrid;

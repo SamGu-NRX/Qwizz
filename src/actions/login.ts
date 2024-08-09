@@ -2,7 +2,7 @@
 "use server"
 import * as z from "zod";
 import { LoginSchema } from "@/schema";
-import { signIn } from "@/lib/auth";
+import { signIn } from "@/../auth";
 import { DEFAULT_LOGIN_REDIRECT } from "@/index";
 import AuthError from "next-auth"; 
 import { generateVerificationToken } from "@/lib/tokens";
@@ -60,4 +60,4 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
     }
 };
 
-// export { GET, POST } from "@/lib/auth"
+// export { GET, POST } from "@/../auth"

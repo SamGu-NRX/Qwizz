@@ -94,3 +94,7 @@
 .section-heading {
   @apply max-w-[540px] mx-auto;
 }
+
+.heading {
+  @apply font-bold text-4xl md:text-5xl text-center;
+}
