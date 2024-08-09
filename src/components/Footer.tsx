@@ -21,9 +21,9 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="w-full pt-20 pb-10" id="contact">
-      {/* background grid */}
-      <div className="w-full absolute left-0 -bottom-72 min-h-96">
+    <footer className="relative w-full pt-20 pb-10 bg-gradient-to-r from-gray-800/[0.5] via-black/[0.65] to-gray-800 text-white" id="contact">
+      {/* Background Grid */}
+      <div className="absolute inset-0 -z-10 w-full h-full">
         <Image
           src="/footer-grid.svg"
           alt="grid"
@@ -34,14 +34,13 @@ const Footer = () => {
         />
       </div>
 
-      <div className="flex flex-col items-center px-4">
-        <h1 className="heading lg:max-w-[45vw]">
-          Ready to take <span className="text-purple">your</span> digital
-          presence to the next level?
+      {/* Call to Action Section */}
+      <div className="flex flex-col items-center px-4 text-center">
+        <h1 className="heading lg:max-w-[45vw] text-2xl lg:text-5xl font-bold">
+          Ready to take <span className="text-purple">your</span> digital presence to the next level?
         </h1>
-        <p className="text-white-200 md:mt-10 my-5 text-center">
-          Reach out to me today and let&apos;s discuss how I can help you
-          achieve your goals.
+        <p className="text-white-200 md:mt-10 my-5 lg:text-lg">
+          Reach out to me today and let&apos;s discuss how I can help you achieve your goals.
         </p>
         <a href="mailto:focus.sgu@gmail.com">
           <MagicButton
@@ -51,20 +50,22 @@ const Footer = () => {
           />
         </a>
       </div>
-      <div className="flex mt-16 md:flex-row flex-col justify-between items-center">
-        <p className="md:text-base text-sm md:font-normal font-light">
-            &copy; {currentYear} StudyBuddy. All rights reserved.
+
+      {/* Footer Content */}
+      <div className="flex flex-col md:flex-row justify-between items-center mt-16 w-full md:px-16 px-4">
+        <p className="text-sm md:text-base font-light md:order-1 order-2 mt-4 md:mt-0">
+          &copy; {currentYear} StudyBuddy. All rights reserved.
         </p>
 
-        <div className="flex items-center md:gap-3 gap-6 p-2 mt-2">
+        <div className="flex items-center md:gap-4 gap-6 p-2 md:mt-0 mt-4 order-1">
           {socialMedia.map((info) => (
             <div
               key={info.id}
               onClick={() => window.open(info.link)}
-              className="w-14 h-12 cursor-pointer group flex justify-center items-center backdrop-filter backdrop-blur-lg bg-black-200/[0.95] rounded-lg border border-black-300 transition-all duration-200 transform hover:scale-110 hover:bg-opacity-90"
+              className="w-12 h-12 cursor-pointer group flex justify-center items-center bg-opacity-90 backdrop-filter backdrop-blur-lg bg-black-200 rounded-full border border-gray-500 transition-all duration-300 transform hover:scale-110 hover:bg-opacity-100"
             >
               <div
-                className={`h-6 w-6 transition-colors duration-200 ${
+                className={`h-6 w-6 transition-colors duration-300 ${
                   info.name === 'GitHub'
                     ? 'text-neutral-400 group-hover:text-white'
                     : info.name === 'Twitter'
