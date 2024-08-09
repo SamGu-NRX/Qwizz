@@ -16,7 +16,7 @@ Smooth animations and real-time statistics
 </p>
 
 ### Responsive Onboarding
-Document upload + OCR detection linking to local storage (refresh resistant)
+Document upload & Advanced OCR (server computing via Tesseract) linking to local storage (refresh resistant)
 <p align="center">
   <img src="https://github.com/user-attachments/assets/3617e8c8-9511-4462-90ef-a42773edd12e" alt="Onboarding" width="600">
 </p>
