@@ -21,7 +21,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="relative w-full pt-20 pb-10 bg-gradient-to-r from-gray-800/[0.5] via-black/[0.65] to-gray-800 text-white" id="contact">
+    <footer className="relative w-full pt-28 pb-10 bg-gradient-to-r from-gray-800/[0.5] via-black/[0.65] to-gray-800 text-white" id="contact">
       {/* Background Grid */}
       <div className="absolute inset-0 -z-10 w-full h-full">
         <Image

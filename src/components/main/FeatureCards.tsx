@@ -1,22 +1,20 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { Box, Image, Text, Stack, Link as ChakraLink } from "@chakra-ui/react";
-import { motion } from "framer-motion";
-
-const MotionBox = motion(Box);
+import Image from 'next/image';
 
 interface FeatureCard {
-    title: string;
-    href: string;
-    description: string;
-    imageUrl: string;
-  }
+  title: string;
+  href: string;
+  description: string;
+  imageUrl: string;
+}
 
-const featureCards = [
+const featureCards: FeatureCard[] = [
   {
     title: "AI Chatbot Functionality",
     href: "/features/ai-chatbot",
-    description: "The AI chatbot serves as a study companion, answering questions, providing explanations, and generating custom flashcards and MCQs on-demand.",
+    description: "AI chatbot as study companion, answering questions and generating flashcards.",
     imageUrl: "/images/ai-chatbot.jpg"
   },
   {
@@ -92,77 +90,51 @@ interface FeatureCardProps {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+            className="mt-2 text-sm"
           >
-            <a
-              href={card.href}
-              className="px-4 py-2 bg-white text-black rounded-full hover:bg-gray-200 transition-colors"
-            >
-              Learn More
-            </a>
+            {card.description}
           </motion.div>
         )}
-      </motion.div>
-    );
+    </motion.div>
+  );
+};
+
+const FeatureCardsDeck: React.FC = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const nextCard = () => {
+    setActiveIndex((prev) => (prev + 1) % featureCards.length);
   };
-  
-  const FeatureCardsDeck: React.FC = () => {
-    const [focusedIndex, setFocusedIndex] = useState(0);
-  
-    const nextCard = () => {
-      setFocusedIndex((prev) => (prev + 1) % featureCards.length);
-    };
-  
-    const prevCard = () => {
-      setFocusedIndex((prev) => (prev - 1 + featureCards.length) % featureCards.length);
-    };
-  
-    const swipeConfidenceThreshold = 10000;
-    const swipePower = (offset: number, velocity: number) => {
-      return Math.abs(offset) * velocity;
-    };
-  
-    return (
-      <div className="w-full max-w-4xl mx-auto p-4">
-        <div className="relative overflow-hidden">
-          <div className="flex justify-center items-center gap-4 mb-4">
-            <button onClick={prevCard} className="p-2 rounded-full bg-gray-200 hover:bg-gray-300">
-              <ChevronLeft size={24} />
-            </button>
-            <span className="text-lg font-bold">
-              {focusedIndex + 1} / {featureCards.length}
-            </span>
-            <button onClick={nextCard} className="p-2 rounded-full bg-gray-200 hover:bg-gray-300">
-              <ChevronRight size={24} />
-            </button>
-          </div>
-          <motion.div
-            className="flex flex-wrap justify-center gap-4"
-            drag="x"
-            dragConstraints={{ left: 0, right: 0 }}
-            onDragEnd={(e, { offset, velocity }) => {
-              const swipe = swipePower(offset.x, velocity.x);
-              if (swipe < -swipeConfidenceThreshold) {
-                nextCard();
-              } else if (swipe > swipeConfidenceThreshold) {
-                prevCard();
-              }
-            }}
-          >
-            {featureCards.map((card, index) => (
-              <FeatureCard
-                key={index}
-                card={card}
-                index={index}
-                focusedIndex={focusedIndex}
-                setFocusedIndex={setFocusedIndex}
-              />
-            ))}
-          </motion.div>
-        </div>
+
+  const prevCard = () => {
+    setActiveIndex((prev) => (prev - 1 + featureCards.length) % featureCards.length);
+  };
+
+  return (
+    <div className="w-full h-full max-w-4xl mx-auto p-4">
+      <div className="flex justify-center items-center gap-4 mb-4">
+        <button onClick={prevCard} className="p-2 rounded-full bg-gray-200 hover:bg-gray-300">
+          <ChevronLeft size={24} />
+        </button>
+        <span className="text-lg font-bold">
+          {activeIndex + 1} / {featureCards.length}
+        </span>
+        <button onClick={nextCard} className="p-2 rounded-full bg-gray-200 hover:bg-gray-300">
+          <ChevronRight size={24} />
+        </button>
       </div>
-    );
-  };
-  
-  export default FeatureCardsDeck;
+      <div className="relative overflow-hidden">
+        <AnimatePresence initial={false}>
+          <FeatureCard key={activeIndex} card={featureCards[activeIndex]} isActive={true} />
+        </AnimatePresence>
+        {activeIndex < featureCards.length - 1 && (
+          <div className="absolute top-0 right-0 h-full w-1/4">
+            <FeatureCard card={featureCards[activeIndex + 1]} isActive={false} />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default FeatureCardsDeck;
