@@ -1,95 +1,63 @@
-"use client"
+import { Button } from "@/components/ui/button";
+import { ColumnDef, Row } from "@tanstack/react-table";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import Link from "next/link";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer"
-
-import { Button } from "@/components/ui/button"
-import { ColumnDef, Row } from "@tanstack/react-table"
-
-import { ArrowUpDown, MoreHorizontal } from "lucide-react"
-
-import Dashboard from "./page"
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-
-import {Check, X} from "lucide-react"
-
-import Link from "next/link"
-
-import FlashcardDrawer from "@/components/FlashcardDisplay"
-
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
+// Define the shape of your data.
 export type Question = {
-  title: Array<string>
-  id: string
-  type: string
-  date: Date
-  accuracy: number,
-  "set-size": number,
-}
+  // title: Array<string>;
+  title: string;
+  id: string;
+  type: string;
+  date: Date;
+  accuracy: number;
+  "set-size": number;
+};
 
 export const columns: ColumnDef<Question>[] = [
   {
     accessorKey: "title",
     header: () => <div>Title</div>,
     cell: ({ row }) => {
-        return (
-            <div>
-                <div className="font-medium">Gas Station</div>
-            </div>
-        )
+      const title = row.getValue<string>("title")[0]; // Assuming title is an array
+      return <div className="font-medium">{title}</div>;
     },
   },
   {
     accessorKey: "id",
     header: () => <div>Link</div>,
     cell: ({ row }) => {
-        const linkId = (row.getValue("id"))
-        return (
-                <Button><Link href={"/dashboard-force/review?id=".concat("", linkId.toString())}>Show</Link></Button> 
-        )
+      const linkId = row.getValue("id");
+      return (
+        <Button>
+          <Link href={`/dashboard-force/review?id=${linkId}`}>Show</Link>
+        </Button>
+      );
     },
   },
   {
     accessorKey: "type",
-    header: "Type",
+    header: () => <div>Type</div>,
   },
   {
     accessorKey: "date",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Date
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Date
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
     cell: ({ row }) => {
       const date: Date = row.getValue("date");
       return (
         <div>
-          {(date.getMonth() + 1).toString().concat("-", (date.getDate()).toString()).concat("-", (date.getFullYear()).toString())}
+          {(date.getMonth() + 1).toString().padStart(2, '0')}-{date.getDate().toString().padStart(2, '0')}-{date.getFullYear()}
         </div>
-      )
+      );
     },
   },
   {
@@ -99,17 +67,16 @@ export const columns: ColumnDef<Question>[] = [
   {
     accessorKey: "accuracy",
     header: () => <div>Accuracy</div>,
-    cell: ({ row }: { row: Row<Question> }) => {
+    cell: ({ row }) => {
       const accuracy: number = row.getValue("accuracy");
       const setSize: number = row.getValue("set-size");
-      return <div>{accuracy.toString().concat("/", setSize.toString())}</div>;
+      return <div>{accuracy}/{setSize}</div>;
     },
   },
   {
     id: "actions",
     cell: ({ row }) => {
-      const question = row.original
- 
+      const question = row.original;
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -120,9 +87,7 @@ export const columns: ColumnDef<Question>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(question.id)}
-            >
+            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(question.id)}>
               Copy question set ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
@@ -130,7 +95,7 @@ export const columns: ColumnDef<Question>[] = [
             <DropdownMenuItem>Delete</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      )
+      );
     },
   },
-]
+];

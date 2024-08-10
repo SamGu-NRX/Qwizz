@@ -67,3 +67,18 @@ export const FormDataSchema = z.object({
   subject: z.string().min(1, 'Subject is required'),
   uploadedText: z.string().optional(),
 })
+
+export const addFriendValidator = z.object({
+  email: z.string().email(),
+})
+
+export const messageValidator = z.object({
+  id: z.string(),
+  senderId: z.string(),
+  text: z.string(),
+  timestamp: z.number(),
+})
+
+export const messageArrayValidator = z.array(messageValidator)
+
+export type Message = z.infer<typeof messageValidator>

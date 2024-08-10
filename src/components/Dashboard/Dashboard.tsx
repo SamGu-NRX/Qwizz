@@ -45,7 +45,7 @@ import ProgressBars from '@/components/ProgressBar';
 
 import StatCharts from '@/components/StatGraphs';
 
-import { db } from "@/../lib/db"
+import { db } from "@/lib/db"
 
 
 async function fetchFlashcards() {
@@ -66,7 +66,7 @@ async function getData(): Promise<Question[]> {
       if (flashcardContent.cards[index].correct == flashcardContent.cards[index].chosen) correct++;
     }
     let flashcardJson = {
-      title: [flashcardContent.title],
+      title: flashcardContent.title,
       id: flashcardContent.ID,
       type: flashcardContent.subject,
       date: new Date(flashcardContent.date.year, flashcardContent.date.month-1, flashcardContent.date.day),
@@ -132,7 +132,7 @@ export default async function Dashboard() {
             <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
               <Card className="sm:col-span-2" x-chunk="dashboard-05-chunk-0">
                 <CardHeader className="pb-3">
-                  <CardTitle>Hello, Arthur!</CardTitle>
+                  <CardTitle>Hello, Sam!</CardTitle>
                   <CardDescription className="max-w-lg text-balance leading-relaxed">
                     Welcome back to StudyBuddy, your intelligent study
                     companion! Start improving your learning with AI today!

@@ -5,7 +5,7 @@ import Tutorial from '@/components/Onboarding/Tutorial';
 import ClientOverlay from '@/components/Onboarding/ClientOverlay';
 import { ChevronLeft, ChevronRight, Copy, MoreVertical } from 'lucide-react';
 import Script from 'next/script';
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import Sidebar from "@/components/SidebarDash";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,11 +13,12 @@ import { Separator } from "@/components/ui/separator";
 import { Question, columns } from "./columns";
 import { DataTable } from "./data-table";
 import Header from "@/components/HeaderDash";
-import { data, todayDate, weekData, lastWeekData, monthData, yearData } from './getData';
+import { data, fetchTable as QuestionTable, todayDate, weekData, lastWeekData, monthData, yearData } from './getData';
 import { DropdownMenu, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import ProgressBars from '@/components/ProgressBar';
 import StatCharts from '@/components/StatGraphs';
 import { fadeUp } from '@/animations/gsap';
+import { Table } from '@/components/ui/table';
 
 function getAccuracy(data: Question[]) {
   if (!data || data.length === 0) {
@@ -34,7 +35,6 @@ function getAccuracy(data: Question[]) {
 }
 
 interface DashboardProps {
-  data: Question[];
   todayDate: Date;
   weekData: Question[];
   lastWeekData: Question[];
@@ -45,16 +45,22 @@ interface DashboardProps {
 const Dashboard: React.FC<DashboardProps>= () => {
   const dashboardRef = useRef<HTMLDivElement>(null);
   const elementsRef = useRef<(HTMLHeadingElement | HTMLParagraphElement | HTMLButtonElement)[]>([]);
+  
+  const [loading, setLoading] = useState(true);
+
+  
 
   const redirectGenerate = () => {
-    window.location.href = '/dashboard/generate';
+    window.location.href = '/dashboard-force/flashcards';
   }
+
 
   useEffect(() => {
       if (dashboardRef.current) {
         fadeUp(elementsRef.current.filter(el => el !== null) as HTMLElement[], dashboardRef.current, { delay: 0.05, start: 'top 80%', ease: 'power3.inOut', stagger: 0.1 });
       }
     }, []);
+   
 
 
   if (data && Array.isArray(data) && data.length > 0) {
@@ -76,7 +82,7 @@ const Dashboard: React.FC<DashboardProps>= () => {
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
-      {/* <ClientOverlay /> */}
+      <ClientOverlay />
       <Sidebar />
       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
         <Header />
@@ -113,20 +119,22 @@ const Dashboard: React.FC<DashboardProps>= () => {
               />
             </div>
             <Card
-              x-chunk="dashboard-05-chunk-3"
-              id="questions"
-              ref={(el) => {
-                if (el) elementsRef.current[3] = el;
-              }}
+            x-chunk="dashboard-05-chunk-3"
+            id="questions"
+            ref={(el) => {
+            if (el) elementsRef.current[3] = el;
+            }}
             >
               <CardHeader className="px-7">
                 <CardTitle>Questions</CardTitle>
-                <CardDescription>Recent questions you answered this week.</CardDescription>
+                  <CardDescription>Recent questions you answered this week.</CardDescription>
               </CardHeader>
               <CardContent>
-                {/* {Array.isArray(data) ? <DataTable columns={columns} data={data} /> : <div>You haven{`'`}t answered any questions today! Go practice!</div>} */}
-
-                <DataTable columns={columns} data={data} /> 
+                {Array.isArray(data) && data.length > 0 ? (
+                <QuestionTable />
+                ) : (
+                <div>You haven&apos;t answered any questions today! Go practice!</div>
+                )}
               </CardContent>
             </Card>
           </div>

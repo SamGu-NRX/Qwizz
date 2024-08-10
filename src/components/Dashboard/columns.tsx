@@ -32,7 +32,7 @@ import FlashcardDrawer from "@/components/FlashcardDisplay"
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type Question = {
-  title: Array<string>
+  title: string;
   id: string
   type: string
   date: Date

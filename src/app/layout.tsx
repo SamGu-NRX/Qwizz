@@ -3,11 +3,10 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 // import { AuthProvider } from "@/context/AuthProvider";
 import '@mantine/core/styles.css';
-import { auth } from '@/../lib/auth'
+import { auth } from '@/../auth'
 import '@mantine/dropzone/styles.css';
 import { ColorSchemeScript, createTheme, MantineProvider } from '@mantine/core';
 import { ChakraProvider } from "@chakra-ui/react";
-import {NextUIProvider} from "@nextui-org/system";
 
 import Providers from "./providers"
 import { getSession } from "next-auth/react";
@@ -38,13 +37,11 @@ export default async function RootLayout({
           <ColorSchemeScript/>
         </head>
         <body className={inter.className}>
-          <NextUIProvider>
           <ChakraProvider theme={theme}>
           <MantineProvider>
             {children}
           </MantineProvider>
           </ChakraProvider>
-          </NextUIProvider>
         </body>
       </html>
     </Providers>
