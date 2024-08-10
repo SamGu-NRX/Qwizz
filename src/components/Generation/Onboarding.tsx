@@ -9,6 +9,7 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import FileUpload from './FileUpload'
 import GradeLevelSelection from './GradeLevelSelection'
 import { SubjectSelection } from './SubjectSelection'
+import OCR from '@/components/OCR/OCR'
 
 type Inputs = z.infer<typeof FormDataSchema>
 
@@ -233,34 +234,37 @@ export default function Onboarding() {
         )}
 
         {currentStep === 1 && (
-          <motion.div
-            initial={{ x: delta >= 0 ? '50%' : '-50%', opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
-          >
-            <div className='col-span-full'>
-                <FileUpload
-                  label="Upload Document"
-                  onFileAccepted={handleFileAccepted}
-                />
+          // <motion.div
+          //   initial={{ x: delta >= 0 ? '50%' : '-50%', opacity: 0 }}
+          //   animate={{ x: 0, opacity: 1 }}
+          //   transition={{ duration: 0.3, ease: 'easeInOut' }}
+          // >
+          //   <div className='col-span-full'>
+          //       <FileUpload
+          //         label="Upload Document"
+          //         onFileAccepted={handleFileAccepted}
+          //       />
 
-                {fileData && (
-                  <textarea
-                    value={fileData}
-                    onChange={handleOcrTextEdit}
-                    className='mt-2 w-full p-2 border rounded'
-                    rows={10}
-                  />
-                )}
+          //       {fileData && (
+          //         <textarea
+          //           value={fileData}
+          //           onChange={handleOcrTextEdit}
+          //           className='mt-2 w-full p-2 border rounded'
+          //           rows={10}
+          //         />
+          //       )}
                 
-                {errors.uploadedText?.message && (
-                  <p className='mt-2 text-sm text-red-400'>
-                    {errors.uploadedText.message}
-                  </p>
-                )}
-              </div>
+          //       {errors.uploadedText?.message && (
+          //         <p className='mt-2 text-sm text-red-400'>
+          //           {errors.uploadedText.message}
+          //         </p>
+          //       )}
+          //     </div>
 
-          </motion.div>
+          // </motion.div>
+          <OCR onOcrComplete={function (ocrContent: string): void {
+            throw new Error('Function not implemented.')
+          } } />
         )}
 
         {currentStep === 2 && (
@@ -291,6 +295,10 @@ export default function Onboarding() {
                 )}
               </div>
           </motion.div>
+          
+          // <OCR onOcrComplete={function (ocrContent: string): void {
+          //   throw new Error('Function not implemented.')
+          // } } />
         )}
 
         {currentStep === 3 && (
