@@ -37,6 +37,7 @@ const gradeLevels = ['Elementary', 'Middle School', 'High School', 'College']
 export default function Onboarding() {
   const [previousStep, setPreviousStep] = useState(0)
   const [currentStep, setCurrentStep] = useState(0)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const [fileData, setFileData] = useState<string | null>(null)
   const delta = currentStep - previousStep
 
@@ -139,19 +140,31 @@ export default function Onboarding() {
     saveToLocalStorage({ subject })
   }
 
-  const handleFileAccepted = (ocrContent: string) => {
-    setValue('uploadedText', ocrContent)
-    saveToLocalStorage({ uploadedText: ocrContent })
-    setFileData(ocrContent)
-    localStorage.setItem('onboardingFileData', ocrContent)
-  }
-
+  const handleFileAccepted = (fileOrContent: File | string) => {
+    if (typeof fileOrContent === 'string') {
+      setFileData(fileOrContent);
+    } else {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const content = reader.result as string;
+        setFileData(content);
+      };
+      reader.readAsText(fileOrContent);
+    }
+  };
   const handleOcrTextEdit = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const editedText = event.target.value
     setValue('uploadedText', editedText)
     saveToLocalStorage({ uploadedText: editedText })
     setFileData(editedText)
     localStorage.setItem('onboardingFileData', editedText)
+  }
+  const openNotesStep = () => {
+    setCurrentStep('notes')
+  }
+
+  const openSyllabusStep = () => {
+    setCurrentStep('syllabus')
   }
 
   return (
@@ -234,37 +247,18 @@ export default function Onboarding() {
         )}
 
         {currentStep === 1 && (
-          // <motion.div
-          //   initial={{ x: delta >= 0 ? '50%' : '-50%', opacity: 0 }}
-          //   animate={{ x: 0, opacity: 1 }}
-          //   transition={{ duration: 0.3, ease: 'easeInOut' }}
-          // >
-          //   <div className='col-span-full'>
-          //       <FileUpload
-          //         label="Upload Document"
-          //         onFileAccepted={handleFileAccepted}
-          //       />
-
-          //       {fileData && (
-          //         <textarea
-          //           value={fileData}
-          //           onChange={handleOcrTextEdit}
-          //           className='mt-2 w-full p-2 border rounded'
-          //           rows={10}
-          //         />
-          //       )}
-                
-          //       {errors.uploadedText?.message && (
-          //         <p className='mt-2 text-sm text-red-400'>
-          //           {errors.uploadedText.message}
-          //         </p>
-          //       )}
-          //     </div>
-
-          // </motion.div>
-          <OCR onOcrComplete={function (ocrContent: string): void {
-            throw new Error('Function not implemented.')
-          } } />
+          <motion.div
+          initial={{ x: delta >= 0 ? '50%' : '-50%', opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
+        >
+          <div className='col-span-full'>
+            <OCR 
+              onOcrComplete={handleFileAccepted}
+              initialFile={fileData ? new File([fileData], "dropped_file.txt", { type: "text/plain" }) : null}
+            />
+          </div>
+        </motion.div>
         )}
 
         {currentStep === 2 && (

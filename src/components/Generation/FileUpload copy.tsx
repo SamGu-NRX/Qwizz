@@ -1,18 +1,15 @@
 // src/components/FileUpload.tsx
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Container, Paper, Title, Text, Space, Button, Textarea, Modal } from '@mantine/core';
-import OCR from '@/components/OCR/OCR';
+import OCR from '@/components/OCR/OCR'; // Adjust the import path as necessary
 import { Dropzone, FileWithPath, IMAGE_MIME_TYPE, PDF_MIME_TYPE, MIME_TYPES } from '@mantine/dropzone';
 
-const FileUpload: React.FC<{ label: string, onFileAccepted: (content: string) => void }> = ({ label, onFileAccepted }) => {
+const FileUpload = ({ label, onFileAccepted }: { label: string, onFileAccepted: (ocrContent: string) => void }) => {
   const [ocrResult, setOcrResult] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentFile, setCurrentFile] = useState<File | null>(null);
 
   const handleFileDrop = (acceptedFiles: FileWithPath[]) => {
     const file = acceptedFiles[0];
-    setCurrentFile(file);
-    
     if (file.type.startsWith('image/')) {
       setIsModalOpen(true);
     } else {
@@ -22,7 +19,9 @@ const FileUpload: React.FC<{ label: string, onFileAccepted: (content: string) =>
         setOcrResult(reader.result as string);
         setIsModalOpen(true);
       };
-      reader.readAsText(file);
+      if (file.type.startsWith('application/pdf') || file.type === MIME_TYPES.doc || file.type === MIME_TYPES.docx) {
+        reader.readAsText(file);
+      }
     }
   };
 
@@ -38,37 +37,33 @@ const FileUpload: React.FC<{ label: string, onFileAccepted: (content: string) =>
   return (
     <Container size="lg" py="xl">
       <Paper shadow="md" p="xl" radius="md">
-        <Title order={1} mb="lg" className="text-center">
-          Upload and Extract Text
-        </Title>
+      <Title order={1} mb="lg" className="text-center">
+        Upload and Extract Text
+      </Title>
         <Text className="text-center" c="dimmed" mb="xl">
           Upload an image or document, crop it if needed, and extract text using OCR technology.
         </Text>
         <Space h="md" />
         <Dropzone
-          onDrop={handleFileDrop}
-          accept={[
-            ...IMAGE_MIME_TYPE,
-            ...Array.from(PDF_MIME_TYPE),
-            MIME_TYPES.doc,
-            MIME_TYPES.docx,
-          ]}
-        >
-          {() => (
+            onDrop={handleFileDrop}
+            accept={[
+                ...IMAGE_MIME_TYPE,
+                ...Array.from(PDF_MIME_TYPE),
+                MIME_TYPES.doc,
+                MIME_TYPES.docx,
+              ]}
+            >
             <Text size="xl" inline>
-              Drag and drop files here, or click to select files
+                Drag and drop files here, or click to select files
             </Text>
-          )}
-        </Dropzone>
+            </Dropzone>
 
-        <Modal opened={isModalOpen} onClose={() => setIsModalOpen(false)} title="Confirm OCR Transcription" size="lg">
-          {currentFile && currentFile.type.startsWith('image/') ? (
-            <OCR onOcrComplete={handleOcrComplete} initialFile={currentFile} />
-          ) : (
+        <Modal opened={isModalOpen} onClose={() => setIsModalOpen(false)} title="Confirm OCR Transcription">
+          {ocrResult ? (
             <>
               <Textarea
                 value={ocrResult}
-                onChange={(e) => setOcrResult(e.currentTarget.value)}
+                onChange={(e) => setOcrResult(e.target.value)}
                 rows={10}
                 className="w-full p-2 border rounded"
               />
@@ -76,6 +71,8 @@ const FileUpload: React.FC<{ label: string, onFileAccepted: (content: string) =>
                 Confirm
               </Button>
             </>
+          ) : (
+            <OCR onOcrComplete={handleOcrComplete} />
           )}
         </Modal>
       </Paper>

@@ -8,7 +8,7 @@ import { createWorker, PSM, OEM } from 'tesseract.js';
 import ReactCrop, { Crop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 
-const OCR = ({ onOcrComplete, initialFile }: { onOcrComplete: (ocrContent: string) => void, initialFile?: File | null }) => {
+const OCR = ({ onOcrComplete }: { onOcrComplete: (ocrContent: string) => void }) => {
   const [imageData, setImageData] = useState<null | string>(null);
   const [crop, setCrop] = useState<Crop>();
   const [croppedImageData, setCroppedImageData] = useState<null | string>(null);
