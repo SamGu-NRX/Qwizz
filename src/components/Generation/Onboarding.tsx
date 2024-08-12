@@ -9,6 +9,8 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import FileUpload from './FileUpload'
 import GradeLevelSelection from './GradeLevelSelection'
 import { SubjectSelection } from './SubjectSelection'
+import OCR from '@/components/OCR/OCR'
+import Confetti from 'react-confetti'
 
 type Inputs = z.infer<typeof FormDataSchema>
 
@@ -36,6 +38,7 @@ const gradeLevels = ['Elementary', 'Middle School', 'High School', 'College']
 export default function Onboarding() {
   const [previousStep, setPreviousStep] = useState(0)
   const [currentStep, setCurrentStep] = useState(0)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const [fileData, setFileData] = useState<string | null>(null)
   const delta = currentStep - previousStep
 
@@ -100,21 +103,40 @@ export default function Onboarding() {
 
   type FieldName = keyof Inputs
 
+  // const next = async () => {
+  //   const fields = steps[currentStep].fields
+  //   const output = await trigger(fields as FieldName[], { shouldFocus: true })
+
+  //   if (!output) return
+
+  //   if (currentStep < steps.length - 1) {
+  //     if (currentStep === steps.length - 2) {
+  //       await handleSubmit(processForm)()
+  //     } else {
+  //       const newStep = currentStep + 1
+  //       setCurrentStep(newStep)
+  //       setPreviousStep(currentStep)
+  //       localStorage.setItem('onboardingStep', newStep.toString())
+  //     }
+  //   }
+  // }
   const next = async () => {
     const fields = steps[currentStep].fields
     const output = await trigger(fields as FieldName[], { shouldFocus: true })
-
+  
     if (!output) return
-
+  
     if (currentStep < steps.length - 1) {
-      if (currentStep === steps.length - 2) {
+      const newStep = currentStep + 1
+  
+      // If moving to the last step, submit the form
+      if (newStep === steps.length - 1) {
         await handleSubmit(processForm)()
-      } else {
-        const newStep = currentStep + 1
-        setCurrentStep(newStep)
-        setPreviousStep(currentStep)
-        localStorage.setItem('onboardingStep', newStep.toString())
       }
+  
+      setCurrentStep(newStep)
+      setPreviousStep(currentStep)
+      localStorage.setItem('onboardingStep', newStep.toString())
     }
   }
 
@@ -138,13 +160,18 @@ export default function Onboarding() {
     saveToLocalStorage({ subject })
   }
 
-  const handleFileAccepted = (ocrContent: string) => {
-    setValue('uploadedText', ocrContent)
-    saveToLocalStorage({ uploadedText: ocrContent })
-    setFileData(ocrContent)
-    localStorage.setItem('onboardingFileData', ocrContent)
-  }
-
+  const handleFileAccepted = (fileOrContent: File | string) => {
+    if (typeof fileOrContent === 'string') {
+      setFileData(fileOrContent);
+    } else {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const content = reader.result as string;
+        setFileData(content);
+      };
+      reader.readAsText(fileOrContent);
+    }
+  };
   const handleOcrTextEdit = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const editedText = event.target.value
     setValue('uploadedText', editedText)
@@ -152,9 +179,18 @@ export default function Onboarding() {
     setFileData(editedText)
     localStorage.setItem('onboardingFileData', editedText)
   }
+  const openNotesStep = () => {
+    setCurrentStep('notes')
+  }
+
+  const openSyllabusStep = () => {
+    setCurrentStep('syllabus')
+  }
 
   return (
     <section className='absolute inset-0 flex flex-col justify-between p-24 backdrop-blur-xl'>
+
+      {currentStep === steps.length - 1 && <Confetti />}
       {/* steps */}
       <nav aria-label='Progress'>
         <ol role='list' className='space-y-4 md:flex md:space-x-8 md:space-y-0'>
@@ -234,63 +270,74 @@ export default function Onboarding() {
 
         {currentStep === 1 && (
           <motion.div
-            initial={{ x: delta >= 0 ? '50%' : '-50%', opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
-          >
-            <div className='col-span-full'>
-                <FileUpload
-                  label="Upload Document"
-                  onFileAccepted={handleFileAccepted}
-                />
-
-                {fileData && (
-                  <textarea
-                    value={fileData}
-                    onChange={handleOcrTextEdit}
-                    className='mt-2 w-full p-2 border rounded'
-                    rows={10}
-                  />
-                )}
-                
-                {errors.uploadedText?.message && (
-                  <p className='mt-2 text-sm text-red-400'>
-                    {errors.uploadedText.message}
-                  </p>
-                )}
-              </div>
-
-          </motion.div>
+          initial={{ x: delta >= 0 ? '50%' : '-50%', opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
+        >
+          {/* <div className='col-span-full'>
+            <OCR 
+              onOcrComplete={handleFileAccepted}
+              initialFile={fileData ? new File([fileData], "dropped_file.txt", { type: "text/plain" }) : null}
+            />
+          </div> */}
+          <FileUpload
+            label="Upload Document"
+            onFileAccepted={(content) => {
+            setValue('uploadedText', content);
+            saveToLocalStorage({ uploadedText: content });
+            setFileData(content);
+            localStorage.setItem('onboardingFileData', content);
+            }}
+          />
+        </motion.div>
         )}
 
         {currentStep === 2 && (
-          <motion.div
-            initial={{ x: delta >= 0 ? '50%' : '-50%', opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
-          >
-            <div className='col-span-full'>
-                <FileUpload
-                  label="Upload Document"
-                  onFileAccepted={handleFileAccepted}
-                />
+          // <motion.div
+          //   initial={{ x: delta >= 0 ? '50%' : '-50%', opacity: 0 }}
+          //   animate={{ x: 0, opacity: 1 }}
+          //   transition={{ duration: 0.3, ease: 'easeInOut' }}
+          // >
+          //   <div className='col-span-full'>
+          //       <FileUpload
+          //         label="Upload Document"
+          //         onFileAccepted={handleFileAccepted}
+          //       />
 
-                {fileData && (
-                  <textarea
-                    value={fileData}
-                    onChange={handleOcrTextEdit}
-                    className='mt-2 w-full p-2 border rounded'
-                    rows={10}
-                  />
-                )}
+          //       {fileData && (
+          //         <textarea
+          //           value={fileData}
+          //           onChange={handleOcrTextEdit}
+          //           className='mt-2 w-full p-2 border rounded'
+          //           rows={10}
+          //         />
+          //       )}
                 
-                {errors.uploadedText?.message && (
-                  <p className='mt-2 text-sm text-red-400'>
-                    {errors.uploadedText.message}
-                  </p>
-                )}
-              </div>
+          //       {errors.uploadedText?.message && (
+          //         <p className='mt-2 text-sm text-red-400'>
+          //           {errors.uploadedText.message}
+          //         </p>
+          //       )}
+          //     </div>
+          // </motion.div>
+          <motion.div
+          initial={{ x: delta >= 0 ? '50%' : '-50%', opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
+          >
+          <FileUpload
+            label="Upload Document"
+            onFileAccepted={(content) => {
+            setValue('uploadedText', content);
+            saveToLocalStorage({ uploadedText: content });
+            setFileData(content);
+            localStorage.setItem('onboardingFileData', content);
+            }}
+          />
           </motion.div>
+          // <OCR onOcrComplete={function (ocrContent: string): void {
+          //   throw new Error('Function not implemented.')
+          // } } />
         )}
 
         {currentStep === 3 && (

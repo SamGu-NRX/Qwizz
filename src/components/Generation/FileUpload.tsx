@@ -1,37 +1,46 @@
-// src/components/FileUpload.tsx
-import { useState } from 'react';
-import { Container, Paper, Title, Text, Space, Button, Textarea, Modal } from '@mantine/core';
-import OCR from '@/components/OCR/OCR'; // Adjust the import path as necessary
+import React, { useState } from 'react';
+import { Container, Paper, Title, Text, Button, Textarea, Modal, Box, Space } from '@mantine/core';
+import OCR from '@/components/OCR/OCR';
 import { Dropzone, FileWithPath, IMAGE_MIME_TYPE, PDF_MIME_TYPE, MIME_TYPES } from '@mantine/dropzone';
 
-const FileUpload = ({ label, onFileAccepted }: { label: string, onFileAccepted: (ocrContent: string) => void }) => {
+const FileUpload: React.FC<{ label: string, onFileAccepted: (content: string) => void }> = ({ label, onFileAccepted }) => {
   const [ocrResult, setOcrResult] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentFile, setCurrentFile] = useState<File | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
 
-  const handleFileDrop = (acceptedFiles: FileWithPath[]) => {
+  const handleFileDrop = async (acceptedFiles: FileWithPath[]) => {
     const file = acceptedFiles[0];
+    setCurrentFile(file);
+    setIsModalOpen(true);
+    setIsProcessing(true);
+
     if (file.type.startsWith('image/')) {
-      setIsModalOpen(true);
+      // For image files, we'll let the OCR component handle it
+      setIsProcessing(false);
     } else {
       // Handle non-image files (PDF, DOC, etc.)
       const reader = new FileReader();
-      reader.onload = () => {
-        setOcrResult(reader.result as string);
-        setIsModalOpen(true);
+      reader.onload = (e) => {
+        setOcrResult(e.target?.result as string);
+        setIsProcessing(false);
       };
-      if (file.type.startsWith('application/pdf') || file.type === MIME_TYPES.doc || file.type === MIME_TYPES.docx) {
-        reader.readAsText(file);
-      }
+      reader.readAsText(file);
     }
   };
 
   const handleOcrComplete = (ocrText: string) => {
     setOcrResult(ocrText);
+    setIsProcessing(false);
   };
 
   const handleConfirm = () => {
     onFileAccepted(ocrResult);
     setIsModalOpen(false);
+  };
+
+  const handleTextEdit = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setOcrResult(e.target.value);
   };
 
   return (
@@ -45,34 +54,40 @@ const FileUpload = ({ label, onFileAccepted }: { label: string, onFileAccepted: 
         </Text>
         <Space h="md" />
         <Dropzone
-            onDrop={handleFileDrop}
-            accept={[
-                ...IMAGE_MIME_TYPE,
-                ...Array.from(PDF_MIME_TYPE),
-                MIME_TYPES.doc,
-                MIME_TYPES.docx,
-              ]}
-            >
-            <Text size="xl" inline>
+          onDrop={handleFileDrop}
+          accept={[
+            ...IMAGE_MIME_TYPE,
+            ...Array.from(PDF_MIME_TYPE),
+            MIME_TYPES.doc,
+            MIME_TYPES.docx,
+          ]}
+        >
+          <Text size="xl" inline>
                 Drag and drop files here, or click to select files
-            </Text>
-            </Dropzone>
+          </Text>
+        </Dropzone>
 
-        <Modal opened={isModalOpen} onClose={() => setIsModalOpen(false)} title="Confirm OCR Transcription">
-          {ocrResult ? (
+        <Modal opened={isModalOpen} onClose={() => setIsModalOpen(false)} title="Extract and Edit Text" size="lg">
+          {isProcessing ? (
+            <Text>Processing file...</Text>
+          ) : (
             <>
+              {currentFile && currentFile.type.startsWith('image/') && (
+                <Box sx={{ maxWidth: '100%', marginBottom: '1rem' }}>
+                  <OCR onOcrComplete={handleOcrComplete} initialFile={currentFile} />
+                </Box>
+              )}
               <Textarea
                 value={ocrResult}
-                onChange={(e) => setOcrResult(e.target.value)}
+                onChange={handleTextEdit}
                 rows={10}
                 className="w-full p-2 border rounded"
+                placeholder="Extracted text will appear here. You can edit it if needed."
               />
               <Button onClick={handleConfirm} className="mt-4">
                 Confirm
               </Button>
             </>
-          ) : (
-            <OCR onOcrComplete={handleOcrComplete} />
           )}
         </Modal>
       </Paper>

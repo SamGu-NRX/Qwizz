@@ -61,6 +61,7 @@
     "next-auth": "5.0.0-beta.18",
     "nodemailer": "^6.9.14",
     "rc-slider": "^11.1.5",
+    "react-confetti": "^6.1.0",
     "react-dropzone": "^14.2.3",
     "react-easy-crop": "^5.0.8",
     "react-hook-form": "^7.52.1",

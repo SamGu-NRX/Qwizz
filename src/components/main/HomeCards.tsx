@@ -28,7 +28,7 @@ import { BentoItems } from "@/data";
   }, []);
 
     return (
-      <div className="my-6">
+      <div className="my-8">
         <motion.div
         initial={{ opacity: 0.0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -47,20 +47,21 @@ import { BentoItems } from "@/data";
         </div>
       </motion.div>
 
-        <BentoGrid className="max-w-5xl mx-auto">
-          {BentoItems.map((item, index) => (
-            <div key={item.title}   
-            ref={el => { if (el) cardRefs.current[index] = el; }} className={index === 4? "md:col-span-2 " : ""}>
-              <BentoGridItem
-                key={index}
-                title={item.title}
-                description={item.description}
-                header={item.header}
-                icon={item.icon}
-              />
-            </div>
-          ))}
-        </BentoGrid>
+      <BentoGrid className="max-w-5xl mx-auto -mt-3">
+        {BentoItems.map((item, index) => (
+          <div key={item.title}   
+          ref={el => { if (el) cardRefs.current[index] = el; }} className={index === 4? "md:col-span-2 " : ""}>
+            <BentoGridItem
+              key={index}
+              title={item.title}
+              description={item.description}
+              header={item.header}
+              icon={item.icon}
+            />
+          </div>
+        ))}
+      </BentoGrid>
+
       </div>
     );
   }

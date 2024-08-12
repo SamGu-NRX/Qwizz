@@ -1,13 +1,14 @@
+// src/components/OCR/OCR.tsx
 "use client";
 
-import { useEffect, useRef, useState } from 'react';
+import { SetStateAction, useEffect, useRef, useState } from 'react';
 import { Group, Stack, Text, Image, Progress, Button } from '@mantine/core';
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { createWorker, PSM, OEM } from 'tesseract.js';
 import ReactCrop, { Crop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 
-const OCR = ({ onOcrComplete, initialFile }: { onOcrComplete: (ocrContent: string) => void, initialFile?: File | null }) => {
+const OCR = ({ onOcrComplete }: { onOcrComplete: (ocrContent: string) => void }) => {
   const [imageData, setImageData] = useState<null | string>(null);
   const [crop, setCrop] = useState<Crop>();
   const [croppedImageData, setCroppedImageData] = useState<null | string>(null);
@@ -44,12 +45,6 @@ const OCR = ({ onOcrComplete, initialFile }: { onOcrComplete: (ocrContent: strin
     };
   }, []);
 
-  useEffect(() => {
-    if (initialFile) {
-      loadFile(initialFile);
-    }
-  }, [initialFile]);
-
   const getCroppedImg = () => {
     if (!crop || !imgRef.current) return;
 
@@ -82,19 +77,18 @@ const OCR = ({ onOcrComplete, initialFile }: { onOcrComplete: (ocrContent: strin
     if (croppedImage) {
       setCroppedImageData(croppedImage);
       setIsCropping(false);
-      handleExtract(croppedImage);
     }
   };
 
-  const handleExtract = async (imageData: string) => {
-    if (!imageData || !workerRef.current) return;
+  const handleExtract = async () => {
+    if (!croppedImageData || !workerRef.current) return;
   
     setProgressLabel('Processing...');
   
     const worker = workerRef.current;
   
     try {
-      const result = await worker.recognize(imageData);
+      const result = await worker.recognize(croppedImageData);
       setOcrResult(result.data.text);
       onOcrComplete(result.data.text);
       console.log(result.data);
@@ -108,26 +102,23 @@ const OCR = ({ onOcrComplete, initialFile }: { onOcrComplete: (ocrContent: strin
   return (
     <Group align='initial' style={{ padding: '10px' }}>
       <Stack style={{ flex: '1' }}>
-        {!imageData && (
-          <Dropzone
-            onDrop={(files) => loadFile(files[0])}
-            accept={IMAGE_MIME_TYPE}
-            multiple={false}
+        <Dropzone
+          onDrop={(files) => loadFile(files[0])}
+          accept={IMAGE_MIME_TYPE}
+          multiple={false}
           >
-            <Text size="xl" inline>
-              Drag image here or click to select file
-            </Text>
-          </Dropzone>
-        )}
+          <Text size="xl" inline>
+            Drag image here or click to select file
+          </Text>
+        </Dropzone>
 
         {isCropping && imageData && (
-          <>
-            <ReactCrop crop={crop} onChange={c => setCrop(c)}>
-              <Image ref={imgRef} src={imageData} alt="Upload" style={{ maxWidth: '100%' }} />
-            </ReactCrop>
-            <Button onClick={handleCropComplete}>Confirm Crop</Button>
-          </>
+          <ReactCrop crop={crop} onChange={c => setCrop(c)}>
+            <Image ref={imgRef} src={imageData} alt="Upload" style={{ maxWidth: '100%' }} />
+          </ReactCrop>
         )}
+
+        {isCropping && <Button onClick={handleCropComplete}>Confirm Crop</Button>}
 
         {!isCropping && croppedImageData && (
           <Image src={croppedImageData} alt="Cropped image" style={{ width: '100%' }} />
@@ -135,6 +126,7 @@ const OCR = ({ onOcrComplete, initialFile }: { onOcrComplete: (ocrContent: strin
       </Stack>
 
       <Stack style={{ flex: '1' }}>
+        <Button disabled={!croppedImageData || !workerRef.current} onClick={handleExtract}>Extract</Button>
         <Text>{progressLabel.toUpperCase()}</Text>
         <Progress value={progress * 100} />
 
