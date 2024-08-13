@@ -12,35 +12,22 @@ import { SubjectSelection } from './SubjectSelection'
 import OCR from '@/components/OCR/OCR'
 import Confetti from 'react-confetti'
 
-type Inputs = z.infer<typeof FormDataSchema>
+type Inputs = z.infer<typeof FormDataSchema>;
 
 const steps = [
-  {
-    id: 'Step 1',
-    name: 'Basic Information',
-    fields: ['gradeLevel', 'subject']
-  },
-  {
-    id: 'Step 2',
-    name: 'Upload Documents & Notes',
-    fields: ['uploadedText']
-  },
-  {
-    id: 'Step 3',
-    name: 'Upload Syllabus & Context',
-    fields: ['uploadedText']
-  },
+  { id: 'Step 1', name: 'Basic Information', fields: ['gradeLevel', 'subject'] },
+  { id: 'Step 2', name: 'Upload Documents & Notes', fields: ['uploadedText'] },
+  { id: 'Step 3', name: 'Upload Syllabus & Context', fields: ['uploadedText'] },
   { id: 'Step 4', name: 'Complete' }
-]
+];
 
-const gradeLevels = ['Elementary', 'Middle School', 'High School', 'College']
+const gradeLevels = ['Elementary', 'Middle School', 'High School', 'College'];
 
 export default function Onboarding() {
-  const [previousStep, setPreviousStep] = useState(0)
-  const [currentStep, setCurrentStep] = useState(0)
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [fileData, setFileData] = useState<string | null>(null)
-  const delta = currentStep - previousStep
+  const [previousStep, setPreviousStep] = useState(0);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [fileData, setFileData] = useState<string | null>(null);
+  const delta = currentStep - previousStep;
 
   const {
     register,
@@ -52,113 +39,99 @@ export default function Onboarding() {
     formState: { errors }
   } = useForm<Inputs>({
     resolver: zodResolver(FormDataSchema)
-  })
+  });
+
+  // Watch the selected subject
+  const selectedSubject = watch('subject');
 
   // Load data from local storage on initial render
   useEffect(() => {
-    const savedData = localStorage.getItem('onboardingData')
+    const savedData = localStorage.getItem('onboardingData');
     if (savedData) {
-      const parsedData = JSON.parse(savedData)
+      const parsedData = JSON.parse(savedData);
       Object.keys(parsedData).forEach((key) => {
-        setValue(key as keyof Inputs, parsedData[key])
-      })
+        setValue(key as keyof Inputs, parsedData[key]);
+      });
     }
-    
-    const savedFileData = localStorage.getItem('onboardingFileData')
+
+    const savedFileData = localStorage.getItem('onboardingFileData');
     if (savedFileData) {
-        setFileData(savedFileData)
+      setFileData(savedFileData);
     }
 
-    const savedStep = localStorage.getItem('onboardingStep')
+    const savedStep = localStorage.getItem('onboardingStep');
     if (savedStep) {
-        setCurrentStep(parseInt(savedStep, 10))
+      setCurrentStep(parseInt(savedStep, 10));
     }
-  }, [setValue])
-    
-      // Save data to local storage after each field change
-    const saveToLocalStorage = (data: Partial<Inputs>) => {
-        const existingData = localStorage.getItem('onboardingData')
-        const newData = existingData ? { ...JSON.parse(existingData), ...data } : data
-        localStorage.setItem('onboardingData', JSON.stringify(newData))
-    }
-    
-      // Watch for changes in form fields and save to local storage
-    useEffect(() => {
-      const subscription = watch((value, { name }) => {
-        if (name) {
-            saveToLocalStorage({ [name]: value[name as keyof Inputs] })
-        }
-      })
-      return () => subscription.unsubscribe()
-    }, [watch])
-    
-    const processForm: SubmitHandler<Inputs> = data => {
-      console.log(data)
-      // Clear local storage after successful form submission
-      localStorage.removeItem('onboardingData')
-      localStorage.removeItem('onboardingFileData')
-      localStorage.removeItem('onboardingStep')
-      reset()
-    }
+  }, [setValue]);
 
-  type FieldName = keyof Inputs
+  // Save data to local storage after each field change
+  const saveToLocalStorage = (data: Partial<Inputs>) => {
+    const existingData = localStorage.getItem('onboardingData');
+    const newData = existingData ? { ...JSON.parse(existingData), ...data } : data;
+    localStorage.setItem('onboardingData', JSON.stringify(newData));
+  };
 
-  // const next = async () => {
-  //   const fields = steps[currentStep].fields
-  //   const output = await trigger(fields as FieldName[], { shouldFocus: true })
+  // Watch for changes in form fields and save to local storage
+  useEffect(() => {
+    const subscription = watch((value, { name }) => {
+      if (name) {
+        saveToLocalStorage({ [name]: value[name as keyof Inputs] });
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch]);
 
-  //   if (!output) return
+  const processForm: SubmitHandler<Inputs> = (data) => {
+    console.log(data);
+    // Clear local storage after successful form submission
+    localStorage.removeItem('onboardingData');
+    localStorage.removeItem('onboardingFileData');
+    localStorage.removeItem('onboardingStep');
+    reset();
+  };
 
-  //   if (currentStep < steps.length - 1) {
-  //     if (currentStep === steps.length - 2) {
-  //       await handleSubmit(processForm)()
-  //     } else {
-  //       const newStep = currentStep + 1
-  //       setCurrentStep(newStep)
-  //       setPreviousStep(currentStep)
-  //       localStorage.setItem('onboardingStep', newStep.toString())
-  //     }
-  //   }
-  // }
+  type FieldName = keyof Inputs;
+
   const next = async () => {
-    const fields = steps[currentStep].fields
-    const output = await trigger(fields as FieldName[], { shouldFocus: true })
-  
-    if (!output) return
-  
+    const fields = steps[currentStep].fields;
+    const output = await trigger(fields as FieldName[], { shouldFocus: true });
+
+    if (!output) return;
+
     if (currentStep < steps.length - 1) {
-      const newStep = currentStep + 1
-  
+      const newStep = currentStep + 1;
+
       // If moving to the last step, submit the form
       if (newStep === steps.length - 1) {
-        await handleSubmit(processForm)()
+        await handleSubmit(processForm)();
       }
-  
-      setCurrentStep(newStep)
-      setPreviousStep(currentStep)
-      localStorage.setItem('onboardingStep', newStep.toString())
+
+      setCurrentStep(newStep);
+      setPreviousStep(currentStep);
+      localStorage.setItem('onboardingStep', newStep.toString());
     }
-  }
+  };
 
   const prev = () => {
     if (currentStep > 0) {
-      const newStep = currentStep - 1
-      setCurrentStep(newStep)
-      setPreviousStep(currentStep)
-      localStorage.setItem('onboardingStep', newStep.toString())
+      const newStep = currentStep - 1;
+      setCurrentStep(newStep);
+      setPreviousStep(currentStep);
+      localStorage.setItem('onboardingStep', newStep.toString());
     }
-  }
+  };
 
   const handleGradeLevelSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = event.target.value
-    setValue('gradeLevel', value)
-    saveToLocalStorage({ gradeLevel: value })
-  }
+    const value = event.target.value;
+    setValue('gradeLevel', value);
+    saveToLocalStorage({ gradeLevel: value });
+  };
 
-  const handleSubjectSelect = (subject: Subject | null) => {
-    setValue('subject', subject?.value || '')
-    saveToLocalStorage({ subject })
-  }
+  const handleSubjectSelect = (subject: { value: string } | null) => {
+    setValue('subject', subject?.value || '');
+    saveToLocalStorage({ subject });
+  };
 
   const handleFileAccepted = (fileOrContent: File | string) => {
     if (typeof fileOrContent === 'string') {
@@ -191,7 +164,7 @@ export default function Onboarding() {
     <section className='absolute inset-0 flex flex-col justify-between p-24 backdrop-blur-xl'>
 
       {currentStep === steps.length - 1 && <Confetti />}
-      {/* steps */}
+      {/* Steps */}
       <nav aria-label='Progress'>
         <ol role='list' className='space-y-4 md:flex md:space-x-8 md:space-y-0'>
           {steps.map((step, index) => (
@@ -234,7 +207,7 @@ export default function Onboarding() {
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.3, ease: 'easeInOut' }}
           >
-           <h2 className='text-xl font-semibold leading-7 text-gray-900'>
+            <h2 className='text-xl font-semibold leading-7 text-gray-900'>
               Educational Information
             </h2>
             <p className='mt-1 text-sm leading-6 text-gray-600'>
@@ -255,7 +228,7 @@ export default function Onboarding() {
               </div>
 
               <div className='sm:col-span-3 flex flex-col pt-[36px]'>
-                <SubjectSelection 
+                <SubjectSelection
                   onSubjectSelect={handleSubjectSelect}
                 />
                 {errors.subject?.message && (
@@ -270,74 +243,40 @@ export default function Onboarding() {
 
         {currentStep === 1 && (
           <motion.div
-          initial={{ x: delta >= 0 ? '50%' : '-50%', opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ duration: 0.3, ease: 'easeInOut' }}
-        >
-          {/* <div className='col-span-full'>
-            <OCR 
-              onOcrComplete={handleFileAccepted}
-              initialFile={fileData ? new File([fileData], "dropped_file.txt", { type: "text/plain" }) : null}
+            initial={{ x: delta >= 0 ? '50%' : '-50%', opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+          >
+            <FileUpload
+              label="Upload Document"
+              title={`Upload your ${selectedSubject || 'selected subject'} notes here`}
+              onFileAccepted={(content) => {
+                setValue('uploadedText', content);
+                saveToLocalStorage({ uploadedText: content });
+                setFileData(content);
+                localStorage.setItem('onboardingFileData', content);
+              }}
             />
-          </div> */}
-          <FileUpload
-            label="Upload Document"
-            onFileAccepted={(content) => {
-            setValue('uploadedText', content);
-            saveToLocalStorage({ uploadedText: content });
-            setFileData(content);
-            localStorage.setItem('onboardingFileData', content);
-            }}
-          />
-        </motion.div>
+          </motion.div>
         )}
 
         {currentStep === 2 && (
-          // <motion.div
-          //   initial={{ x: delta >= 0 ? '50%' : '-50%', opacity: 0 }}
-          //   animate={{ x: 0, opacity: 1 }}
-          //   transition={{ duration: 0.3, ease: 'easeInOut' }}
-          // >
-          //   <div className='col-span-full'>
-          //       <FileUpload
-          //         label="Upload Document"
-          //         onFileAccepted={handleFileAccepted}
-          //       />
-
-          //       {fileData && (
-          //         <textarea
-          //           value={fileData}
-          //           onChange={handleOcrTextEdit}
-          //           className='mt-2 w-full p-2 border rounded'
-          //           rows={10}
-          //         />
-          //       )}
-                
-          //       {errors.uploadedText?.message && (
-          //         <p className='mt-2 text-sm text-red-400'>
-          //           {errors.uploadedText.message}
-          //         </p>
-          //       )}
-          //     </div>
-          // </motion.div>
           <motion.div
-          initial={{ x: delta >= 0 ? '50%' : '-50%', opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ duration: 0.3, ease: 'easeInOut' }}
+            initial={{ x: delta >= 0 ? '50%' : '-50%', opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
           >
-          <FileUpload
-            label="Upload Document"
-            onFileAccepted={(content) => {
-            setValue('uploadedText', content);
-            saveToLocalStorage({ uploadedText: content });
-            setFileData(content);
-            localStorage.setItem('onboardingFileData', content);
-            }}
-          />
+            <FileUpload
+              label="Upload Document"
+              title={`Upload your ${selectedSubject || 'selected subject'} syllabus/grading context here`}
+              onFileAccepted={(content) => {
+                setValue('uploadedText', content);
+                saveToLocalStorage({ uploadedText: content });
+                setFileData(content);
+                localStorage.setItem('onboardingFileData', content);
+              }}
+            />
           </motion.div>
-          // <OCR onOcrComplete={function (ocrContent: string): void {
-          //   throw new Error('Function not implemented.')
-          // } } />
         )}
 
         {currentStep === 3 && (
@@ -400,5 +339,5 @@ export default function Onboarding() {
         </div>
       </div>
     </section>
-  )
+  );
 }
