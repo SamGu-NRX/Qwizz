@@ -58,6 +58,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ label, onFileAccepted, title, d
           {description || 'Upload an image or document, crop it if needed, and extract text using our on-device OCR technology.'}
         </Text>
         <Space h="md" />
+        
         <Dropzone
           onDrop={handleFileDrop}
           accept={[
