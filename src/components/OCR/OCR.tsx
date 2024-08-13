@@ -118,13 +118,7 @@ const OCR = ({ onOcrComplete, initialFile }: { onOcrComplete: (ocrContent: strin
     const worker = workerRef.current;
   
     try {
-      const result = await worker.recognize(imageData, {
-        logger: m => {
-          if (m.status === 'recognizing text') {
-            setProgress(m.progress * 100);
-          }
-        },
-      });
+      const result = await worker.recognize(imageData);
       
       setOcrResult(result.data.text);
       onOcrComplete(result.data.text);
