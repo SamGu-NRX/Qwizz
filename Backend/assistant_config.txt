@@ -31,3 +31,6 @@ curl "https://api.openai.com/v1/assistants" \
       "type": "json_object"
     }
   }%   
+
+
+  

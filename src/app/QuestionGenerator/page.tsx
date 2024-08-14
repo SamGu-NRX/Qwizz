@@ -1,11 +1,11 @@
+// deprecated
+// import QuestionForm from "@/components/QuestionGenerator/QuestionForm";
 
-import QuestionForm from "@/components/QuestionGenerator/QuestionForm";
 
+// const Home = () => {
+//   return (
+//     <QuestionForm />
+//   );
+// }
 
-const Home = () => {
-  return (
-    <QuestionForm />
-  );
-}
-
-export default Home;
+// export default Home;

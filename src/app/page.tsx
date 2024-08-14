@@ -27,11 +27,11 @@ const HomePage = () => {
 
   return (
     <div className='h-screen flex flex-col'>
-      {/* Check bugs for Dynamic Navbar, i.e. fade out when scrolling and show up when scrolling up */}
+      {/* TODO:Check bugs for Dynamic Navbar, i.e. fade out when scrolling and show up when scrolling up */}
       <Navbar />
       <Hero />
       <HomeGrid/>
-      <FeatureCardsDeck />
+      {/* <FeatureCardsDeck /> */}
       <Footer />
     </div>
   );
