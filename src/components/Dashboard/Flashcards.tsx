@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Loader, Star } from "lucide-react";
 import { gsap } from "gsap";
 import confetti from 'canvas-confetti';
-import { flash_cards } from "@/actions/get-flashcard";
+import { flash_cards } from "@/actions/get-AI";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";

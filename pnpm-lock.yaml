@@ -107,9 +107,6 @@ importers:
       bcryptjs:
         specifier: ^2.4.3
         version: 2.4.3
-      canvas-confetti:
-        specifier: ^1.9.3
-        version: 1.9.3
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.0
@@ -225,6 +222,9 @@ importers:
       '@types/bcryptjs':
         specifier: ^2.4.6
         version: 2.4.6
+      '@types/canvas-confetti':
+        specifier: ^1.6.4
+        version: 1.6.4
       '@types/intro.js':
         specifier: ^5.1.5
         version: 5.1.5
@@ -243,6 +243,9 @@ importers:
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.19(postcss@8.4.40)
+      canvas-confetti:
+        specifier: ^1.9.3
+        version: 1.9.3
       css-loader:
         specifier: ^7.1.2
         version: 7.1.2(webpack@5.93.0)
@@ -2934,6 +2937,9 @@ packages:
 
   '@types/body-parser@1.19.5':
     resolution: {integrity: sha512-fB3Zu92ucau0iQ0JMCFQE7b/dv8Ot07NI3KaZIkIUNXq82k4eBAqUaneXfleGY9JWskeS9y+u0nXMyspcuQrCg==}
+
+  '@types/canvas-confetti@1.6.4':
+    resolution: {integrity: sha512-fNyZ/Fdw/Y92X0vv7B+BD6ysHL4xVU5dJcgzgxLdGbn8O3PezZNIJpml44lKM0nsGur+o/6+NZbZeNTt00U1uA==}
 
   '@types/caseless@0.12.5':
     resolution: {integrity: sha512-hWtVTC2q7hc7xZ/RLbxapMvDMgUnDvKvMOpKal4DrMyfGBUfB1oKaZlIRr6mJL+If3bAP6sV/QneGzF6tJjZDg==}
@@ -9358,6 +9364,8 @@ snapshots:
     dependencies:
       '@types/connect': 3.4.38
       '@types/node': 20.14.13
+
+  '@types/canvas-confetti@1.6.4': {}
 
   '@types/caseless@0.12.5':
     optional: true
