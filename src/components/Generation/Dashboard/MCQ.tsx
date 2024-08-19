@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Loader, Clock } from "lucide-react";
 import { gsap } from "gsap";
 import confetti from 'canvas-confetti';
-import { generate_mcq } from "@/actions/get-mcq";
+import { generate_mcq } from "@/actions/get-AI";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";

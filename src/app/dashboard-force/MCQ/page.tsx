@@ -1,9 +1,9 @@
 "use client";
-import FlashcardApp from "@/components/Generation/Dashboard/Flashcards";
 import Sidebar from "@/components/SidebarDash";
 import Header from "@/components/HeaderDash";
 import { fadeUp } from "@/animations/gsap";
 import { useEffect, useRef } from "react";
+import MCQGenerator from "@/components/Generation/Dashboard/MCQ";
 
 const Home = () => {
   const dashboardRef = useRef<HTMLDivElement>(null);
@@ -24,7 +24,7 @@ const Home = () => {
           className="justify-center items-center "
           ref={dashboardRef}
         >
-          <FlashcardApp />
+          <MCQGenerator />
         </main>
       </div>
     </div>
