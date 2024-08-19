@@ -74,8 +74,12 @@ Our team gained valuable experience in:
 ## How to Run
 
 ### Requirements
+Before you begin, ensure you have met the following requirements:
+
+A modern web browser
 - Python 3 and pip
-- Node.js and a JS package manager (pnpm recommended)
+- Node.js installed on your machine
+- and a JS package manager (pnpm recommended)
 
 ### Step 1: Node Setup and Run
 ```bash
