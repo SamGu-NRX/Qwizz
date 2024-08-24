@@ -101,6 +101,12 @@ importers:
       '@tanstack/react-table':
         specifier: ^8.19.3
         version: 8.19.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@trpc/client':
+        specifier: 11.0.0-rc.485
+        version: 11.0.0-rc.485(@trpc/server@11.0.0-rc.485)
+      '@trpc/server':
+        specifier: 11.0.0-rc.485
+        version: 11.0.0-rc.485
       '@types/styled-components':
         specifier: ^5.1.34
         version: 5.1.34
@@ -2931,6 +2937,14 @@ packages:
   '@tootallnate/once@2.0.0':
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
     engines: {node: '>= 10'}
+
+  '@trpc/client@11.0.0-rc.485':
+    resolution: {integrity: sha512-Ld1gQjdYyrku0rjP/4QMg/SdsKgujr0P5XNoWkCyPRjdw3PuJbZFebauQPRC17cbbqGcpJrR+T3vnkhjMb1sgw==}
+    peerDependencies:
+      '@trpc/server': 11.0.0-rc.485+1c1d824cd
+
+  '@trpc/server@11.0.0-rc.485':
+    resolution: {integrity: sha512-U9SK9jbqCjR8S9wGSe4UBu2e0fqxhQWriZiDb5BLzdxXzls4Jv+XhAkI65yBzlcTbt6VqXegZDAXB3IARPhUCg==}
 
   '@trysound/sax@0.2.0':
     resolution: {integrity: sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==}
@@ -9381,6 +9395,12 @@ snapshots:
 
   '@tootallnate/once@2.0.0':
     optional: true
+
+  '@trpc/client@11.0.0-rc.485(@trpc/server@11.0.0-rc.485)':
+    dependencies:
+      '@trpc/server': 11.0.0-rc.485
+
+  '@trpc/server@11.0.0-rc.485': {}
 
   '@trysound/sax@0.2.0': {}
 
