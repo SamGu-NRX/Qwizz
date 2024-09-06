@@ -3,6 +3,7 @@
 <p align="center">
   <strong>Improve your learning skills with an all-in-one, personalized education assistant.</strong><br>
   Unlimited MCQ and flashcard generation for standardized tests, difficult subjects, and active recall.
+  Best Education Project | Boost Hacks 2024
 </p>
 
 ---
