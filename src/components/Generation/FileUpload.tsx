@@ -8,10 +8,11 @@ interface FileUploadProps {
   onFileAccepted: (content: string) => void;
   title?: string;
   description?: string;
+  fileData?: string;
 }
 
-const FileUpload: React.FC<FileUploadProps> = ({ label, onFileAccepted, title, description }) => {
-  const [ocrResult, setOcrResult] = useState('');
+const FileUpload: React.FC<FileUploadProps> = ({ label, onFileAccepted, title, description, fileData }) => {
+  const [ocrResult, setOcrResult] = useState(fileData || '');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentFile, setCurrentFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
