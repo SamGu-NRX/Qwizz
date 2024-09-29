@@ -96,7 +96,7 @@ Before you begin, ensure you have met the following requirements:
 
 ### Step 2: Python Setup and Run
 ```bash
-cd ./GPT_API
+cd ./Backend
 pip install -r ./requirements.txt
 python -m flask run
 ```
