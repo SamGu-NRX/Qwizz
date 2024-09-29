@@ -1,11 +1,12 @@
 // src/app/providers.tsx
-
-import type { Session } from "next-auth"
 import { SessionProvider } from "next-auth/react"
+import { auth } from "@/../auth";
 
-export default function Providers({ session, children }: { session: Session | null, children: React.ReactNode }) {
+export default async function Providers({ children }: 
+    { children: React.ReactNode }) {
+    const authSession = await auth();
     return (
-        <SessionProvider session={session}>
+        <SessionProvider session={authSession}>
             {children}
         </SessionProvider>
     )

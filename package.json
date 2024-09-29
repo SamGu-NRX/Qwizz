@@ -1,6 +1,6 @@
 {
   "name": "studybuddy",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
     "dev": "next dev --turbo",
@@ -94,7 +94,7 @@
     "canvas-confetti": "^1.9.3",
     "css-loader": "^7.1.2",
     "eslint": "^8.57.0",
-    "eslint-config-next": "14.2.5",
+    "eslint-config-next": "14.2.13",
     "mini-css-extract-plugin": "^2.9.0",
     "pnpm": "^9.6.0",
     "postcss": "^8.4.39",
@@ -106,7 +106,7 @@
     "typescript": "^5.5.4"
   },
   "peerDependencies": {
-    "next": "14.2.5",
+    "next": "14.2.13",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   }

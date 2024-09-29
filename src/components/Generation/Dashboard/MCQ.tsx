@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Loader, Clock } from "lucide-react";
 import { gsap } from "gsap";
@@ -49,6 +49,14 @@ const MCQGenerator = () => {
     }
   };
 
+  const handleSubmit = useCallback(() => {
+    setIsTimerRunning(false);
+    setShowFeedback(true);
+    if (selectedAnswer === mcqQuestions[currentIndex].correctAnswer) {
+      setScore(score + 1);
+    }
+  }, [selectedAnswer, currentIndex, 
+  
   useEffect(() => {
     const savedMCQQuestions = localStorage.getItem("mcqQuestions");
     const savedIndex = localStorage.getItem("currentIndex");
@@ -82,7 +90,7 @@ const MCQGenerator = () => {
       handleSubmit();
     }
     return () => clearInterval(timer);
-  }, [isTimerRunning, timeLeft]);
+  }, [handleSubmit, isTimerRunning, timeLeft]);
 
   const nextQuestion = () => {
     if (mcqQuestions && currentIndex < mcqQuestions.length - 1) {
@@ -134,13 +142,7 @@ const MCQGenerator = () => {
     }
   };
 
-  const handleSubmit = () => {
-    setIsTimerRunning(false);
-    setShowFeedback(true);
-    if (selectedAnswer === mcqQuestions[currentIndex].correctAnswer) {
-      setScore(score + 1);
-    }
-  };
+  
 
   const progress = mcqQuestions && mcqQuestions.length > 0 ? ((currentIndex + 1) / mcqQuestions.length) * 100 : 0;
 
