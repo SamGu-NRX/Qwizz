@@ -103,6 +103,11 @@ python -m flask run
 > Ensure the Flask app runs on port 5000 or update the `.env` file accordingly.
 > Default: `FLASK_API_URL=http://127.0.0.1:5000/`
 
+### Step 3: Run Next.js Dev Server
+```bash
+cd ..
+next dev  # or npm/pnpm run dev, depending on your setup
+```
 ---
 
 <p align="center">
