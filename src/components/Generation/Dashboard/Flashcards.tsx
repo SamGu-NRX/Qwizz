@@ -73,8 +73,8 @@ const FlashcardApp = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           flashcards,
-          title: 'My Flashcard Set',
-          subject: 'Some Subject',
+          title: 'Generated Flashcard Set',
+          subject: 'Subject', // Set this dynamically based on user input
           flashcardSetId,
         }),
       });
@@ -99,6 +99,7 @@ const FlashcardApp = () => {
       console.error('Error saving flashcards:', error);
     }
   };
+  
   
 
   // Load flashcards and current index from local storage on component mount

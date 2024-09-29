@@ -41,7 +41,7 @@ export function isAvailable(
 ) {
   var events;
 
-  fetch("/api/calendar-events")
+  getCalendarEvents(session, new Response(), args.calanderId)
     .then((res) => {
       res.json();
     })

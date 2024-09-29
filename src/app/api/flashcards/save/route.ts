@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
-import { prisma } from '@/lib/prisma';
+import { auth } from "@/../auth";
+import { db } from '@/lib/db';
 
 export async function POST(req: NextRequest) {
-  const session = await getServerSession(authOptions, req);
+  const session = await auth(req);
   if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
@@ -12,7 +11,7 @@ export async function POST(req: NextRequest) {
   const { id, isSaved } = await req.json();
 
   try {
-    const flashcard = await prisma.flashcard.update({
+    const flashcard = await db.flashcard.update({
       where: { id },
       data: { isSaved },
     });
