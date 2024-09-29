@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Container, Paper, Title, Text, Button, Textarea, Modal, Box, Space } from '@mantine/core';
 import OCR from '@/components/OCR/OCR';
 import { Dropzone, FileWithPath, IMAGE_MIME_TYPE, PDF_MIME_TYPE, MIME_TYPES } from '@mantine/dropzone';
+import { useFormContext } from 'react-hook-form';
 
 interface FileUploadProps {
   label: string;
@@ -9,13 +10,15 @@ interface FileUploadProps {
   title?: string;
   description?: string;
   fileData?: string;
+  fieldName?: string;
 }
 
-const FileUpload: React.FC<FileUploadProps> = ({ label, onFileAccepted, title, description, fileData }) => {
+const FileUpload: React.FC<FileUploadProps> = ({ label, onFileAccepted, title, description, fileData, fieldName }) => {
   const [ocrResult, setOcrResult] = useState(fileData || '');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentFile, setCurrentFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const { setValue } = useFormContext();
 
   const handleFileDrop = async (acceptedFiles: FileWithPath[]) => {
     const file = acceptedFiles[0];
@@ -80,7 +83,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ label, onFileAccepted, title, d
           ) : (
             <>
               {currentFile && currentFile.type.startsWith('image/') && (
-                <Box sx={{ maxWidth: '100%', marginBottom: '1rem' }}>
+                <Box style={{ maxWidth: '100%', marginBottom: '1rem' }}>
                   <OCR onOcrComplete={handleOcrComplete} initialFile={currentFile} />
                 </Box>
               )}

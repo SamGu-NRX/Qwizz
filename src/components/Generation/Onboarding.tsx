@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { z } from 'zod';
 import { FormDataSchema } from '@/schema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
 import FileUpload from './FileUpload';
 import GradeLevelSelection from './GradeLevelSelection';
 import { SubjectSelection } from './SubjectSelection';
@@ -15,9 +15,9 @@ type Inputs = z.infer<typeof FormDataSchema>;
 
 const steps = [
   { id: 'Step 1', name: 'Basic Information', fields: ['gradeLevel', 'subject'] },
-  { id: 'Step 2', name: 'Upload Documents & Notes', fields: ['uploadedText'] },
-  { id: 'Step 3', name: 'Upload Syllabus & Context', fields: ['uploadedText'] },
-  { id: 'Step 4', name: 'Complete' }
+  { id: 'Step 2', name: 'Upload Documents & Notes', fields: ['uploadedNotes'] },
+  { id: 'Step 3', name: 'Upload Syllabus & Context', fields: ['uploadedSyllabus'] },
+  { id: 'Step 4', name: 'Complete' },
 ];
 
 const gradeLevels = ['Elementary', 'Middle School', 'High School', 'College'];
@@ -25,42 +25,28 @@ const gradeLevels = ['Elementary', 'Middle School', 'High School', 'College'];
 export default function Onboarding() {
   const [previousStep, setPreviousStep] = useState(0);
   const [currentStep, setCurrentStep] = useState(0);
-  const [fileData, setFileData] = useState<string | null>(null);
   const delta = currentStep - previousStep;
 
-  // Initialize useForm with zod validation and react-hook-form resolver
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    watch,
-    reset,
-    trigger,
-    formState: { errors }
-  } = useForm<Inputs>({
+  const methods = useForm<Inputs>({
     resolver: zodResolver(FormDataSchema),
     defaultValues: {
-      gradeLevel: '',   // Set default form values
+      gradeLevel: '',
       subject: '',
-      uploadedText: ''
-    }
+      uploadedNotes: '',
+      uploadedSyllabus: '',
+    },
   });
 
-  // Watch specific form fields to track changes
-  const selectedSubject = watch('subject');
+  const { register, handleSubmit, setValue, watch, reset, trigger, formState } = methods;
+  const { errors } = formState;
 
-  // Load data from localStorage when the component is mounted
+  // Load data from localStorage on initial render
   useEffect(() => {
-    if (typeof window !== 'undefined') { // Ensure this only runs on client-side
+    if (typeof window !== 'undefined') {
       const savedData = localStorage.getItem('onboardingData');
       if (savedData) {
         const parsedData = JSON.parse(savedData);
-        Object.keys(parsedData).forEach((key) => {
-          setValue(key as keyof Inputs, parsedData[key]);  // Set form data from localStorage
-        });
-        if (parsedData.uploadedText) {
-          setFileData(parsedData.uploadedText); // Set fileData for FileUpload component
-        }
+        reset(parsedData); // Use reset to set all form values
       }
 
       const savedStep = localStorage.getItem('onboardingStep');
@@ -68,21 +54,12 @@ export default function Onboarding() {
         setCurrentStep(parseInt(savedStep, 10));
       }
     }
-  }, [setValue]);
+  }, [reset]);
 
-  // Save form data to localStorage when changes occur
-  const saveToLocalStorage = (data: Partial<Inputs>) => {
-    const existingData = localStorage.getItem('onboardingData');
-    const newData = existingData ? { ...JSON.parse(existingData), ...data } : data;
-    localStorage.setItem('onboardingData', JSON.stringify(newData));
-  };
-
-  // Watch for form field changes and trigger localStorage save
+  // Save data to localStorage whenever form data changes
   useEffect(() => {
-    const subscription = watch((value, { name }) => {
-      if (name) {
-        saveToLocalStorage({ [name]: value[name as keyof Inputs] });
-      }
+    const subscription = watch((value) => {
+      localStorage.setItem('onboardingData', JSON.stringify(value));
     });
     return () => subscription.unsubscribe();
   }, [watch]);
@@ -90,13 +67,11 @@ export default function Onboarding() {
   // Form submission handler
   const processForm: SubmitHandler<Inputs> = (data) => {
     console.log(data);
-    // Clear localStorage and reset form upon successful submission
     localStorage.removeItem('onboardingData');
     localStorage.removeItem('onboardingStep');
     reset();
   };
 
-  // Handle navigation to the next step
   const next = async () => {
     const fields = steps[currentStep].fields;
     const output = await trigger(fields as (keyof Inputs)[], { shouldFocus: true });
@@ -117,7 +92,6 @@ export default function Onboarding() {
     }
   };
 
-  // Handle navigation to the previous step
   const prev = () => {
     if (currentStep > 0) {
       setPreviousStep(currentStep);

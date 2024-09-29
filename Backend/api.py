@@ -90,6 +90,7 @@ async def create_flashcards(user_id, files: List[UploadFile] = File(...)):
             file_object.write(file.file.read())
         
         url = upload_to_storage(file_location, 'storage place', file.filename)
+        # per person
         
         if not url:
             raise HTTPException(status_code=500, detail="File upload failed")
