@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useRef, useState } from 'react';
 import { Group, Stack, Text, Image, Progress, Button, Modal } from '@mantine/core';
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
@@ -32,16 +34,14 @@ const OCR = ({ onOcrComplete, initialFile }: { onOcrComplete: (ocrContent: strin
 
   useEffect(() => {
     const initializeWorker = async () => {
-      const worker = await createWorker();
+      const worker = await createWorker("eng");
       workerRef.current = worker;
-      await worker.loadLanguage('eng');
-      await worker.initialize('eng');
       await worker.setParameters({
         tessedit_pageseg_mode: PSM.AUTO,
         tessedit_ocr_engine_mode: OEM.LSTM_ONLY,
       });
     };
-
+    
     initializeWorker();
 
     return () => {

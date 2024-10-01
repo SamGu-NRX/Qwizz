@@ -55,7 +55,7 @@ const MCQGenerator = () => {
     if (selectedAnswer === mcqQuestions[currentIndex].correctAnswer) {
       setScore(score + 1);
     }
-  }, [selectedAnswer, currentIndex, 
+  }, [selectedAnswer, currentIndex]);
   
   useEffect(() => {
     const savedMCQQuestions = localStorage.getItem("mcqQuestions");
