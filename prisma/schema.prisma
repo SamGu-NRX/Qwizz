@@ -16,6 +16,9 @@ model FlashcardSet {
   subject    String
 
   quizzes    Quiz[] @relation(name: "QuizToFlashcardSet")
+
+  userId     String      @db.ObjectId
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Flashcard {
@@ -26,11 +29,13 @@ model Flashcard {
   source         String
   date           FlashcardDate @relation(fields: [dateId], references: [id])
   dateId         String        @db.ObjectId
+  isSaved        Boolean       @default(false)
 
   flashcardSetId String        @db.ObjectId
   flashcardSet   FlashcardSet  @relation(fields: [flashcardSetId], references: [id], onDelete: Cascade)
 
   quizQuestion   QuizQuestion? @relation(name: "FlashcardToQuizQuestion")
+
 }
 
 model FlashcardDate {
@@ -130,14 +135,16 @@ enum UserRole {
 }
 
 model User {
-  id            String        @id @default(auto()) @map("_id") @db.ObjectId
-  name          String?
-  email         String?       @unique
-  emailVerified DateTime?     @map("email_verified")
-  phoneNumber   String?
-  image         String?
-  hashedPassword      String?
-  role          UserRole      // STUDENT, TEACHER, ADMIN
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  name           String?
+  email          String?       @unique
+  emailVerified  DateTime?     @map("email_verified")
+  phoneNumber    String?
+  image          String?
+  hashedPassword String?
+  firstTime      Boolean       @default(true)
+
+  role          UserRole      @default(STUDENT)// STUDENT, TEACHER, ADMIN
   accounts      Account[]
   sessions      Session[]
 
@@ -153,11 +160,14 @@ model User {
   conversationIds String[] @db.ObjectId
   conversations Conversation[] @relation(fields: [conversationIds], references: [id])
 
+
   messages      Message[]
   seenMessageIds String[] @db.ObjectId
   seenMessages  Message[] @relation("Seen", fields: [seenMessageIds], references: [id])
 
   @@map("users")
+  
+  FlashcardSet FlashcardSet[]
 }
 
 model Account {

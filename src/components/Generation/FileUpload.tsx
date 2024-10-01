@@ -2,12 +2,23 @@ import React, { useState } from 'react';
 import { Container, Paper, Title, Text, Button, Textarea, Modal, Box, Space } from '@mantine/core';
 import OCR from '@/components/OCR/OCR';
 import { Dropzone, FileWithPath, IMAGE_MIME_TYPE, PDF_MIME_TYPE, MIME_TYPES } from '@mantine/dropzone';
+import { useFormContext } from 'react-hook-form';
 
-const FileUpload: React.FC<{ label: string, onFileAccepted: (content: string) => void }> = ({ label, onFileAccepted }) => {
-  const [ocrResult, setOcrResult] = useState('');
+interface FileUploadProps {
+  label: string;
+  onFileAccepted: (content: string) => void;
+  title?: string;
+  description?: string;
+  fileData?: string;
+  fieldName?: string;
+}
+
+const FileUpload: React.FC<FileUploadProps> = ({ label, onFileAccepted, title, description, fileData, fieldName }) => {
+  const [ocrResult, setOcrResult] = useState(fileData || '');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentFile, setCurrentFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const { setValue } = useFormContext();
 
   const handleFileDrop = async (acceptedFiles: FileWithPath[]) => {
     const file = acceptedFiles[0];
@@ -16,10 +27,8 @@ const FileUpload: React.FC<{ label: string, onFileAccepted: (content: string) =>
     setIsProcessing(true);
 
     if (file.type.startsWith('image/')) {
-      // For image files, we'll let the OCR component handle it
       setIsProcessing(false);
     } else {
-      // Handle non-image files (PDF, DOC, etc.)
       const reader = new FileReader();
       reader.onload = (e) => {
         setOcrResult(e.target?.result as string);
@@ -46,13 +55,14 @@ const FileUpload: React.FC<{ label: string, onFileAccepted: (content: string) =>
   return (
     <Container size="lg" py="xl">
       <Paper shadow="md" p="xl" radius="md">
-      <Title order={1} mb="lg" className="text-center">
-        Upload and Extract Text
-      </Title>
+        <Title order={1} mb="lg" className="text-center">
+          {title || 'Upload and Extract Text'}
+        </Title>
         <Text className="text-center" c="dimmed" mb="xl">
-          Upload an image or document, crop it if needed, and extract text using OCR technology.
+          {description || 'Upload an image or document, crop it if needed, and extract text using our on-device OCR technology.'}
         </Text>
         <Space h="md" />
+        
         <Dropzone
           onDrop={handleFileDrop}
           accept={[
@@ -63,7 +73,7 @@ const FileUpload: React.FC<{ label: string, onFileAccepted: (content: string) =>
           ]}
         >
           <Text size="xl" inline>
-                Drag and drop files here, or click to select files
+            Drag and drop files here, or click to select files
           </Text>
         </Dropzone>
 
@@ -73,7 +83,7 @@ const FileUpload: React.FC<{ label: string, onFileAccepted: (content: string) =>
           ) : (
             <>
               {currentFile && currentFile.type.startsWith('image/') && (
-                <Box sx={{ maxWidth: '100%', marginBottom: '1rem' }}>
+                <Box style={{ maxWidth: '100%', marginBottom: '1rem' }}>
                   <OCR onOcrComplete={handleOcrComplete} initialFile={currentFile} />
                 </Box>
               )}

@@ -1,16 +1,12 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-// import { AuthProvider } from "@/context/AuthProvider";
 import '@mantine/core/styles.css';
-import { auth } from '@/../auth'
 import '@mantine/dropzone/styles.css';
 import { ColorSchemeScript, createTheme, MantineProvider } from '@mantine/core';
 import { ChakraProvider } from "@chakra-ui/react";
 
-import Providers from "./providers"
-import { getSession } from "next-auth/react";
-import logoPic from '../assets/StudyBuddyLogo.png'
+import Providers from "./providers";
 
 const theme = createTheme({
   /** Put your mantine theme override here */
@@ -23,28 +19,24 @@ export const metadata: Metadata = {
   description: "Your all-in-one study companion, supercharged with AI",
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
-  const session = await auth();
+}) {
   return (
-    <Providers session={session}>
+    <Providers>
       <html lang="en">
         <head>
           <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <ColorSchemeScript/>
+          <ColorSchemeScript />
         </head>
         <body className={inter.className}>
           <ChakraProvider theme={theme}>
-          <MantineProvider>
-            {children}
-          </MantineProvider>
+            <MantineProvider>{children}</MantineProvider>
           </ChakraProvider>
         </body>
       </html>
     </Providers>
   );
 }
-

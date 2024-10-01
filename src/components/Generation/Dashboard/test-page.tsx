@@ -1,6 +1,6 @@
 import { signOut } from 'next-auth/react';
 
-import Navbar from '../../components/Navbar';
+import Navbar from '../../Navbar';
 import { Center, Box, Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
 
 const Dashboard = () => {

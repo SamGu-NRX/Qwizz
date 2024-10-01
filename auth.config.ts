@@ -31,14 +31,35 @@ export default {
     Github({
       clientId: process.env.AUTH_GITHUB_CLIENT_ID ?? 'default',
       clientSecret: process.env.AUTH_GITHUB_CLIENT_SECRET ?? 'default',
+      profile(profile) {
+        return {
+          ...profile,
+          id: String(profile.id),
+          image: profile.avatar_url, // GitHub profile image
+        };
+      },
     }),
     Google({
       clientId: process.env.AUTH_GOOGLE_CLIENT_ID ?? 'default',
       clientSecret: process.env.AUTH_GOOGLE_CLIENT_SECRET ?? 'default',
+      profile(profile) {
+        return {
+          ...profile,
+          id: profile.sub,
+          image: profile.picture, // Google profile image
+        };
+      },
     }),
     Discord({
       clientId: process.env.AUTH_DISCORD_CLIENT_ID ?? 'default',
       clientSecret: process.env.AUTH_DISCORD_CLIENT_SECRET ?? 'default',
+      profile(profile) {
+        return {
+          ...profile,
+          id: profile.id,
+          image: profile.image_url, // Discord profile image
+        };
+      },
     }),
     Resend({
       apiKey: process.env.AUTH_RESEND_API_KEY ?? 'default',

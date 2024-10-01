@@ -1,5 +1,5 @@
 "use client";
-import FlashcardApp from "@/components/Dashboard/Flashcards";
+import FlashcardApp from "@/components/Generation/Dashboard/Flashcards";
 import Sidebar from "@/components/SidebarDash";
 import Header from "@/components/HeaderDash";
 import { fadeUp } from "@/animations/gsap";

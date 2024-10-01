@@ -4,14 +4,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Loader, Star } from "lucide-react";
 import { gsap } from "gsap";
 import confetti from 'canvas-confetti';
-import { flash_cards } from "@/actions/get-flashcard";
+import { flash_cards } from "@/actions/get-AI";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 
 interface Flashcard {
-  id: number;
+  id: string;
   front: string;
   back: string;
   isSaved: boolean;
@@ -19,6 +19,7 @@ interface Flashcard {
 
 const FlashcardApp = () => {
   const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
+  const [flashcardSetId, setFlashcardSetId] = useState<string | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
   const [question, setQuestion] = useState("");
@@ -32,16 +33,18 @@ const FlashcardApp = () => {
     setIsLoading(true);
     setCanGenerate(false);
     try {
-      const newFlashcardss = await flash_cards(question);
-      const newFlashcards = newFlashcardss["flashcards"]
-      // .map((card: Omit<Flashcard, 'isSaved'>) => ({
-      //   ...card,
-      //   isSaved: false
-      // }));
-      setFlashcards(newFlashcards);
+      const newFlashcardss = await flash_cards(question); // Call your Flask API
+      if (newFlashcardss.error) {
+        console.error("Error generating flashcards:", newFlashcardss);
+        return;
+      }
+  
+      const newFlashcards = newFlashcardss["flashcards"];
+      
+      // Save flashcards to MongoDB using Prisma
+      await saveFlashcards(newFlashcards, null); // Save to DB (this is the function discussed earlier)
+  
       setCurrentIndex(0);
-      localStorage.setItem("flashcards", JSON.stringify(newFlashcards));
-      localStorage.setItem("currentIndex", "0");
     } catch (error) {
       console.error("Error generating flashcards:", error);
     } finally {
@@ -53,19 +56,51 @@ const FlashcardApp = () => {
     setIsLoading(true);
     try {
       const newFlashcardss = await flash_cards(question);
-      const newFlashcards = newFlashcardss["flashcards"]
-      // .map((card: Omit<Flashcard, 'isSaved'>) => ({
-      //   ...card,
-      //   isSaved: false
-      // }));
-      setFlashcards((prevFlashcards) => [...prevFlashcards, ...newFlashcards]);
-      localStorage.setItem("flashcards", JSON.stringify([...flashcards, ...newFlashcards]));
+      const newFlashcards = newFlashcardss["flashcards"];
+      await saveFlashcards(newFlashcards, flashcardSetId);
     } catch (error) {
       console.error("Error generating more flashcards:", error);
     } finally {
       setIsLoading(false);
     }
   };
+  
+
+  const saveFlashcards = async (flashcards: Flashcard[], flashcardSetId: string | null) => {
+    try {
+      const response = await fetch('/api/flashcards/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          flashcards,
+          title: 'Generated Flashcard Set',
+          subject: 'Subject', // Set this dynamically based on user input
+          flashcardSetId,
+        }),
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Flashcards saved:', data);
+        setFlashcardSetId(data.flashcardSet.id);
+  
+        // Update flashcards state
+        if (flashcardSetId) {
+          // Append new flashcards
+          setFlashcards(prevFlashcards => [...prevFlashcards, ...data.flashcardSet.flashcards]);
+        } else {
+          // Replace flashcards
+          setFlashcards(data.flashcardSet.flashcards);
+        }
+      } else {
+        console.error('Failed to save flashcards');
+      }
+    } catch (error) {
+      console.error('Error saving flashcards:', error);
+    }
+  };
+  
+  
 
   // Load flashcards and current index from local storage on component mount
   useEffect(() => {
@@ -143,29 +178,29 @@ const FlashcardApp = () => {
     setIsFlipped(!isFlipped);
   };
 
-  const toggleSaveCard = async (id: number) => {
-    // try {
-    //   const response = await fetch('/api/flashcards/save', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify({ id, isSaved: !flashcards[currentIndex].isSaved }),
-    //   });
-
-    //   if (response.ok) {
-    //     setFlashcards(flashcards.map(card =>
-    //       card.id === id ? { ...card, isSaved: !card.isSaved } : card
-    //     ));
-    //   } else {
-    //     console.error('Failed to save flashcard');
-    //   }
-    // } catch (error) {
-    //   console.error('Error saving flashcard:', error);
-    // }
-
-    setIsSaved(!isSaved);
+  const toggleSaveCard = async (id: string) => {
+    try {
+      const newIsSaved = !flashcards[currentIndex].isSaved;
+      const response = await fetch('/api/flashcards/save', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id, isSaved: newIsSaved }),
+      });
+  
+      if (response.ok) {
+        setFlashcards(flashcards.map(card =>
+          card.id === id ? { ...card, isSaved: newIsSaved } : card
+        ));
+      } else {
+        console.error('Failed to save flashcard');
+      }
+    } catch (error) {
+      console.error('Error saving flashcard:', error);
+    }
   };
+  
 
   const progress = flashcards && flashcards.length > 0 ? ((currentIndex + 1) / flashcards.length) * 100 : 0;
 
@@ -251,9 +286,9 @@ const FlashcardApp = () => {
                     }}
                   >
                     <Star
-                      // className={`h-6 w-6 ${flashcards[currentIndex].isSaved ? 'text-yellow-400 fill-yellow-400' : 'text-gray-400'}`}
-                      className={`h-6 w-6 ${isSaved ? 'text-yellow-400 fill-yellow-400' : 'text-gray-400'}`}
+                      className={`h-6 w-6 ${flashcards[currentIndex].isSaved ? 'text-yellow-400 fill-yellow-400' : 'text-gray-400'}`}
                     />
+
       
                 </Button>
 

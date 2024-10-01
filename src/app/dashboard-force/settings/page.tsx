@@ -13,15 +13,20 @@ import { Input } from "@/components/ui/input";
 import Sidebar from "@/components/SidebarDash";
 import Header from "@/components/HeaderDash";
 import * as React from "react";
+import { useSession } from "next-auth/react";
 
 export default function Settings() {
   const [image, setImage] = React.useState<string>("");
   const [tempImage, setTempImage] = React.useState<string>("");
   const [isDialogOpen, setIsDialogOpen] = React.useState<boolean>(false);
 
-  const username = "guest";
-  const name = "Arthur Shufer";
-  const email = "arthnotoriety@gmail.com";
+
+  // Get user session data
+  const { data: session } = useSession();
+  const userImage = session?.user?.image || "/default-avatar.png"; // Use the user's image or a default fallback
+  const name = session?.user?.name || "Guest";
+  const username = session?.user?.id || "Guest";
+  const email = session?.user?.email || "no email";
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -80,7 +85,10 @@ export default function Settings() {
                 <div className="grid gap-3">
                   <div className="flex items-center justify-between">
                     <Avatar className="w-20 h-20">
-                      <AvatarImage src={image || "https://github.com/shadcn.png"} alt="@shadcn" />
+                      <AvatarImage src={userImage || "https://github.com/shadcn.png"}
+                         alt="Avatar" 
+                         className="overflow-hidden rounded-full"
+                      />
                       <AvatarFallback>CN</AvatarFallback>
                     </Avatar>
                     <div className="grid w-full max-w-sm items-center gap-1.5">

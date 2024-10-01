@@ -58,6 +58,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             image: user.image,
             emailVerified: user.emailVerified,
             firstTime: true,
+            role: "STUDENT",
           },
         });
         return `/onboarding`;
