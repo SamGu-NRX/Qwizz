@@ -235,48 +235,54 @@ model PasswordResetToken {
   @@unique([email, token])
 }
 
-// **Conversation Model**
 model Conversation {
-  id              String        @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt       DateTime      @default(now())
-  lastMessageAt   DateTime      @default(now())
-  name            String?
-  isGroup         Boolean?
+  id                String        @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt         DateTime      @default(now())
+  lastMessageAt     DateTime      @default(now())
+  name              String?
+  isGroup           Boolean?      // Indicates if it's a group chat (user-to-user)
+  type              ConversationType  // NEW: Enum to differentiate conversation types
+  subject           String?       // NEW: Subject/Topic for AI conversations
+  contextOptOut     Boolean       @default(false)  // NEW: If true, conversation is not used as AI context
 
-  messages        Message[]
-  users           User[]        @relation("UserConversations")
+  messages          Message[]
+  userConversations UserConversation[]
 
-  // Link to Note (for context)
-  associatedNoteId String?      @db.ObjectId
-  associatedNote   Note?        @relation(fields: [associatedNoteId], references: [id])
+  associatedNoteId  String?       @db.ObjectId
+  associatedNote    Note?         @relation(fields: [associatedNoteId], references: [id])
 
   @@map("conversations")
 }
 
-// **Message Model**
+enum ConversationType {
+  USER   // Direct messaging between users
+  AI     // Conversations with the AI chatbot
+}
+
 model Message {
-  id              String        @id @default(auto()) @map("_id") @db.ObjectId
-  body            String?
-  image           String?
-  createdAt       DateTime      @default(now())
+  id                  String               @id @default(auto()) @map("_id") @db.ObjectId
+  body                String?
+  image               String?
+  createdAt           DateTime             @default(now())
 
-  senderId        String        @db.ObjectId
-  sender          User          @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  senderId            String               @db.ObjectId
+  sender              User                 @relation(fields: [senderId], references: [id], onDelete: Cascade)
 
-  conversationId  String        @db.ObjectId
-  conversation    Conversation  @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  conversationId      String               @db.ObjectId
+  conversation        Conversation         @relation(fields: [conversationId], references: [id], onDelete: Cascade)
 
-  seen            User[]        @relation("Seen")
+  // Only applicable for user-to-user messages
+  messageSeenByUsers  MessageSeenByUser[]  // For tracking "seen" status
 
   @@map("messages")
 }
 
-// **Note Model**
+
 model Note {
   id              String        @id @default(auto()) @map("_id") @db.ObjectId
   title           String
   content         String        // Original content
-  enhancedContent String?       // AI-enhanced content
+  enhancedContent String?       // AI-enhanced content with highlights
   userId          String        @db.ObjectId
   user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -285,8 +291,10 @@ model Note {
   mcqs            MCQ[]
   mindMaps        MindMap[]
 
+  knowledgeWeb    KnowledgeWeb? // NEW: Link to the knowledge web for this note
+
   createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
 
   @@map("notes")
 }
@@ -325,6 +333,9 @@ model MCQ {
 model MindMap {
   id             String   @id @default(auto()) @map("_id") @db.ObjectId
   title          String
+  subject        String
+  topic          String?
+
   nodes          String   // JSON structure
 
   noteId         String   @db.ObjectId
@@ -335,6 +346,18 @@ model MindMap {
 
   createdAt      DateTime @default(now())
 }
+
+model KnowledgeWeb {
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
+  noteId    String     @db.ObjectId
+  note      Note       @relation(fields: [noteId], references: [id], onDelete: Cascade)
+
+  nodes     String     // JSON structure representing interconnected concepts
+  edges     String     // JSON structure representing relationships between concepts
+
+  createdAt DateTime   @default(now())
+}
+
 
 model MemoryItem {
   id             String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -352,19 +375,36 @@ model MemoryItem {
 }
 
 
-// **AIUsage Model**
 model AIUsage {
   id             String   @id @default(auto()) @map("_id") @db.ObjectId
   userId         String   @db.ObjectId
   user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   endpoint       String   // API endpoint used
-  tokensUsed     Int      // Number of tokens
+  tokensUsed     Int      // Number of tokens used
   cost           Float    // Cost in credits
   timestamp      DateTime @default(now())
 
   noteId         String?  @db.ObjectId
   note           Note?    @relation(fields: [noteId], references: [id])
 
+  conversationId String?  @db.ObjectId  // NEW: Link to AI conversation if applicable
+  conversation   Conversation? @relation(fields: [conversationId], references: [id])
+
   @@map("ai_usages")
+}
+
+model Purchase {
+  id       String   @id @default(uuid())
+  userId   String
+  credit   Float
+  createAt DateTime @default(now())
+}
+
+model StripeCustomer {
+  id               String @id @default(uuid())
+  userId           String @unique
+  stripeCustomerId String @unique
+
+  createAt DateTime @default(now())
 }
