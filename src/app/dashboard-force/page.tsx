@@ -24,7 +24,7 @@ function getAccuracy(data: Question[]) {
   if (!data || data.length === 0) {
     return 90;
   }
-  
+
   var correct = 0;
   var total = 0;
   for (let i = 0; i < data.length; i++) {
@@ -45,10 +45,10 @@ interface DashboardProps {
 const Dashboard: React.FC<DashboardProps>= () => {
   const dashboardRef = useRef<HTMLDivElement>(null);
   const elementsRef = useRef<(HTMLHeadingElement | HTMLParagraphElement | HTMLButtonElement)[]>([]);
-  
+
   const [loading, setLoading] = useState(true);
 
-  
+
 
   const redirectGenerate = () => {
     window.location.href = '/dashboard-force/flashcards';
@@ -60,7 +60,7 @@ const Dashboard: React.FC<DashboardProps>= () => {
         fadeUp(elementsRef.current.filter(el => el !== null) as HTMLElement[], dashboardRef.current, { delay: 0.05, start: 'top 80%', ease: 'power3.inOut', stagger: 0.1 });
       }
     }, []);
-   
+
 
 
   if (data && Array.isArray(data) && data.length > 0) {
