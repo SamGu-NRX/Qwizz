@@ -1,3 +1,5 @@
+// Prisma schema file (schema.prisma)
+
 generator client {
   provider = "prisma-client-js"
   output   = "../node_modules/.prisma/client"
@@ -9,108 +11,13 @@ datasource db {
   // relationMode = "prisma"
 }
 
-// **User Roles**
+// Enums
 enum UserRole {
   STUDENT
   TEACHER
   ADMIN
 }
 
-// **User Model**
-model User {
-  id             String         @id @default(auto()) @map("_id") @db.ObjectId
-  name           String?
-  email          String?        @unique
-  emailVerified  DateTime?      @map("email_verified")
-  phoneNumber    String?
-  image          String?
-  hashedPassword String?
-  firstTime      Boolean        @default(true)
-
-  role           UserRole       @default(STUDENT)
-  accounts       Account[]
-  sessions       Session[]
-
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
-
-  // Relations
-  contextFiles   ContextFiles[]
-  quizzesCreated Quiz[]         @relation("TeacherQuizzes")
-  quizzesTaken   QuizResponse[] @relation("StudentResponses")
-
-  conversations  Conversation[] @relation("UserConversations")
-  messages       Message[]
-  seenMessages   Message[]      @relation("Seen")
-
-  flashcardSets  FlashcardSet[]
-  notes          Note[]
-  memoryItems    MemoryItem[]
-  mindMaps       MindMap[]
-  mcqs           MCQ[]
-  keyTerms       KeyTerm[]
-  apiUsages      AIUsage[]
-
-  // AI Credit Information
-  totalCredit    Float          @default(10000.0)
-  usedCredit     Float          @default(0.0)
-
-  @@map("users")
-}
-
-// **FlashcardSet Model**
-model FlashcardSet {
-  id             String        @id @default(auto()) @map("_id") @db.ObjectId
-  title          String
-  subject        String
-  flashcards     Flashcard[]
-
-  quizzes        Quiz[]        @relation(name: "QuizToFlashcardSet")
-
-  userId         String        @db.ObjectId
-  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model Flashcard {
-  id             String        @id @default(auto()) @map("_id") @db.ObjectId
-  title          String
-  front          String
-  back           String
-  source         String
-  isSaved        Boolean       @default(false)
-
-  // Date fields directly in the Flashcard model
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
-  lastReviewedAt DateTime?     // For tracking review sessions
-
-  flashcardSetId String        @db.ObjectId
-  flashcardSet   FlashcardSet  @relation(fields: [flashcardSetId], references: [id], onDelete: Cascade)
-
-  quizQuestion   QuizQuestion? @relation(name: "FlashcardToQuizQuestion")
-
-  // Relation to Note
-  noteId         String?       @db.ObjectId
-  note           Note?         @relation(fields: [noteId], references: [id], onDelete: Cascade)
-}
-
-
-// **ContextFiles Model**
-model ContextFiles {
-  id           String        @id @default(auto()) @map("_id") @db.ObjectId
-  gradeLevel   String
-  subject      String
-
-  syllabusText String
-  notesText    String
-
-  userId       String        @db.ObjectId
-  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  quizzes      Quiz[]
-}
-
-// **QuestionType Enum**
 enum QuestionType {
   MULTIPLE_CHOICE
   MATCHING
@@ -118,90 +25,81 @@ enum QuestionType {
   IMAGE_UPLOAD
 }
 
-// **Quiz Model**
-model Quiz {
-  id             String        @id @default(auto()) @map("_id") @db.ObjectId
-  title          String
-  description    String?
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
-
-  teacherId      String        @db.ObjectId
-  teacher        User          @relation("TeacherQuizzes", fields: [teacherId], references: [id], onDelete: Cascade)
-
-  questions      QuizQuestion[]
-  contextFileId  String?       @db.ObjectId
-  contextFile    ContextFiles? @relation(fields: [contextFileId], references: [id], onDelete: SetNull)
-
-  quizResponses  QuizResponse[]
-
-  flashcardSetId String?       @db.ObjectId
-  flashcardSet   FlashcardSet? @relation(name: "QuizToFlashcardSet", fields: [flashcardSetId], references: [id])
+enum ConversationType {
+  USER // Direct messaging between users
+  AI // Conversations with the AI chatbot
 }
 
-// **QuizQuestion Model**
-model QuizQuestion {
-  id              String        @id @default(auto()) @map("_id") @db.ObjectId
-  question        String
-  type            QuestionType
-  options         String[]      // For MULTIPLE_CHOICE and MATCHING
-  answers         String[]      // Correct answers
-  keywords        String[]      // For SHORT_RESPONSE grading
-  imagePath       String?       // For IMAGE_UPLOAD questions
+// User model
+model User {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  name           String?
+  email          String?   @unique
+  emailVerified  DateTime? @map("email_verified")
+  phoneNumber    String?
+  image          String?
+  hashedPassword String?
+  firstTime      Boolean   @default(true)
 
-  quizId          String        @db.ObjectId
-  quiz            Quiz          @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  role     UserRole  @default(STUDENT)
+  accounts Account[]
+  sessions Session[]
 
-  flashcardId     String?       @db.ObjectId @unique
-  flashcard       Flashcard?    @relation(name: "FlashcardToQuizQuestion", fields: [flashcardId], references: [id], onDelete: SetNull)
+  // Relations
+  contextFiles   ContextFiles[]
+  quizzesCreated Quiz[]         @relation("TeacherQuizzes")
+  quizzesTaken   QuizResponse[] @relation("StudentResponses")
 
-  quizResponseId  String?       @db.ObjectId
-  quizResponse    QuizResponse? @relation("IncorrectQuestions", fields: [quizResponseId], references: [id])
+  // Messaging relations
+  userConversations  UserConversation[]
+  messages           Message[]
+  messageSeenByUsers MessageSeenByUser[]
+
+  // AI-related models
+  notes         Note[]
+  flashcardSets FlashcardSet[]
+  memoryItems   MemoryItem[]
+  mindMaps      MindMap[]
+  mcqs          MCQ[]
+  keyTerms      KeyTerm[]
+  apiUsages     AIUsage[]
+
+  // AI Credit Information
+  totalCredit Float @default(10000.0)
+  usedCredit  Float @default(0.0)
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
 }
 
-// **QuizResponse Model**
-model QuizResponse {
-  id                String          @id @default(auto()) @map("_id") @db.ObjectId
-  studentId         String          @db.ObjectId
-  student           User            @relation("StudentResponses", fields: [studentId], references: [id], onDelete: Cascade)
-
-  quizId            String          @db.ObjectId
-  quiz              Quiz            @relation(fields: [quizId], references: [id], onDelete: Cascade)
-
-  answers           String[]        // User's answers
-  imagePaths        String[]        // For IMAGE_UPLOAD questions
-  score             Float
-  createdAt         DateTime        @default(now())
-  feedback          String[]        // Feedback per question
-
-  incorrectQuestions QuizQuestion[] @relation("IncorrectQuestions")
-}
-
-// **Account Model**
+// Account model
 model Account {
-  id                String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String   @db.ObjectId
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String?  @db.String
-  access_token      String?  @db.String
+  refresh_token     String? @db.String
+  access_token      String? @db.String
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String?  @db.String
+  id_token          String? @db.String
   session_state     String?
 
-  createdAt         DateTime @default(now()) @map(name: "created_at")
-  updatedAt         DateTime @default(now()) @map(name: "updated_at")
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @default(now()) @map(name: "updated_at")
 
-  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
   @@map("accounts")
 }
 
-// **Session Model**
+// Session model
 model Session {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   sessionToken String   @unique
@@ -209,13 +107,331 @@ model Session {
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("sessions")
 }
 
-// **VerificationToken Model**
+// ContextFiles model
+model ContextFiles {
+  id         String @id @default(auto()) @map("_id") @db.ObjectId
+  gradeLevel String
+  subject    String
+
+  syllabusText String
+  notesText    String
+
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  quizzes Quiz[]
+
+  @@map("context_files")
+}
+
+// Quiz model
+model Quiz {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  teacherId String @db.ObjectId
+  teacher   User   @relation("TeacherQuizzes", fields: [teacherId], references: [id], onDelete: Cascade)
+
+  questions     QuizQuestion[]
+  contextFileId String?        @db.ObjectId
+  contextFile   ContextFiles?  @relation(fields: [contextFileId], references: [id], onDelete: SetNull)
+
+  quizResponses QuizResponse[]
+
+  flashcardSetId String?       @db.ObjectId
+  flashcardSet   FlashcardSet? @relation(name: "QuizToFlashcardSet", fields: [flashcardSetId], references: [id])
+
+  @@map("quizzes")
+}
+
+// QuizQuestion model
+model QuizQuestion {
+  id        String       @id @default(auto()) @map("_id") @db.ObjectId
+  question  String
+  type      QuestionType
+  options   String[] // For MULTIPLE_CHOICE and MATCHING
+  answers   String[] // Correct answers
+  keywords  String[] // For SHORT_RESPONSE grading
+  imagePath String? // For IMAGE_UPLOAD questions
+
+  quizId String @db.ObjectId
+  quiz   Quiz   @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  flashcardId String?    @unique @db.ObjectId
+  flashcard   Flashcard? @relation(name: "FlashcardToQuizQuestion", fields: [flashcardId], references: [id], onDelete: SetNull)
+
+  quizResponseId String?       @db.ObjectId
+  quizResponse   QuizResponse? @relation("IncorrectQuestions", fields: [quizResponseId], references: [id])
+
+  @@map("quiz_questions")
+}
+
+// QuizResponse model
+model QuizResponse {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  studentId String @db.ObjectId
+  student   User   @relation("StudentResponses", fields: [studentId], references: [id], onDelete: Cascade)
+
+  quizId String @db.ObjectId
+  quiz   Quiz   @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  answers    String[] // User's answers
+  imagePaths String[] // For IMAGE_UPLOAD questions
+  score      Float
+  createdAt  DateTime @default(now())
+  feedback   String[] // Feedback per question
+
+  incorrectQuestions QuizQuestion[] @relation("IncorrectQuestions")
+
+  @@map("quiz_responses")
+}
+
+// FlashcardSet model
+model FlashcardSet {
+  id         String      @id @default(auto()) @map("_id") @db.ObjectId
+  title      String
+  subject    String
+  flashcards Flashcard[]
+
+  quizzes Quiz[] @relation(name: "QuizToFlashcardSet")
+
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("flashcard_sets")
+}
+
+// Flashcard model
+model Flashcard {
+  id      String  @id @default(auto()) @map("_id") @db.ObjectId
+  title   String
+  front   String
+  back    String
+  source  String
+  isSaved Boolean @default(false)
+
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  lastReviewedAt DateTime?
+
+  flashcardSetId String       @db.ObjectId
+  flashcardSet   FlashcardSet @relation(fields: [flashcardSetId], references: [id], onDelete: Cascade)
+
+  quizQuestion QuizQuestion? @relation(name: "FlashcardToQuizQuestion")
+
+  noteId String? @db.ObjectId
+  note   Note?   @relation(fields: [noteId], references: [id], onDelete: Cascade)
+
+  @@map("flashcards")
+}
+
+// Note model
+model Note {
+  id              String  @id @default(auto()) @map("_id") @db.ObjectId
+  title           String
+  content         String // Original content
+  enhancedContent String? // AI-enhanced content with highlights
+
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  keyTerms   KeyTerm[]
+  flashcards Flashcard[]
+  mcqs       MCQ[]
+  mindMaps   MindMap[]
+
+  knowledgeWeb KnowledgeWeb? // Represents the interconnected concepts
+
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  AIUsage      AIUsage[]
+  Conversation Conversation[]
+
+  @@map("notes")
+}
+
+// KeyTerm model
+model KeyTerm {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  term        String
+  explanation String // From web query
+  analogy     String // Simplified explanation
+
+  noteId String @db.ObjectId
+  note   Note   @relation(fields: [noteId], references: [id], onDelete: Cascade)
+
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("key_terms")
+}
+
+// MCQ model
+model MCQ {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  question String
+  options  String[]
+  answer   String
+
+  noteId String @db.ObjectId
+  note   Note   @relation(fields: [noteId], references: [id], onDelete: Cascade)
+
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@map("mcqs")
+}
+
+// MindMap model
+model MindMap {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  title String
+  nodes String // JSON structure representing nodes and edges
+
+  noteId String @db.ObjectId
+  note   Note   @relation(fields: [noteId], references: [id], onDelete: Cascade)
+
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@map("mind_maps")
+}
+
+// MemoryItem model
+model MemoryItem {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  content String // Snapshot of the content
+  type    String // e.g., "Flashcard", "Note", "KeyTerm"
+
+  referenceId   String @db.ObjectId // ID of the original item
+  referenceType String // Model type of the original item
+
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@map("memory_items")
+}
+
+// KnowledgeWeb model
+model KnowledgeWeb {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  noteId String @db.ObjectId
+  note   Note   @relation(fields: [noteId], references: [id], onDelete: Cascade)
+
+  nodes String // JSON structure representing interconnected concepts
+  edges String // JSON structure representing relationships between concepts
+
+  createdAt DateTime @default(now())
+
+  @@map("knowledge_webs")
+}
+
+// AIUsage model
+model AIUsage {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  endpoint   String // API endpoint used
+  tokensUsed Int // Number of tokens used
+  cost       Float // Cost in credits
+  timestamp  DateTime @default(now())
+
+  noteId String? @db.ObjectId
+  note   Note?   @relation(fields: [noteId], references: [id])
+
+  conversationId String?       @db.ObjectId
+  conversation   Conversation? @relation(fields: [conversationId], references: [id])
+
+  @@map("ai_usages")
+}
+
+// Conversation model
+model Conversation {
+  id            String           @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt     DateTime         @default(now())
+  lastMessageAt DateTime         @default(now())
+  name          String?
+  isGroup       Boolean? // Indicates if it's a group chat (user-to-user)
+  type          ConversationType // Differentiates between USER and AI conversations
+  subject       String? // Subject/Topic for AI conversations
+  contextOptOut Boolean          @default(false) // If true, conversation is not used as AI context
+
+  messages          Message[]
+  userConversations UserConversation[] // Relation to join model
+
+  associatedNoteId String?   @db.ObjectId
+  associatedNote   Note?     @relation(fields: [associatedNoteId], references: [id])
+  AIUsage          AIUsage[]
+
+  @@map("conversations")
+}
+
+// UserConversation join model
+model UserConversation {
+  id             String @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String @db.ObjectId
+  conversationId String @db.ObjectId
+
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, conversationId], name: "user_conversation_unique")
+  @@index([userId], name: "user_idx")
+  @@index([conversationId], name: "conversation_idx")
+  @@map("user_conversations")
+}
+
+// Message model
+model Message {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  body      String?
+  image     String?
+  createdAt DateTime @default(now())
+
+  senderId String @db.ObjectId
+  sender   User   @relation(fields: [senderId], references: [id], onDelete: Cascade)
+
+  conversationId String       @db.ObjectId
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  // For user-to-user messages, tracks which users have seen this message
+  messageSeenByUsers MessageSeenByUser[]
+
+  @@map("messages")
+}
+
+// MessageSeenByUser join model
+model MessageSeenByUser {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  messageId String @db.ObjectId
+  userId    String @db.ObjectId
+
+  message Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([messageId, userId], name: "message_user_unique")
+  @@index([messageId], name: "message_idx")
+  @@index([userId], name: "user_idx")
+  @@map("message_seen_by_users")
+}
+
+// VerificationToken model
 model VerificationToken {
   id      String   @id @default(cuid()) @map("_id")
   email   String
@@ -223,9 +439,10 @@ model VerificationToken {
   expires DateTime
 
   @@unique([email, token])
+  @@map("verification_tokens")
 }
 
-// **PasswordResetToken Model**
+// PasswordResetToken model
 model PasswordResetToken {
   id      String   @id @default(cuid()) @map("_id")
   email   String
@@ -233,176 +450,18 @@ model PasswordResetToken {
   expires DateTime
 
   @@unique([email, token])
-}
-
-model Conversation {
-  id                String        @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt         DateTime      @default(now())
-  lastMessageAt     DateTime      @default(now())
-  name              String?
-  isGroup           Boolean?      // Indicates if it's a group chat (user-to-user)
-  type              ConversationType  // NEW: Enum to differentiate conversation types
-  subject           String?       // NEW: Subject/Topic for AI conversations
-  contextOptOut     Boolean       @default(false)  // NEW: If true, conversation is not used as AI context
-
-  messages          Message[]
-  userConversations UserConversation[]
-
-  associatedNoteId  String?       @db.ObjectId
-  associatedNote    Note?         @relation(fields: [associatedNoteId], references: [id])
-
-  @@map("conversations")
-}
-
-enum ConversationType {
-  USER   // Direct messaging between users
-  AI     // Conversations with the AI chatbot
-}
-
-model Message {
-  id                  String               @id @default(auto()) @map("_id") @db.ObjectId
-  body                String?
-  image               String?
-  createdAt           DateTime             @default(now())
-
-  senderId            String               @db.ObjectId
-  sender              User                 @relation(fields: [senderId], references: [id], onDelete: Cascade)
-
-  conversationId      String               @db.ObjectId
-  conversation        Conversation         @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-
-  // Only applicable for user-to-user messages
-  messageSeenByUsers  MessageSeenByUser[]  // For tracking "seen" status
-
-  @@map("messages")
-}
-
-
-model Note {
-  id              String        @id @default(auto()) @map("_id") @db.ObjectId
-  title           String
-  content         String        // Original content
-  enhancedContent String?       // AI-enhanced content with highlights
-  userId          String        @db.ObjectId
-  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  keyTerms        KeyTerm[]
-  flashcards      Flashcard[]
-  mcqs            MCQ[]
-  mindMaps        MindMap[]
-
-  knowledgeWeb    KnowledgeWeb? // NEW: Link to the knowledge web for this note
-
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-
-  @@map("notes")
-}
-
-// **KeyTerm Model**
-model KeyTerm {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  term           String
-  explanation    String   // From web query
-  analogy        String   // Simplified explanation
-
-  noteId         String   @db.ObjectId
-  note           Note     @relation(fields: [noteId], references: [id], onDelete: Cascade)
-
-  userId         String   @db.ObjectId
-  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-// **MCQ Model**
-model MCQ {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  question       String
-  options        String[]
-  answer         String
-
-  noteId         String   @db.ObjectId
-  note           Note     @relation(fields: [noteId], references: [id], onDelete: Cascade)
-
-  userId         String   @db.ObjectId
-  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  createdAt      DateTime @default(now())
-}
-
-// **MindMap Model**
-model MindMap {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  title          String
-  subject        String
-  topic          String?
-
-  nodes          String   // JSON structure
-
-  noteId         String   @db.ObjectId
-  note           Note     @relation(fields: [noteId], references: [id], onDelete: Cascade)
-
-  userId         String   @db.ObjectId
-  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  createdAt      DateTime @default(now())
-}
-
-model KnowledgeWeb {
-  id        String     @id @default(auto()) @map("_id") @db.ObjectId
-  noteId    String     @db.ObjectId
-  note      Note       @relation(fields: [noteId], references: [id], onDelete: Cascade)
-
-  nodes     String     // JSON structure representing interconnected concepts
-  edges     String     // JSON structure representing relationships between concepts
-
-  createdAt DateTime   @default(now())
-}
-
-
-model MemoryItem {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  content        String   // Snapshot of the content (e.g., flashcard front and back)
-  type           String   // e.g., "Flashcard", "Note", "KeyTerm"
-
-  // Reference to the original item
-  referenceId    String   @db.ObjectId
-  referenceType  String   // Discriminator to determine the model (e.g., "Flashcard", "Note")
-
-  userId         String   @db.ObjectId
-  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  createdAt      DateTime @default(now())
-}
-
-
-model AIUsage {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId         String   @db.ObjectId
-  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  endpoint       String   // API endpoint used
-  tokensUsed     Int      // Number of tokens used
-  cost           Float    // Cost in credits
-  timestamp      DateTime @default(now())
-
-  noteId         String?  @db.ObjectId
-  note           Note?    @relation(fields: [noteId], references: [id])
-
-  conversationId String?  @db.ObjectId  // NEW: Link to AI conversation if applicable
-  conversation   Conversation? @relation(fields: [conversationId], references: [id])
-
-  @@map("ai_usages")
+  @@map("password_reset_tokens")
 }
 
 model Purchase {
-  id       String   @id @default(uuid())
+  id       String   @id @default(uuid()) @map("_id")
   userId   String
   credit   Float
   createAt DateTime @default(now())
 }
 
 model StripeCustomer {
-  id               String @id @default(uuid())
+  id               String @id @default(uuid()) @map("_id")
   userId           String @unique
   stripeCustomerId String @unique
 
