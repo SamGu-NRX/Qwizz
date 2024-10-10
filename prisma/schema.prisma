@@ -9,59 +9,66 @@ datasource db {
   // relationMode = "prisma"
 }
 
-// User Info starts here
+// **User Roles**
 enum UserRole {
   STUDENT
   TEACHER
   ADMIN
 }
 
+// **User Model**
 model User {
-  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  id             String         @id @default(auto()) @map("_id") @db.ObjectId
   name           String?
-  email          String?       @unique
-  emailVerified  DateTime?     @map("email_verified")
+  email          String?        @unique
+  emailVerified  DateTime?      @map("email_verified")
   phoneNumber    String?
   image          String?
   hashedPassword String?
-  firstTime      Boolean       @default(true)
+  firstTime      Boolean        @default(true)
 
-  role          UserRole      @default(STUDENT)// STUDENT, TEACHER, ADMIN
-  accounts      Account[]
-  sessions      Session[]
+  role           UserRole       @default(STUDENT)
+  accounts       Account[]
+  sessions       Session[]
 
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
 
-  // Adding relations to ContextFiles
-  contextFiles  ContextFiles[]
-  quizzesCreated Quiz[] @relation("TeacherQuizzes")
-  quizzesTaken  QuizResponse[] @relation("StudentResponses")
+  // Relations
+  contextFiles   ContextFiles[]
+  quizzesCreated Quiz[]         @relation("TeacherQuizzes")
+  quizzesTaken   QuizResponse[] @relation("StudentResponses")
 
-  // Relations for conversations and messages
-  conversationIds String[] @db.ObjectId
-  conversations Conversation[] @relation(fields: [conversationIds], references: [id])
+  conversations  Conversation[] @relation("UserConversations")
+  messages       Message[]
+  seenMessages   Message[]      @relation("Seen")
 
+  flashcardSets  FlashcardSet[]
+  notes          Note[]
+  memoryItems    MemoryItem[]
+  mindMaps       MindMap[]
+  mcqs           MCQ[]
+  keyTerms       KeyTerm[]
+  apiUsages      AIUsage[]
 
-  messages      Message[]
-  seenMessageIds String[] @db.ObjectId
-  seenMessages  Message[] @relation("Seen", fields: [seenMessageIds], references: [id])
+  // AI Credit Information
+  totalCredit    Float          @default(10000.0)
+  usedCredit     Float          @default(0.0)
 
   @@map("users")
-
-  FlashcardSet FlashcardSet[]
 }
 
+// **FlashcardSet Model**
 model FlashcardSet {
-  id         String      @id @default(auto()) @map("_id") @db.ObjectId
-  title      String
-  flashcards Flashcard[]
-  subject    String
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  title          String
+  subject        String
+  flashcards     Flashcard[]
 
-  quizzes    Quiz[] @relation(name: "QuizToFlashcardSet")
+  quizzes        Quiz[]        @relation(name: "QuizToFlashcardSet")
 
-  userId     String      @db.ObjectId
-  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String        @db.ObjectId
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Flashcard {
@@ -70,27 +77,25 @@ model Flashcard {
   front          String
   back           String
   source         String
-  date           FlashcardDate @relation(fields: [dateId], references: [id])
-  dateId         String        @db.ObjectId
   isSaved        Boolean       @default(false)
+
+  // Date fields directly in the Flashcard model
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  lastReviewedAt DateTime?     // For tracking review sessions
 
   flashcardSetId String        @db.ObjectId
   flashcardSet   FlashcardSet  @relation(fields: [flashcardSetId], references: [id], onDelete: Cascade)
 
   quizQuestion   QuizQuestion? @relation(name: "FlashcardToQuizQuestion")
 
+  // Relation to Note
+  noteId         String?       @db.ObjectId
+  note           Note?         @relation(fields: [noteId], references: [id], onDelete: Cascade)
 }
 
-model FlashcardDate {
-  id        String      @id @default(auto()) @map("_id") @db.ObjectId
-  day       Int
-  month     Int
-  time      String
-  year      Int
 
-  flashcards Flashcard[]
-}
-
+// **ContextFiles Model**
 model ContextFiles {
   id           String        @id @default(auto()) @map("_id") @db.ObjectId
   gradeLevel   String
@@ -99,13 +104,13 @@ model ContextFiles {
   syllabusText String
   notesText    String
 
-  // Each user can have multiple context files and each file can only belong to one user
   userId       String        @db.ObjectId
   user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   quizzes      Quiz[]
 }
 
+// **QuestionType Enum**
 enum QuestionType {
   MULTIPLE_CHOICE
   MATCHING
@@ -113,6 +118,7 @@ enum QuestionType {
   IMAGE_UPLOAD
 }
 
+// **Quiz Model**
 model Quiz {
   id             String        @id @default(auto()) @map("_id") @db.ObjectId
   title          String
@@ -133,67 +139,69 @@ model Quiz {
   flashcardSet   FlashcardSet? @relation(name: "QuizToFlashcardSet", fields: [flashcardSetId], references: [id])
 }
 
+// **QuizQuestion Model**
 model QuizQuestion {
-  id          String        @id @default(auto()) @map("_id") @db.ObjectId
-  question    String
-  type        QuestionType
-  options     String[]      // For MULTIPLE_CHOICE and MATCHING
-  answers     String[]      // Correct answers for MULTIPLE_CHOICE and MATCHING pairs
-  keywords    String[]      // For SHORT_RESPONSE grading
-  imagePath   String?       // For IMAGE_UPLOAD questions
+  id              String        @id @default(auto()) @map("_id") @db.ObjectId
+  question        String
+  type            QuestionType
+  options         String[]      // For MULTIPLE_CHOICE and MATCHING
+  answers         String[]      // Correct answers
+  keywords        String[]      // For SHORT_RESPONSE grading
+  imagePath       String?       // For IMAGE_UPLOAD questions
 
-  quizId      String        @db.ObjectId
-  quiz        Quiz          @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  quizId          String        @db.ObjectId
+  quiz            Quiz          @relation(fields: [quizId], references: [id], onDelete: Cascade)
 
-  flashcardId String?       @db.ObjectId @unique
-  flashcard   Flashcard?    @relation(name: "FlashcardToQuizQuestion", fields: [flashcardId], references: [id], onDelete: SetNull)
+  flashcardId     String?       @db.ObjectId @unique
+  flashcard       Flashcard?    @relation(name: "FlashcardToQuizQuestion", fields: [flashcardId], references: [id], onDelete: SetNull)
 
-  quizResponseId String?     @db.ObjectId
-  quizResponse   QuizResponse? @relation("IncorrectQuestions", fields: [quizResponseId], references: [id])
+  quizResponseId  String?       @db.ObjectId
+  quizResponse    QuizResponse? @relation("IncorrectQuestions", fields: [quizResponseId], references: [id])
 }
 
+// **QuizResponse Model**
 model QuizResponse {
-  id          String        @id @default(auto()) @map("_id") @db.ObjectId
-  studentId   String        @db.ObjectId
-  student     User          @relation("StudentResponses", fields: [studentId], references: [id], onDelete: Cascade)
+  id                String          @id @default(auto()) @map("_id") @db.ObjectId
+  studentId         String          @db.ObjectId
+  student           User            @relation("StudentResponses", fields: [studentId], references: [id], onDelete: Cascade)
 
-  quizId      String        @db.ObjectId
-  quiz        Quiz          @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  quizId            String          @db.ObjectId
+  quiz              Quiz            @relation(fields: [quizId], references: [id], onDelete: Cascade)
 
-  answers     String[]      // Store answers as array of strings or custom type if needed
-  imagePaths  String[]      // Paths to uploaded images for IMAGE_UPLOAD questions
-  score       Float
-  createdAt   DateTime      @default(now())
-  feedback    String[]      // Teacher or AI-generated feedback per question
+  answers           String[]        // User's answers
+  imagePaths        String[]        // For IMAGE_UPLOAD questions
+  score             Float
+  createdAt         DateTime        @default(now())
+  feedback          String[]        // Feedback per question
 
   incorrectQuestions QuizQuestion[] @relation("IncorrectQuestions")
 }
 
-
-
+// **Account Model**
 model Account {
-  id                String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String  @db.ObjectId
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String   @db.ObjectId
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.String
-  access_token      String? @db.String
+  refresh_token     String?  @db.String
+  access_token      String?  @db.String
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.String
+  id_token          String?  @db.String
   session_state     String?
 
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @default(now()) @map(name: "updated_at")
+  createdAt         DateTime @default(now()) @map(name: "created_at")
+  updatedAt         DateTime @default(now()) @map(name: "updated_at")
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
   @@map("accounts")
 }
 
+// **Session Model**
 model Session {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   sessionToken String   @unique
@@ -201,12 +209,13 @@ model Session {
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   @@map("sessions")
 }
 
+// **VerificationToken Model**
 model VerificationToken {
   id      String   @id @default(cuid()) @map("_id")
   email   String
@@ -216,6 +225,7 @@ model VerificationToken {
   @@unique([email, token])
 }
 
+// **PasswordResetToken Model**
 model PasswordResetToken {
   id      String   @id @default(cuid()) @map("_id")
   email   String
@@ -225,32 +235,136 @@ model PasswordResetToken {
   @@unique([email, token])
 }
 
+// **Conversation Model**
 model Conversation {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt DateTime @default(now())
-  lastMessageAt DateTime @default(now())
-  name String?
-  isGroup Boolean?
+  id              String        @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt       DateTime      @default(now())
+  lastMessageAt   DateTime      @default(now())
+  name            String?
+  isGroup         Boolean?
 
-  messagesIds String[] @db.ObjectId
-  messages Message[]
+  messages        Message[]
+  users           User[]        @relation("UserConversations")
 
-  userIds String[] @db.ObjectId
-  users User[] @relation(fields: [userIds], references: [id])
+  // Link to Note (for context)
+  associatedNoteId String?      @db.ObjectId
+  associatedNote   Note?        @relation(fields: [associatedNoteId], references: [id])
+
+  @@map("conversations")
 }
 
+// **Message Model**
 model Message {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  body String?
-  image String?
-  createdAt DateTime @default(now())
+  id              String        @id @default(auto()) @map("_id") @db.ObjectId
+  body            String?
+  image           String?
+  createdAt       DateTime      @default(now())
 
-  seenIds String[] @db.ObjectId
-  seen User[] @relation("Seen", fields: [seenIds], references: [id])
+  senderId        String        @db.ObjectId
+  sender          User          @relation(fields: [senderId], references: [id], onDelete: Cascade)
 
-  conversationId String @db.ObjectId
-  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  conversationId  String        @db.ObjectId
+  conversation    Conversation  @relation(fields: [conversationId], references: [id], onDelete: Cascade)
 
-  senderId String @db.ObjectId
-  sender User @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  seen            User[]        @relation("Seen")
+
+  @@map("messages")
+}
+
+// **Note Model**
+model Note {
+  id              String        @id @default(auto()) @map("_id") @db.ObjectId
+  title           String
+  content         String        // Original content
+  enhancedContent String?       // AI-enhanced content
+  userId          String        @db.ObjectId
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  keyTerms        KeyTerm[]
+  flashcards      Flashcard[]
+  mcqs            MCQ[]
+  mindMaps        MindMap[]
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @default(now())
+
+  @@map("notes")
+}
+
+// **KeyTerm Model**
+model KeyTerm {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  term           String
+  explanation    String   // From web query
+  analogy        String   // Simplified explanation
+
+  noteId         String   @db.ObjectId
+  note           Note     @relation(fields: [noteId], references: [id], onDelete: Cascade)
+
+  userId         String   @db.ObjectId
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// **MCQ Model**
+model MCQ {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  question       String
+  options        String[]
+  answer         String
+
+  noteId         String   @db.ObjectId
+  note           Note     @relation(fields: [noteId], references: [id], onDelete: Cascade)
+
+  userId         String   @db.ObjectId
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt      DateTime @default(now())
+}
+
+// **MindMap Model**
+model MindMap {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  title          String
+  nodes          String   // JSON structure
+
+  noteId         String   @db.ObjectId
+  note           Note     @relation(fields: [noteId], references: [id], onDelete: Cascade)
+
+  userId         String   @db.ObjectId
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt      DateTime @default(now())
+}
+
+model MemoryItem {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  content        String   // Snapshot of the content (e.g., flashcard front and back)
+  type           String   // e.g., "Flashcard", "Note", "KeyTerm"
+
+  // Reference to the original item
+  referenceId    String   @db.ObjectId
+  referenceType  String   // Discriminator to determine the model (e.g., "Flashcard", "Note")
+
+  userId         String   @db.ObjectId
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt      DateTime @default(now())
+}
+
+
+// **AIUsage Model**
+model AIUsage {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String   @db.ObjectId
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  endpoint       String   // API endpoint used
+  tokensUsed     Int      // Number of tokens
+  cost           Float    // Cost in credits
+  timestamp      DateTime @default(now())
+
+  noteId         String?  @db.ObjectId
+  note           Note?    @relation(fields: [noteId], references: [id])
+
+  @@map("ai_usages")
 }
