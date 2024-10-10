@@ -9,6 +9,49 @@ datasource db {
   // relationMode = "prisma"
 }
 
+// User Info starts here
+enum UserRole {
+  STUDENT
+  TEACHER
+  ADMIN
+}
+
+model User {
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  name           String?
+  email          String?       @unique
+  emailVerified  DateTime?     @map("email_verified")
+  phoneNumber    String?
+  image          String?
+  hashedPassword String?
+  firstTime      Boolean       @default(true)
+
+  role          UserRole      @default(STUDENT)// STUDENT, TEACHER, ADMIN
+  accounts      Account[]
+  sessions      Session[]
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  // Adding relations to ContextFiles
+  contextFiles  ContextFiles[]
+  quizzesCreated Quiz[] @relation("TeacherQuizzes")
+  quizzesTaken  QuizResponse[] @relation("StudentResponses")
+
+  // Relations for conversations and messages
+  conversationIds String[] @db.ObjectId
+  conversations Conversation[] @relation(fields: [conversationIds], references: [id])
+
+
+  messages      Message[]
+  seenMessageIds String[] @db.ObjectId
+  seenMessages  Message[] @relation("Seen", fields: [seenMessageIds], references: [id])
+
+  @@map("users")
+
+  FlashcardSet FlashcardSet[]
+}
+
 model FlashcardSet {
   id         String      @id @default(auto()) @map("_id") @db.ObjectId
   title      String
@@ -52,7 +95,7 @@ model ContextFiles {
   id           String        @id @default(auto()) @map("_id") @db.ObjectId
   gradeLevel   String
   subject      String
-  
+
   syllabusText String
   notesText    String
 
@@ -126,49 +169,7 @@ model QuizResponse {
   incorrectQuestions QuizQuestion[] @relation("IncorrectQuestions")
 }
 
-// User Info starts here
 
-enum UserRole {
-  STUDENT
-  TEACHER
-  ADMIN
-}
-
-model User {
-  id             String        @id @default(auto()) @map("_id") @db.ObjectId
-  name           String?
-  email          String?       @unique
-  emailVerified  DateTime?     @map("email_verified")
-  phoneNumber    String?
-  image          String?
-  hashedPassword String?
-  firstTime      Boolean       @default(true)
-
-  role          UserRole      @default(STUDENT)// STUDENT, TEACHER, ADMIN
-  accounts      Account[]
-  sessions      Session[]
-
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
-
-  // Adding relations to ContextFiles
-  contextFiles  ContextFiles[]
-  quizzesCreated Quiz[] @relation("TeacherQuizzes")
-  quizzesTaken  QuizResponse[] @relation("StudentResponses")
-
-  // Relations for conversations and messages
-  conversationIds String[] @db.ObjectId
-  conversations Conversation[] @relation(fields: [conversationIds], references: [id])
-
-
-  messages      Message[]
-  seenMessageIds String[] @db.ObjectId
-  seenMessages  Message[] @relation("Seen", fields: [seenMessageIds], references: [id])
-
-  @@map("users")
-  
-  FlashcardSet FlashcardSet[]
-}
 
 model Account {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId
@@ -243,7 +244,7 @@ model Message {
   body String?
   image String?
   createdAt DateTime @default(now())
-  
+
   seenIds String[] @db.ObjectId
   seen User[] @relation("Seen", fields: [seenIds], references: [id])
 

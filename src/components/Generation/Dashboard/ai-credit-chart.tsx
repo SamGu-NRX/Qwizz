@@ -26,9 +26,11 @@ export default function AIChart({
   availableCredit: number;
   totalUsage: number;
 }) {
+
+  const currentMonth = new Date().toLocaleString('default', { month: 'long' });
   const chartData = [
     {
-      month: "january",
+      month: currentMonth.toLowerCase(),
       available: `${availableCredit}`,
       used: `${totalUsage}`,
     },
