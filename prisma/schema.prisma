@@ -25,7 +25,7 @@ enum QuestionType {
   IMAGE_UPLOAD
 }
 
-enum ConversationType {
+enum SenderType {
   USER // Direct messaging between users
   AI // Conversations with the AI chatbot
 }
@@ -45,28 +45,36 @@ model User {
   accounts Account[]
   sessions Session[]
 
-  // Relations
-  contextFiles   ContextFiles[]
-  quizzesCreated Quiz[]         @relation("TeacherQuizzes")
-  quizzesTaken   QuizResponse[] @relation("StudentResponses")
+  // User-specific information
+  contextFiles     ContextFiles[]
+  createdQuestions Question[]     @relation("UserCreatedQuestions")
+  createdQuizzes   Quiz[]         @relation("UserCreatedQuizzes")
+
+  // generated-user-specific
+  keyTerms    KeyTerm[]
+  mindMaps    MindMap[]
+  memoryItems MemoryItem[]
+
+  // used for statistics
+  quizzesTaken       QuizResponse[]      @relation("StudentResponses") // their responses/
+  MCQs               MCQ[]
+
 
   // Messaging relations
-  userConversations  UserConversation[]
-  messages           Message[]
+  userConversations       UserConversationParticipant[]
+  userMessages            UserMessage[]
+  aiConversations         AIConversation[]
+  
   messageSeenByUsers MessageSeenByUser[]
 
-  // AI-related models
-  notes         Note[]
+  // User-created models
+  notes         Note[] // magic notes
   flashcardSets FlashcardSet[]
-  memoryItems   MemoryItem[]
-  mindMaps      MindMap[]
-  mcqs          MCQ[]
-  keyTerms      KeyTerm[]
-  apiUsages     AIUsage[]
 
   // AI Credit Information
-  totalCredit Float @default(10000.0)
-  usedCredit  Float @default(0.0)
+  totalCredit Float     @default(10000.0)
+  usedCredit  Float     @default(0.0)
+  aiUsages    AIUsage[]
 
   // Timestamps
   createdAt DateTime @default(now())
@@ -113,7 +121,6 @@ model Session {
   @@map("sessions")
 }
 
-// ContextFiles model
 model ContextFiles {
   id         String @id @default(auto()) @map("_id") @db.ObjectId
   gradeLevel String
@@ -130,7 +137,6 @@ model ContextFiles {
   @@map("context_files")
 }
 
-// Quiz model
 model Quiz {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   title       String
@@ -138,61 +144,72 @@ model Quiz {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  teacherId String @db.ObjectId
-  teacher   User   @relation("TeacherQuizzes", fields: [teacherId], references: [id], onDelete: Cascade)
+  creatorId String @db.ObjectId
+  creator   User   @relation(fields: [creatorId], references: [id], onDelete: Cascade)
 
-  questions     QuizQuestion[]
-  contextFileId String?        @db.ObjectId
-  contextFile   ContextFiles?  @relation(fields: [contextFileId], references: [id], onDelete: SetNull)
-
+  quizItems     QuizItem[]
   quizResponses QuizResponse[]
 
-  flashcardSetId String?       @db.ObjectId
-  flashcardSet   FlashcardSet? @relation(name: "QuizToFlashcardSet", fields: [flashcardSetId], references: [id])
+  // Relations to context(where it is created from) and reference to generate flashcards with quiz
 
-  @@map("quizzes")
+  // contextFileId String?        @db.ObjectId
+  // contextFile   ContextFiles?  @relation(fields: [contextFileId], references: [id], onDelete: SetNull)
+  // flashcardSetId String?       @db.ObjectId
+  // flashcardSet   FlashcardSet? @relation(name: "QuizToFlashcardSet", fields: [flashcardSetId], references: [id])
 }
 
-// QuizQuestion model
-model QuizQuestion {
-  id        String       @id @default(auto()) @map("_id") @db.ObjectId
-  question  String
-  type      QuestionType
-  options   String[] // For MULTIPLE_CHOICE and MATCHING
-  answers   String[] // Correct answers
-  keywords  String[] // For SHORT_RESPONSE grading
-  imagePath String? // For IMAGE_UPLOAD questions
+// Quiz Question
+model Question {
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  content        String // The question text
+  type           QuestionType
+  options        String[] // For MULTIPLE_CHOICE and MATCHING
+  correctAnswers String[] // Correct answers
+  explanation    String? // Explanation for the answer
 
+  // keywords  String[] // For SHORT_RESPONSE grading
+  // imagePath String? // For IMAGE_UPLOAD questions
+
+  createdById String @db.ObjectId
+  createdBy   User   @relation(fields: [createdById], references: [id], onDelete: Cascade)
+
+  noteId String? @db.ObjectId
+  note   Note?   @relation(fields: [noteId], references: [id], onDelete: Cascade)
+
+  quizItems QuizItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model QuizItem {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
   quizId String @db.ObjectId
   quiz   Quiz   @relation(fields: [quizId], references: [id], onDelete: Cascade)
 
-  flashcardId String?    @unique @db.ObjectId
-  flashcard   Flashcard? @relation(name: "FlashcardToQuizQuestion", fields: [flashcardId], references: [id], onDelete: SetNull)
+  questionId String   @db.ObjectId
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
 
-  quizResponseId String?       @db.ObjectId
-  quizResponse   QuizResponse? @relation("IncorrectQuestions", fields: [quizResponseId], references: [id])
-
-  @@map("quiz_questions")
+  order Int // The order of the question in the quiz
 }
 
-// QuizResponse model
 model QuizResponse {
-  id        String @id @default(auto()) @map("_id") @db.ObjectId
-  studentId String @db.ObjectId
-  student   User   @relation("StudentResponses", fields: [studentId], references: [id], onDelete: Cascade)
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   quizId String @db.ObjectId
   quiz   Quiz   @relation(fields: [quizId], references: [id], onDelete: Cascade)
 
-  answers    String[] // User's answers
-  imagePaths String[] // For IMAGE_UPLOAD questions
-  score      Float
-  createdAt  DateTime @default(now())
-  feedback   String[] // Feedback per question
+  responses Json // Stores user's answers to questions
+  score     Float?
+  createdAt DateTime @default(now())
 
-  incorrectQuestions QuizQuestion[] @relation("IncorrectQuestions")
-
-  @@map("quiz_responses")
+  // imagePaths String[] // For IMAGE_UPLOAD questions
+  // score      Float
+  // createdAt  DateTime @default(now())
+  // feedback   String[] // Feedback per question
+  // incorrectQuestions QuizQuestion[] @relation("IncorrectQuestions")
 }
 
 // FlashcardSet model
@@ -213,10 +230,10 @@ model FlashcardSet {
 // Flashcard model
 model Flashcard {
   id      String  @id @default(auto()) @map("_id") @db.ObjectId
-  title   String
-  front   String
-  back    String
-  source  String
+  title   String // Title or topic of the flashcard
+  front   String // Question or prompt side
+  back    String // Answer or explanation side
+  source  String // Source of the flashcard content
   isSaved Boolean @default(false)
 
   createdAt      DateTime  @default(now())
@@ -226,48 +243,51 @@ model Flashcard {
   flashcardSetId String       @db.ObjectId
   flashcardSet   FlashcardSet @relation(fields: [flashcardSetId], references: [id], onDelete: Cascade)
 
-  quizQuestion QuizQuestion? @relation(name: "FlashcardToQuizQuestion")
-
   noteId String? @db.ObjectId
   note   Note?   @relation(fields: [noteId], references: [id], onDelete: Cascade)
+
+  createdById String @db.ObjectId // User who created the flashcard
+  createdBy   User   @relation(fields: [createdById], references: [id], onDelete: Cascade)
+
+  createdByAI Boolean @default(false) // Indicates if created by the chatbot
 
   @@map("flashcards")
 }
 
-// Note model
+// Magic Notes
 model Note {
   id              String  @id @default(auto()) @map("_id") @db.ObjectId
-  title           String
-  content         String // Original content
-  enhancedContent String? // AI-enhanced content with highlights
+  title           String // Title of the note
+  content         String // Original content of the note
+  enhancedContent String? // AI-enhanced version with highlights, examples, etc.
 
   userId String @db.ObjectId
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  keyTerms   KeyTerm[]
-  flashcards Flashcard[]
-  mcqs       MCQ[]
-  mindMaps   MindMap[]
+  noteConcepts NoteConcept[]
+  flashcards   Flashcard[]
+  mindMaps     MindMap[]
 
-  knowledgeWeb KnowledgeWeb? // Represents the interconnected concepts
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  AIUsage      AIUsage[]
-  Conversation Conversation[]
+  createdByAI Boolean @default(false) // Indicates if modified by the chatbot
 
   @@map("notes")
 }
 
-// KeyTerm model
+// Underlined highlighted hover keyterm
 model KeyTerm {
   id          String @id @default(auto()) @map("_id") @db.ObjectId
   term        String
-  explanation String // From web query
-  analogy     String // Simplified explanation
+  explanation String // From web query/scraping
+  analogy     String // Simplified explanation using AI
 
   noteId String @db.ObjectId
   note   Note   @relation(fields: [noteId], references: [id], onDelete: Cascade)
+
+  // Optional: If key terms are shared across notes, consider many-to-many relation
+  // notes          Note[]   @relation("KeyTermNotes")
 
   userId String @db.ObjectId
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -275,22 +295,34 @@ model KeyTerm {
   @@map("key_terms")
 }
 
-// MCQ model
-model MCQ {
-  id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  question String
-  options  String[]
-  answer   String
+model Concept {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String?
 
-  noteId String @db.ObjectId
-  note   Note   @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  parentId String?   @db.ObjectId
+  parent   Concept?  @relation("ConceptHierarchy", fields: [parentId], references: [id])
+  children Concept[] @relation("ConceptHierarchy")
 
-  userId String @db.ObjectId
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdById String @db.ObjectId
+  createdBy   User   @relation(fields: [createdById], references: [id], onDelete: Cascade)
+
+  noteConcepts NoteConcept[]
 
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
 
-  @@map("mcqs")
+// Associate concepts with a note
+model NoteConcept {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  noteId    String @db.ObjectId
+  conceptId String @db.ObjectId
+
+  note    Note    @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  concept Concept @relation(fields: [conceptId], references: [id], onDelete: Cascade)
+
+  @@unique([noteId, conceptId])
 }
 
 // MindMap model
@@ -327,20 +359,6 @@ model MemoryItem {
   @@map("memory_items")
 }
 
-// KnowledgeWeb model
-model KnowledgeWeb {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  noteId String @db.ObjectId
-  note   Note   @relation(fields: [noteId], references: [id], onDelete: Cascade)
-
-  nodes String // JSON structure representing interconnected concepts
-  edges String // JSON structure representing relationships between concepts
-
-  createdAt DateTime @default(now())
-
-  @@map("knowledge_webs")
-}
-
 // AIUsage model
 model AIUsage {
   id     String @id @default(auto()) @map("_id") @db.ObjectId
@@ -352,11 +370,7 @@ model AIUsage {
   cost       Float // Cost in credits
   timestamp  DateTime @default(now())
 
-  noteId String? @db.ObjectId
-  note   Note?   @relation(fields: [noteId], references: [id])
-
-  conversationId String?       @db.ObjectId
-  conversation   Conversation? @relation(fields: [conversationId], references: [id])
+  // Removed relations to Note and Conversation as per your requirements
 
   @@map("ai_usages")
 }
@@ -375,9 +389,10 @@ model Conversation {
   messages          Message[]
   userConversations UserConversation[] // Relation to join model
 
-  associatedNoteId String?   @db.ObjectId
-  associatedNote   Note?     @relation(fields: [associatedNoteId], references: [id])
-  AIUsage          AIUsage[]
+  // Removed associatedNote to avoid errors and unnecessary complexity
+  Note   Note?   @relation(fields: [noteId], references: [id])
+  noteId String? @db.ObjectId
+  Note   Note?   @relation(fields: [noteId], references: [id])
 
   @@map("conversations")
 }
@@ -416,6 +431,49 @@ model Message {
   @@map("messages")
 }
 
+model AIConversation {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  subject       String? // Subject or topic of the conversation
+  contextOptOut Boolean  @default(false) // If true, conversation isn't used for AI context
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now())
+
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  aiMessages AIMessage[]
+
+  // Optional relations to associate the conversation with a specific content item
+  questionId String?   @db.ObjectId
+  question   Question? @relation(fields: [questionId], references: [id])
+
+  flashcardId String?    @db.ObjectId
+  flashcard   Flashcard? @relation(fields: [flashcardId], references: [id])
+
+  noteId String? @db.ObjectId
+  note   Note?   @relation(fields: [noteId], references: [id])
+
+  // Indexes for efficient querying
+  @@index([questionId])
+  @@index([flashcardId])
+  @@index([noteId])
+  @@map("ai_conversations")
+}
+
+model AIMessage {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  body      String? // Content of the message
+  createdAt DateTime @default(now())
+
+  conversationId String         @db.ObjectId
+  conversation   AIConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  senderType SenderType // Enum to indicate if the message is from the user or AI
+  // Enum values: USER, AI
+
+  @@map("ai_messages")
+}
+
 // MessageSeenByUser join model
 model MessageSeenByUser {
   id        String @id @default(auto()) @map("_id") @db.ObjectId
@@ -431,7 +489,7 @@ model MessageSeenByUser {
   @@map("message_seen_by_users")
 }
 
-// VerificationToken model
+// Helper models
 model VerificationToken {
   id      String   @id @default(cuid()) @map("_id")
   email   String
@@ -442,7 +500,6 @@ model VerificationToken {
   @@map("verification_tokens")
 }
 
-// PasswordResetToken model
 model PasswordResetToken {
   id      String   @id @default(cuid()) @map("_id")
   email   String
@@ -453,6 +510,7 @@ model PasswordResetToken {
   @@map("password_reset_tokens")
 }
 
+// Stripe
 model Purchase {
   id       String   @id @default(uuid()) @map("_id")
   userId   String
@@ -467,3 +525,8 @@ model StripeCustomer {
 
   createAt DateTime @default(now())
 }
+
+//  knowledge webs, i want it to be like
+// The Graph view lets you visualize the relationships between the knowledge in your "memory".
+// Circles represent concepts, or nodes.
+// I want to make it into a tree like format that showcases how knowledge "stack" on top of each other, similar to how key terms build upon each other and can be shared across notes.
