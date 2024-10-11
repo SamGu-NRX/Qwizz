@@ -1,4 +1,4 @@
-<h1 align="center">StudyBuddy</h1>
+<h1 align="center">Qwizz</h1>
 
 <p align="center">
   <strong>Improve your learning skills with an all-in-one, personalized education assistant.</strong><br>
