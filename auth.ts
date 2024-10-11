@@ -32,7 +32,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       // return true;
 
       const dbUser = await db.user.findUnique({
-        where: { email: user.email },
+        where: { email: user.email ?? '' },
       });
 
       if (dbUser) {
@@ -42,7 +42,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         }
         if (dbUser.firstTime) {
           await db.user.update({
-            where: { email: user.email },
+            where: { email: user.email ?? '' },
             data: { firstTime: false },
           });
           return `/onboarding`;
@@ -56,9 +56,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             email: user.email,
             name: user.name,
             image: user.image,
-            emailVerified: user.emailVerified,
+            emailVerified: new Date(),
             firstTime: true,
-            role: "STUDENT",
+            role: UserRole.STUDENT,
           },
         });
         return `/onboarding`;
@@ -71,7 +71,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
       if (token.role && session.user) {
         session.user.role = token.role as UserRole;
-      }  
+      }
       return session;
     },
     jwt: async ({ token }) => {

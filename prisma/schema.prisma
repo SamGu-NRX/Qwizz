@@ -6,9 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider = "mongodb"
-  url      = env("DATABASE_URL")
-  // relationMode = "prisma"
+  provider     = "mongodb"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 // Enums
@@ -70,12 +70,15 @@ model User {
   usedCredit  Float @default(0.0)
 
   // Timestamps
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
-  Flashcard      Flashcard[]
-  QuizResponse   QuizResponse[]
-  Purchase       Purchase[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  Flashcard    Flashcard[]
+  QuizResponse QuizResponse[]
+
   StripeCustomer StripeCustomer?
+  Purchase       Purchase[]
+  Invoice        Invoice[]
+  Subscription   Subscription[]
 
   @@map("users")
 }
@@ -127,7 +130,7 @@ model Note {
   subject         String
   topic           String?
   isPublic        Boolean @default(false)
-  createdByAI     Boolean @default(false) // Indicates if modified by the chatbot
+  createdByAI     Boolean @default(false) // Indicates if note is created by the chatbot, if so show a disclaimer
 
   userId String @db.ObjectId
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -160,8 +163,9 @@ model KeyTerm {
 model Concept {
   id                  String  @id @default(auto()) @map("_id") @db.ObjectId
   term                String // The term or concept
-  definition          String? // Brief definition or explanation
+  definition          String? // Brief definition or explanation (from web query)
   detailedExplanation String? // AI-generated mini-note (more detailed explanation)
+  analogy             String? // Simplified explanation for a 3 year old
 
   // Hierarchical relations to form knowledge graphs
   parentId String?   @db.ObjectId
@@ -189,7 +193,7 @@ model Flashcard {
   front       String // Question or prompt side
   back        String // Answer or explanation side
   isPublic    Boolean @default(false)
-  createdByAI Boolean @default(false) // Indicates if created by the chatbot
+  createdByAI Boolean @default(false) // Indicates if created by the chatbot, if so show disclaimer in the flashcard set
 
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
@@ -533,4 +537,37 @@ model StripeCustomer {
   createdAt DateTime @default(now())
 
   @@map("stripe_customers")
+}
+
+model Plan {
+  id            String         @id @default(cuid()) @map("_id") @db.ObjectId
+  name          String
+  price         Float
+  stripePlanId  String         @unique
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  subscriptions Subscription[]
+}
+
+model Subscription {
+  id                   String   @id @default(cuid()) @map("_id")
+  userId               String   @db.ObjectId
+  planId               String   @db.ObjectId
+  stripeSubscriptionId String   @unique
+  status               String
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan                 Plan     @relation(fields: [planId], references: [id], onDelete: Cascade)
+}
+
+model Invoice {
+  id              String   @id @default(cuid()) @map("_id")
+  userId          String   @db.ObjectId
+  stripeInvoiceId String   @unique
+  amount          Float
+  status          String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

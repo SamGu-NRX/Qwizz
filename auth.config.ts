@@ -87,13 +87,13 @@ export default {
           const { email, password } = validatedFields.data;
 
           const user = await getUserByEmail(email);
-        
-          if(!user || !user.password) return null;
+
+          if(!user || !user.hashedPassword) return null;
 
           // check if passwords match
           const passwordsMatch = await bcrypt.compare(
-            password, 
-            user.password
+            password,
+            user.hashedPassword
           );
           // if the passwords match, return the user
           if(passwordsMatch) return user;
