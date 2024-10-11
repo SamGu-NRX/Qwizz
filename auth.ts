@@ -45,7 +45,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             where: { email: user.email ?? '' },
             data: { firstTime: false },
           });
-          return `/onboarding`;
+          // TODO FIX THIS: return `/onboarding`;
+          return `/dashboard-force`;
         }
         return `/dashboard-force`;
       } else {

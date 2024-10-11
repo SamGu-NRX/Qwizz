@@ -11,7 +11,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (status === "loading") return; // Do nothing while loading
-    if (status === "unauthenticated") router.push("/login"); // Redirect if not authenticated
+    if (status === "unauthenticated") router.push("/auth/login"); // Redirect if not authenticated
   }, [status, router]);
 
   if (status === "loading" || status === "unauthenticated") {

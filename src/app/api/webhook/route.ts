@@ -6,7 +6,11 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
     const body = await req.text();
-    const signature = req.headers.get("Stripe-Signature") as string;
+    const signature = req.headers.get("Stripe-Signature");
+
+    if (!signature) {
+        return new NextResponse("Webhook Error: Missing Stripe-Signature header", { status: 400 });
+    }
 
     let event: Stripe.Event;
 
@@ -41,16 +45,24 @@ export async function POST(req: Request) {
         });
     } else if (event.type === "invoice.payment_succeeded") {
         const invoice = event.data.object as Stripe.Invoice;
-        const userId = invoice.metadata.userId;
+        const userId = invoice.metadata?.userId;
 
-        await db.invoice.create({
+        if (!userId) {
+            throw new Error("Invoice metadata is missing userId");
+        }
+
+      if (!invoice.status) {
+          throw new Error("Invoice status is missing");
+      }
+
+      await db.invoice.create({
             data: {
-                userId: userId,
-                stripeInvoiceId: invoice.id,
-                amount: invoice.amount_paid / 100,
-                status: invoice.status,
-            },
-        });
+            userId: userId,
+            stripeInvoiceId: invoice.id,
+            amount: invoice.amount_paid / 100,
+            status: invoice.status,
+         },
+      });
     } else if (event.type === "customer.subscription.updated") {
         const subscription = event.data.object as Stripe.Subscription;
         const stripeSubscriptionId = subscription.id;
