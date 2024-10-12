@@ -10,8 +10,7 @@ import {
   LockClosedIcon,
   BookOpenIcon,
   LightBulbIcon,
-} from "@heroicons/react/outline";
-
+} from "@heroicons/react/24/outline";
 
 const features = [
   {
@@ -52,17 +51,12 @@ const FeaturesGrid = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-   interface MousePosition {
-     x: number;
-     y: number;
-   }
-
-   const handleMouseMove = (event: MouseEvent): void => {
-     setMousePosition({
-      x: event.clientX,
-      y: event.clientY,
-     });
-   };
+    const handleMouseMove = (event: MouseEvent): void => {
+      setMousePosition({
+        x: event.clientX,
+        y: event.clientY,
+      });
+    };
 
     window.addEventListener("mousemove", handleMouseMove);
     return () => {
@@ -100,8 +94,7 @@ const FeaturesGrid = () => {
                 <div className="absolute inset-0 bg-gradient-to-b from-white to-transparent to-60%"></div>
               </div>
 
-            {/* Dynamic Web animation for Knowledge Web */}
-
+              {/* Dynamic Web animation for Knowledge Web */}
 
               {/* Dot Pattern Responsive to Cursor */}
               <div
@@ -116,13 +109,7 @@ const FeaturesGrid = () => {
 
               <div className="z-10 flex flex-col gap-3 p-5 transition-transform duration-300 group-hover:-translate-y-3">
                 {/* Added icon based on feature */}
-                <div className="mb-2">
-                  <Image
-                    src={`/icons/${feature.icon}`}
-                    alt={`${feature.title} icon`}
-                    className="w-8 h-8"
-                  />
-                </div>
+                <div className="mb-2">{feature.icon}</div>
                 <h3 className="text-2xl font-semibold text-neutral-900 md:text-3xl">
                   {feature.title}
                 </h3>
