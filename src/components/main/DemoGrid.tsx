@@ -11,6 +11,7 @@ import {
   BookOpenIcon,
   LightBulbIcon,
 } from "@heroicons/react/24/outline";
+import { Card } from "@/components/ui/DynamicCard";
 
 const features = [
   {
@@ -28,6 +29,7 @@ const features = [
     linkText: "Explore the web",
     link: "#",
     icon: <ShareIcon className="h-8 w-8 text-green-500" />,
+    isInteractive: true, // Only this card will have the interactive effects
   },
   {
     title: "Memory Vault",
@@ -48,22 +50,6 @@ const features = [
 ];
 
 const FeaturesGrid = () => {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-
-  useEffect(() => {
-    const handleMouseMove = (event: MouseEvent): void => {
-      setMousePosition({
-        x: event.clientX,
-        y: event.clientY,
-      });
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-    };
-  }, []);
-
   return (
     <section className="bg-neutral-100 py-10 md:py-20 lg:py-28">
       <div className="container mx-auto space-y-10">
@@ -78,10 +64,10 @@ const FeaturesGrid = () => {
 
         <div className="grid w-full auto-rows-[20rem] grid-cols-1 gap-5 md:grid-cols-12">
           {features.map((feature, index) => (
-            <div
+            <Card
               key={index}
+              interactive={feature.isInteractive}
               className={twMerge(
-                "group relative flex transform-gpu flex-col justify-between overflow-hidden rounded-2xl bg-white transition-all duration-300 ease-in-out",
                 index % 2 === 0
                   ? "md:col-span-6 lg:col-span-8"
                   : "md:col-span-6 lg:col-span-4"
@@ -94,31 +80,12 @@ const FeaturesGrid = () => {
                 <div className="absolute inset-0 bg-gradient-to-b from-white to-transparent to-60%"></div>
               </div>
 
-              {/* Dynamic Web animation for Knowledge Web */}
-
-              {/* Dot Pattern Responsive to Cursor */}
-              <div
-                className="absolute inset-0 pointer-events-none"
-                style={{
-                  background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(0, 0, 0, 0.1), transparent 60%)`,
-                  maskImage:
-                    "radial-gradient(circle, #000 40%, transparent 60%)",
-                  transition: "all 0.2s ease",
-                }}
-              ></div>
-
               <div className="h-full flex flex-col justify-between p-5 transition-transform duration-300 group-hover:-translate-y-3">
-                <div className="flex-grow"></div>{" "}
-                {/* Pushes content to the bottom */}
-                {/* Icon, Title, and Description */}
                 <div className="z-10 flex flex-col gap-3 mb-6">
-                  {/* Feature Icon */}
                   <div className="mb-2">{feature.icon}</div>
-                  {/* Title */}
                   <h3 className="text-2xl font-semibold text-neutral-900 md:text-3xl">
                     {feature.title}
                   </h3>
-                  {/* Description */}
                   <p className="text-base text-neutral-600 md:text-lg">
                     {feature.description}
                   </p>
@@ -133,7 +100,7 @@ const FeaturesGrid = () => {
                   {feature.linkText}
                 </a>
               </div>
-            </div>
+            </Card>
           ))}
         </div>
       </div>
