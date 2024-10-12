@@ -1,12 +1,13 @@
+/* CSS for Moving Grid */
 @keyframes move-grid {
     0% {
-        transform: translate3d(0, 0, 0);
+        transform: translateY(-50%);
     }
     100% {
-        transform: translate3d(60px, 30px, 0);
+        transform: translateY(0%);
     }
 }
 
-.animate-move-grid {
-    animation: move-grid 10s linear infinite;
+.animate-move {
+    animation: move-grid 15s linear infinite;
 }
