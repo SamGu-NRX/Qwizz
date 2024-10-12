@@ -15,12 +15,12 @@ const pricingTiers = [
     popular: false,
     inverse: false,
     features: [
-      "Access to up to 3 sets of MCQs, flashcards, and magic notes per month",
-      "10 AI credits/month",
-      "Basic Magic Notes: key term highlighting only",
-      "Save up to 10 items in Memory Vault",
-      "Basic interconnected concept maps",
-      "Limited API access for web queries",
+      "**3 content sets** per month (MCQs, flashcards, notes)",
+      "**10 AI credits** per month",
+      "Access to **Basic Magic Notes**: quick highlights only",
+      "Save up to **10 items** in your **Memory Vault**",
+      "View basic concept maps in a **Tree of Knowledge**",
+      "Limited access to customer support",
     ],
   },
   {
@@ -30,32 +30,33 @@ const pricingTiers = [
     popular: true,
     inverse: true,
     features: [
-      "Access to up to 20 sets of MCQs, flashcards, and magic notes per month",
-      "50 AI credits/month",
-      "Enhanced Magic Notes: key term highlighting and fact-checking",
-      "Save up to 50 items in Memory Vault",
-      "Advanced interconnected concept maps",
-      "Priority web query API access",
-      "Ability to export content formats",
+      "**20 content sets** per month (MCQs, flashcards, notes)",
+      "**50 AI credits** per month",
+      "Unlock **Enchanted Magic Notes**: highlights with fact-checking to enhance your learning",
+      "Save up to **50 items** in your **Memory Vault** with customizable active recall reminders",
+      "View and create advanced maps in the **Tree of Knowledge**",
+      "Priority access to advanced models",
+      "Priority customer support",
+      "Export and save all your content formats",
     ],
   },
   {
-    title: "Business",
+    title: "Wizard",
     monthlyPrice: 19,
     buttonText: "Sign up now",
-    popular: false,
+    popular: true,
     inverse: false,
     features: [
-      "Unlimited access to MCQs, flashcards, and magic notes",
-      "200 AI credits/month",
-      "Full-featured Magic Notes: key term highlighting, fact-checking, and real-time updates",
-      "Unlimited items in Memory Vault",
-      "Comprehensive interconnected knowledge web",
-      "Dedicated API access for web scraping and RAG",
-      "Dedicated account manager",
-      "Export capabilities and advanced analytics",
-      "Custom integration support",
-      "Advanced security features",
+      "**Unlimited content sets** each month",
+      "**200 AI credits** per month",
+      "Access to **Master Magic Notes**: all spells, real-time fact-checking, and auto-suggestions",
+      "Save unlimited items in your **Memory Vault**",
+      "Build and explore a full **Tree of Knowledge** with advanced visualization tools",
+      "Exclusive access to the most advanced AI models",
+      "Dedicated customer support with a personal assistant",
+      "Full export options and in-depth analytics",
+      "Custom integration support for your needs",
+      "Top-tier security and privacy features",
     ],
   },
 ];
@@ -69,6 +70,11 @@ const Pricing = () => {
     });
   }, []);
 
+  const renderFeature = (feature: string) => {
+    const htmlString = feature.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+    return <span dangerouslySetInnerHTML={{ __html: htmlString }} />;
+  };
+
   return (
     <section className="py-24">
       <div className="container mx-auto">
@@ -77,9 +83,8 @@ const Pricing = () => {
         </div>
 
         <p className="section-description mt-5 mb-8">
-          Discover the right plan for you. Upgrade to unlock more AI credits,
-          advanced features, and deeper integrations that make learning
-          efficient and personalized.
+          Discover the perfect plan to boost your learning journey. Upgrade for
+          more AI credits, advanced features, and exclusive support.
         </p>
 
         <div className="py-10 flex flex-wrap gap-6 items-center justify-center">
@@ -101,15 +106,22 @@ const Pricing = () => {
                 <div className="flex justify-between">
                   <h3
                     className={twMerge(
-                      "text-xl font-bold text-black/50",
+                      "text-3xl font-bold text-black/50",
                       inverse ? "text-white" : "text-gray-700"
                     )}
                   >
                     {title}
                   </h3>
-                  {popular === true && (
-                    <div className="inline-flex text-sm px-4 py-1.5 rounded-xl border border-white/20">
-                      <span className="bg-rainbow-gradient text-transparent bg-clip-text font-semibold">
+                  {popular && (
+                    <div
+                      className={twMerge(
+                        "inline-flex items-center justify-center px-3 py-1 rounded-full text-md font-semibold shadow-sm",
+                        inverse
+                          ? "bg-black text-black border border-gray-200"
+                          : "bg-rainbow-gradient bg-[400%] backdrop:blur-md text-white border border-black-400"
+                      )}
+                    >
+                      <span className="bg-rainbow-gradient bg-[400%] backdrop:blur-md text-transparent bg-clip-text">
                         Popular
                       </span>
                     </div>
@@ -141,16 +153,23 @@ const Pricing = () => {
                   {buttonText}
                 </button>
 
-                <ul className="flex flex-col gap-5 mt-8">
+                <ul className="flex flex-col gap-4 mt-6">
                   {features.map((feature, index) => (
-                    <li key={index} className="text-sm flex items-center gap-4">
+                    <li key={index} className="flex items-center space-x-3">
                       <CheckIcon
                         className={twMerge(
-                          "h-5 w-5",
+                          "w-4 h-4 flex-shrink-0",
                           inverse ? "text-white" : "text-blue-600"
                         )}
                       />
-                      <span>{feature}</span>
+                      <span
+                        className={twMerge(
+                          "text-[15px] font-normal",
+                          inverse ? "text-white/80" : "text-gray-700"
+                        )}
+                      >
+                        {renderFeature(feature)}
+                      </span>
                     </li>
                   ))}
                 </ul>
