@@ -12,6 +12,7 @@ import Hero from '@/components/main/Hero';
 // import Features from '@/components/main/Features';
 // import CTA from '@/components/main/CTA';
 import Footer from '@/components/Footer';
+import Testimonials from '@/components/main/Testimonials';
 import FeatureCardsDeck from '@/components/main/Features';
 import HomeGrid from "@/components/main/HomeCards";
 
@@ -32,6 +33,8 @@ const HomePage = () => {
       <Hero />
       <HomeGrid/>
       {/* <FeatureCardsDeck /> */}
+      <Testimonials />
+      <Pricing />
       <Footer />
     </div>
   );
