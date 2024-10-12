@@ -81,7 +81,7 @@ const FeaturesGrid = () => {
             <div
               key={index}
               className={twMerge(
-                "group relative flex transform-gpu flex-col justify-between overflow-hidden rounded-2xl bg-white transition-transform duration-300 ease-in-out",
+                "group relative flex transform-gpu flex-col justify-between overflow-hidden rounded-2xl bg-white transition-all duration-300 ease-in-out",
                 index % 2 === 0
                   ? "md:col-span-6 lg:col-span-8"
                   : "md:col-span-6 lg:col-span-4"
@@ -107,15 +107,22 @@ const FeaturesGrid = () => {
                 }}
               ></div>
 
-              <div className="z-10 flex flex-col gap-3 p-5 transition-transform duration-300 group-hover:-translate-y-3">
-                {/* Added icon based on feature */}
-                <div className="mb-2">{feature.icon}</div>
-                <h3 className="text-2xl font-semibold text-neutral-900 md:text-3xl">
-                  {feature.title}
-                </h3>
-                <p className="text-base text-neutral-600 md:text-lg">
-                  {feature.description}
-                </p>
+              <div className="h-full flex flex-col justify-between p-5 transition-transform duration-300 group-hover:-translate-y-3">
+                <div className="flex-grow"></div>{" "}
+                {/* Pushes content to the bottom */}
+                {/* Icon, Title, and Description */}
+                <div className="z-10 flex flex-col gap-3 mb-6">
+                  {/* Feature Icon */}
+                  <div className="mb-2">{feature.icon}</div>
+                  {/* Title */}
+                  <h3 className="text-2xl font-semibold text-neutral-900 md:text-3xl">
+                    {feature.title}
+                  </h3>
+                  {/* Description */}
+                  <p className="text-base text-neutral-600 md:text-lg">
+                    {feature.description}
+                  </p>
+                </div>
               </div>
 
               <div className="absolute bottom-0 flex w-full translate-y-10 transform-gpu flex-row items-center opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
