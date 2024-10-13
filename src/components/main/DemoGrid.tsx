@@ -2,7 +2,7 @@
 
 import React from "react";
 import { twMerge } from "tailwind-merge";
-import "./demogrid.css";
+
 import Image from "next/image";
 import {
   SparklesIcon,
@@ -13,6 +13,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { GlassCardWithReveal } from "@/components/ui/DynamicCard";
 import { CardSpotlight } from "../ui/card-spotlight";
+import { decodeAction } from "next/dist/server/app-render/entry-base";
 
 const features = [
   {
@@ -51,7 +52,7 @@ const features = [
 
 const FeaturesGrid = () => {
   return (
-    <section className="bg-transparent py-10 md:py-20 lg:py-28">
+    <section className="bg-neutral-100 py-10 md:py-20 lg:py-28">
       <div className="container mx-auto space-y-10">
         <div className="space-y-2.5">
           <h1 className="text-start font-bold text-2xl text-neutral-900 md:text-5xl">
@@ -65,20 +66,14 @@ const FeaturesGrid = () => {
         <div className="grid w-full auto-rows-[20rem] grid-cols-1 gap-5 md:grid-cols-12">
           {features.map((feature, index) => (
             <CardSpotlight
-              key={index} // Apply interactive effect to specific cards
+              key={index}
               className={twMerge(
+                "group relative flex transform-gpu flex-col justify-between overflow-hidden rounded-2xl transition-transform duration-300 ease-in-out",
                 index % 2 === 0
                   ? "md:col-span-6 lg:col-span-8"
                   : "md:col-span-6 lg:col-span-4"
               )}
             >
-              <div className="absolute h-full w-full overflow-hidden opacity-20 [perspective:200px]">
-                <div className="absolute inset-0 [transform:rotateX(45deg)]">
-                  <div className="overflow-hidden inset-0 h-screen animate-move bg-repeat [background-image:linear-gradient(to_right,rgba(0,0,0,0.4)_1px,transparent_0),linear-gradient(to_bottom,rgba(0,0,0,0.4)_1px,transparent_0)] [background-size:60px_30px] [transform-origin:100%_0_0]"></div>
-                </div>
-                <div className="absolute inset-0 "></div>
-              </div>
-
               <div className="h-full flex flex-col justify-between p-5 transition-transform duration-300 group-hover:-translate-y-3">
                 <div className="z-10 flex flex-col gap-3 mb-6">
                   <div className="mb-2">{feature.icon}</div>
@@ -91,10 +86,10 @@ const FeaturesGrid = () => {
                 </div>
               </div>
 
-              <div className="absolute bottom-0 flex w-full translate-y-10 transform-gpu flex-row items-center opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+              <div className="-ml-6 absolute bottom-0 flex w-full translate-y-10 transform-gpu flex-row items-center opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
                 <a
                   href={feature.link}
-                  className="gradient-border flex w-full items-center justify-center bg-transparent px-5 py-2.5 text-sm uppercase text-white"
+                  className="gradient-border flex w-full items-center justify-center bg-black py-2.5 text-sm uppercase text-white"
                 >
                   {feature.linkText}
                 </a>
