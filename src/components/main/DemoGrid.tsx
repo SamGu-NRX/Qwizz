@@ -11,7 +11,8 @@ import {
   BookOpenIcon,
   LightBulbIcon,
 } from "@heroicons/react/24/outline";
-import { GlassCardWithReveal } from "@/components/ui/DynamicCard"; // Make sure this points to the updated glassmorphic component
+import { GlassCardWithReveal } from "@/components/ui/DynamicCard";
+import { CardSpotlight } from "../ui/card-spotlight";
 
 const features = [
   {
@@ -29,7 +30,6 @@ const features = [
     linkText: "Explore the web",
     link: "#",
     icon: <ShareIcon className="h-8 w-8 text-green-500" />,
-    isInteractive: true, // Only this card will have the interactive effects
   },
   {
     title: "Memory Vault",
@@ -51,7 +51,7 @@ const features = [
 
 const FeaturesGrid = () => {
   return (
-    <section className="bg-neutral-100 py-10 md:py-20 lg:py-28">
+    <section className="bg-transparent py-10 md:py-20 lg:py-28">
       <div className="container mx-auto space-y-10">
         <div className="space-y-2.5">
           <h1 className="text-start font-bold text-2xl text-neutral-900 md:text-5xl">
@@ -64,9 +64,8 @@ const FeaturesGrid = () => {
 
         <div className="grid w-full auto-rows-[20rem] grid-cols-1 gap-5 md:grid-cols-12">
           {features.map((feature, index) => (
-            <GlassCardWithReveal
-              key={index}
-              interactive={feature.isInteractive} // Apply interactive effect to specific cards
+            <CardSpotlight
+              key={index} // Apply interactive effect to specific cards
               className={twMerge(
                 index % 2 === 0
                   ? "md:col-span-6 lg:col-span-8"
@@ -77,7 +76,7 @@ const FeaturesGrid = () => {
                 <div className="absolute inset-0 [transform:rotateX(45deg)]">
                   <div className="overflow-hidden inset-0 h-screen animate-move bg-repeat [background-image:linear-gradient(to_right,rgba(0,0,0,0.4)_1px,transparent_0),linear-gradient(to_bottom,rgba(0,0,0,0.4)_1px,transparent_0)] [background-size:60px_30px] [transform-origin:100%_0_0]"></div>
                 </div>
-                <div className="absolute inset-0 bg-gradient-to-b from-white to-transparent to-60%"></div>
+                <div className="absolute inset-0 "></div>
               </div>
 
               <div className="h-full flex flex-col justify-between p-5 transition-transform duration-300 group-hover:-translate-y-3">
@@ -95,12 +94,12 @@ const FeaturesGrid = () => {
               <div className="absolute bottom-0 flex w-full translate-y-10 transform-gpu flex-row items-center opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
                 <a
                   href={feature.link}
-                  className="gradient-border flex w-full items-center justify-center bg-black px-5 py-2.5 text-sm uppercase text-white"
+                  className="gradient-border flex w-full items-center justify-center bg-transparent px-5 py-2.5 text-sm uppercase text-white"
                 >
                   {feature.linkText}
                 </a>
               </div>
-            </GlassCardWithReveal>
+            </CardSpotlight>
           ))}
         </div>
       </div>
