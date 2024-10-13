@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { twMerge } from "tailwind-merge";
 import "./demogrid.css";
 import Image from "next/image";
@@ -11,7 +11,7 @@ import {
   BookOpenIcon,
   LightBulbIcon,
 } from "@heroicons/react/24/outline";
-import { Card } from "@/components/ui/DynamicCard";
+import { GlassCardWithReveal } from "@/components/ui/DynamicCard"; // Make sure this points to the updated glassmorphic component
 
 const features = [
   {
@@ -64,9 +64,9 @@ const FeaturesGrid = () => {
 
         <div className="grid w-full auto-rows-[20rem] grid-cols-1 gap-5 md:grid-cols-12">
           {features.map((feature, index) => (
-            <Card
+            <GlassCardWithReveal
               key={index}
-              interactive={feature.isInteractive}
+              interactive={feature.isInteractive} // Apply interactive effect to specific cards
               className={twMerge(
                 index % 2 === 0
                   ? "md:col-span-6 lg:col-span-8"
@@ -75,7 +75,7 @@ const FeaturesGrid = () => {
             >
               <div className="absolute h-full w-full overflow-hidden opacity-20 [perspective:200px]">
                 <div className="absolute inset-0 [transform:rotateX(45deg)]">
-                  <div className="inset-0 h-screen animate-move bg-repeat [background-image:linear-gradient(to_right,rgba(0,0,0,0.4)_1px,transparent_0),linear-gradient(to_bottom,rgba(0,0,0,0.4)_1px,transparent_0)] [background-size:60px_30px] [transform-origin:100%_0_0]"></div>
+                  <div className="overflow-hidden inset-0 h-screen animate-move bg-repeat [background-image:linear-gradient(to_right,rgba(0,0,0,0.4)_1px,transparent_0),linear-gradient(to_bottom,rgba(0,0,0,0.4)_1px,transparent_0)] [background-size:60px_30px] [transform-origin:100%_0_0]"></div>
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-b from-white to-transparent to-60%"></div>
               </div>
@@ -100,7 +100,7 @@ const FeaturesGrid = () => {
                   {feature.linkText}
                 </a>
               </div>
-            </Card>
+            </GlassCardWithReveal>
           ))}
         </div>
       </div>
