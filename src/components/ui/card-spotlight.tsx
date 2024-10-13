@@ -1,22 +1,28 @@
-"use client";
-
 import { useMotionValue, motion, useMotionTemplate } from "framer-motion";
-import React, { MouseEvent as ReactMouseEvent, useState } from "react";
+import React, {
+  MouseEvent as ReactMouseEvent,
+  useState,
+  forwardRef,
+} from "react";
 import { CanvasRevealEffect } from "@/components/ui/canvas-reveal-effect";
 import { cn } from "@/lib/utils";
 import "./demogrid.css";
 
-export const CardSpotlight = ({
-  children,
-  radius = 150,
-  color = "#ffffff",
-  className,
-  ...props
-}: {
-  radius?: number;
-  color?: string;
-  children: React.ReactNode;
-} & React.HTMLAttributes<HTMLDivElement>) => {
+export const CardSpotlight = forwardRef<
+  HTMLDivElement,
+  {
+    radius?: number;
+    color?: string;
+    children: React.ReactNode;
+  } & React.HTMLAttributes<HTMLDivElement>
+  >(({
+    children,
+    radius = 150,
+    color = "#ffffff",
+    className,
+    ...props },
+  ref) => {
+
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
@@ -36,6 +42,7 @@ export const CardSpotlight = ({
 
   return (
     <div
+      ref={ref} // Forward the ref here
       className={cn(
         "group/spotlight relative rounded-xl border border-white/30 shadow-lg transition-transform duration-300 ease-in-out transform",
         "hover:scale-[101%]", // Maintain hover effect
@@ -53,45 +60,36 @@ export const CardSpotlight = ({
         <div className="absolute inset-0 bg-gradient-to-b from-white to-transparent to-60%"></div>
       </div>
 
-      {/* Glassmorphic Effect Overlay */}
-      <div
-        className="relative z-10 w-full h-full p-6" // Place glass morphic layer on top of the background
+      <motion.div
+        className="pointer-events-none absolute z-0 -inset-px rounded-md opacity-0 transition duration-300 group-hover/spotlight:opacity-100"
         style={{
-          backdropFilter: "blur(16px)",
-          background: "rgba(255, 255, 255, 0.1)",
-          borderRadius: "12px",
-          border: "1px solid rgba(255, 255, 255, 0.125)",
-        }} // Glass effect
-      >
-        <motion.div
-          className="pointer-events-none absolute z-0 -inset-px rounded-md opacity-0 transition duration-300 group-hover/spotlight:opacity-100"
-          style={{
-            backgroundColor: color,
-            maskImage: useMotionTemplate`
+          backgroundColor: color,
+          maskImage: useMotionTemplate`
               radial-gradient(
                 ${radius}px circle at ${mouseX}px ${mouseY}px,
                 white,
                 transparent 80%
               )
             `,
-          }}
-        >
-          {isHovering && (
-            <CanvasRevealEffect
-              animationSpeed={5}
-              containerClassName="bg-transparent absolute inset-0 pointer-events-none"
-              colors={[
-                [59, 130, 246],
-                [139, 92, 246],
-              ]}
-              dotSize={3}
-            />
-          )}
-        </motion.div>
+        }}
+      >
+        {isHovering && (
+          <CanvasRevealEffect
+            animationSpeed={5}
+            containerClassName="bg-transparent absolute inset-0 pointer-events-none"
+            colors={[
+              [59, 130, 246],
+              [139, 92, 246],
+            ]}
+            dotSize={3}
+          />
+        )}
+      </motion.div>
 
-        {/* Actual card content goes here */}
-        {children}
-      </div>
+      {/* Actual card content goes here */}
+      {children}
     </div>
   );
-};
+});
+
+CardSpotlight.displayName = "CardSpotlight";

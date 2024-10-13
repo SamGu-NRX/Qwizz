@@ -1,41 +1,119 @@
-import { useEffect, useRef } from 'react';
-import { fadeUp } from '@/animations/gsap';
-import { motion } from 'framer-motion';
+import React, { useEffect } from 'react';
+import { motion, useAnimation, useScroll, useTransform } from 'framer-motion';
 
+const QwizzMagicalLander = () => {
+  const controls = useAnimation();
+  const { scrollY } = useScroll();
+  const y = useTransform(scrollY, [0, 300], [0, -50]);
 
-const Hero = () => {
-    const heroRef = useRef<HTMLDivElement>(null);
-    const elementsRef = useRef<(HTMLHeadingElement | HTMLParagraphElement | HTMLButtonElement)[]>([]);
-    useEffect(() => {
-        if (heroRef.current) {
-          fadeUp(elementsRef.current.filter(el => el !== null) as HTMLElement[], heroRef.current, { delay: 0.05, start: 'top 80%', ease: 'power3.inOut' });
-        }
-      }, []);
+  useEffect(() => {
+    controls.start({ opacity: 1, y: 0 });
+  }, [controls]);
 
-    return (
-      <div className='flex-grow flex justify-center items-center'>
-        {/* Edit title so that the title is centered relative to vh */}
-        <div
-          className="hero bg-homebackground bg-[#444444] bg-cover bg-blend-multiply w-full h-[100vh] flex flex-col justify-center items-center py-10"
-          ref={heroRef}
-        >
-          <h1 className="text-white text-5xl font-bold" ref={el => { if (el) elementsRef.current[0] = el; }}>StudyBuddy</h1>
-          <p className="text-white mt-4" ref={el => { if (el) elementsRef.current[1] = el; }}>Your All-in-One Intelligent Study Companion</p>
-          <motion.button 
-            className="mt-6 px-4 py-2 bg-white text-black-500 font-bold rounded-full "
-            ref={el => { if (el) elementsRef.current[2] = el; }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => {
-              window.location.href = "/auth/login";
-            }}
-          >
-            Get Started
-          </motion.button>
-        </div>
+  return (
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800">
+      {/* Magical particle background */}
+      <div className="absolute inset-0 overflow-hidden">
+        <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="glowGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+              <stop offset="0%" stopColor="rgba(255,255,255,0.3)" />
+              <stop offset="100%" stopColor="rgba(255,255,255,0)" />
+            </radialGradient>
+          </defs>
+          {[...Array(50)].map((_, i) => (
+            <motion.circle
+              key={i}
+              cx={Math.random() * 100 + "%"}
+              cy={Math.random() * 100 + "%"}
+              r="1"
+              fill="url(#glowGradient)"
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{
+                scale: [1, 2, 1],
+                opacity: [0, 0.5, 0],
+              }}
+              transition={{
+                duration: Math.random() * 3 + 2,
+                repeat: Infinity,
+                repeatType: "reverse",
+              }}
+            />
+          ))}
+        </svg>
       </div>
-    );
-}
 
+      {/* Content */}
+      <motion.div
+        className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 text-center"
+        initial={{ opacity: 0, y: 20 }}
+        animate={controls}
+      >
+        <motion.h1
+          className="text-6xl font-bold text-white mb-4"
+          style={{ y }}
+        >
+          Qwizz
+        </motion.h1>
+        <motion.p
+          className="text-xl text-gray-200 mb-8 max-w-2xl"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+        >
+          Unlock the magic of learning with your intelligent study companion
+        </motion.p>
+        <motion.button
+          className="px-8 py-3 bg-white text-purple-700 font-bold rounded-full text-lg shadow-lg hover:bg-purple-100 transition duration-300"
+          whileHover={{ scale: 1.05, boxShadow: "0 0 15px rgba(255,255,255,0.5)" }}
+          whileTap={{ scale: 0.95 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          onClick={() => { window.location.href = "/auth/login"; }}
+        >
+          Begin Your Journey
+        </motion.button>
+      </motion.div>
 
-export default Hero;
+      {/* Floating books */}
+      <motion.div
+        className="absolute bottom-10 left-10 w-20 h-20"
+        animate={{
+          y: [0, -20, 0],
+          rotate: [0, 5, 0],
+        }}
+        transition={{
+          duration: 5,
+          repeat: Infinity,
+          repeatType: "reverse",
+        }}
+      >
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 19.5C4 18.837 4.26339 18.2011 4.73223 17.7322C5.20107 17.2634 5.83696 17 6.5 17H20" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M6.5 2H20V22H6.5C5.83696 22 5.20107 21.7366 4.73223 21.2678C4.26339 20.7989 4 20.163 4 19.5V4.5C4 3.83696 4.26339 3.20107 4.73223 2.73223C5.20107 2.26339 5.83696 2 6.5 2Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      </motion.div>
+
+      {/* Floating wand */}
+      <motion.div
+        className="absolute top-20 right-20 w-16 h-16"
+        animate={{
+          y: [0, -15, 0],
+          rotate: [0, -10, 0],
+        }}
+        transition={{
+          duration: 4,
+          repeat: Infinity,
+          repeatType: "reverse",
+        }}
+      >
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22 2L12 12M20 6L18 4M20 4L18 6M12 2L22 12M16 3L21 8" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      </motion.div>
+    </div>
+  );
+};
+
+export default QwizzMagicalLander;
