@@ -12,7 +12,7 @@ const QwizzMagicalLander = () => {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800">
-      {/* Magical particle background */}
+      {/* Magical particle background that i messed the hell up on */}
       <div className="absolute inset-0 overflow-hidden">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -43,7 +43,7 @@ const QwizzMagicalLander = () => {
         </svg>
       </div>
 
-      {/* Content */}
+      {/* Hero?? */}
       <motion.div
         className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 text-center"
         initial={{ opacity: 0, y: 20 }}
@@ -92,24 +92,6 @@ const QwizzMagicalLander = () => {
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M4 19.5C4 18.837 4.26339 18.2011 4.73223 17.7322C5.20107 17.2634 5.83696 17 6.5 17H20" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           <path d="M6.5 2H20V22H6.5C5.83696 22 5.20107 21.7366 4.73223 21.2678C4.26339 20.7989 4 20.163 4 19.5V4.5C4 3.83696 4.26339 3.20107 4.73223 2.73223C5.20107 2.26339 5.83696 2 6.5 2Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      </motion.div>
-
-      {/* Floating wand */}
-      <motion.div
-        className="absolute top-20 right-20 w-16 h-16"
-        animate={{
-          y: [0, -15, 0],
-          rotate: [0, -10, 0],
-        }}
-        transition={{
-          duration: 4,
-          repeat: Infinity,
-          repeatType: "reverse",
-        }}
-      >
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M22 2L12 12M20 6L18 4M20 4L18 6M12 2L22 12M16 3L21 8" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
       </motion.div>
     </div>
