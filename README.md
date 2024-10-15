@@ -154,6 +154,95 @@ next dev  # or npm/pnpm run dev, depending on your setup
 
 ---
 
+## FAQ
+
+### 1. What is Qwizz?
+
+**Qwizz** is an all-in-one personalized education assistant designed to revolutionize how students learn and retain information. By integrating AI-powered tools with intuitive features, Qwizz helps you absorb and retain meaningful knowledge for long-term success.
+
+### 2. How does Qwizz protect my data privacy?
+
+We take your privacy seriously. Qwizz complies with the **Family Educational Rights and Privacy Act (FERPA)** to protect your educational records. We implement appropriate security measures to safeguard your personal information and do not share your data with third parties without your explicit consent.
+
+### 3. What personal information does Qwizz collect?
+
+When you use Qwizz, we may collect:
+
+- **Contact Information**: Name and email address.
+- **Authentication Data**: OAuth tokens from third-party services.
+- **User Content**: Documents you upload, chat messages, and responses.
+- **Usage Data**: Scores, feedback, and interaction history.
+- **Calendar Information**: If you integrate with Google Calendar.
+
+### 4. How is my data used?
+
+Your data is used to:
+
+- Create and manage your account securely.
+- Provide and improve our services, including personalized feedback.
+- Communicate updates and support messages.
+- Enhance your learning experience through analytics.
+- Comply with legal obligations, including FERPA.
+
+### 5. Is my data shared with third parties?
+
+We only share your information in the following circumstances:
+
+- **With Your Consent**: If you give explicit permission.
+- **Service Providers**: Trusted third-party vendors who assist in providing our services.
+- **Legal Requirements**: When required by law.
+
+### 6. What is FERPA and how does Qwizz comply with it?
+
+FERPA is a federal law that protects the privacy of student education records. Qwizz complies by:
+
+- Allowing you to access and control your educational records.
+- Implementing security measures to protect your data.
+- Not disclosing your information without consent, except as permitted by FERPA.
+
+### 7. How do the pricing tiers work?
+
+We offer three pricing tiers to suit different needs:
+
+- **Free Tier**: Basic access with limited features, ideal for casual users.
+- **Pro Tier** ($9/month): Additional content sets, AI credits, and enhanced features.
+- **Wizard Tier** ($19/month): Unlimited access to all features, highest AI credits, and premium support.
+
+### 8. What are AI credits?
+
+**AI credits** are units that allow you to utilize our AI-powered features, such as generating content sets, Magic Notes, and more. Each action may consume a certain number of credits based on its complexity.
+
+### 9. Can I upgrade or downgrade my plan?
+
+Yes, you can upgrade or downgrade your subscription at any time based on your learning needs.
+
+### 10. How does the Magic Notes feature work?
+
+**Magic Notes** is an AI-powered note-taking tool that allows you to perform smart analysis, create mind maps, fact-check, and receive instant summarizations. The level of features available depends on your subscription tier.
+
+### 11. Is there a free trial available?
+
+We offer a **Free Tier** that you can use to get started and explore basic features before deciding to upgrade.
+
+### 12. How can I delete my account or data?
+
+You have the right to delete your account and personal data at any time. Please contact us at **[Email Address]** to initiate the process.
+
+### 13. What kind of customer support is available?
+
+- **Free Tier**: Limited access to customer support.
+- **Pro Tier**: Priority customer support.
+- **Wizard Tier**: Dedicated customer support with a personal assistant.
+
+### 14. How often is new content or features added?
+
+We are continually developing Qwizz to add new features and improve existing ones. Stay tuned for updates and check our roadmap for upcoming releases.
+
+### 15. How can I provide feedback or report issues?
+
+We value your feedback! Please contact us at **[Email Address]** to share your thoughts or report any issues.
+
+---
 <p align="center">
   <a href="https://nextjs.org/">Next.js</a> •
   <a href="https://github.com/vercel/next.js/tree/canary/packages/create-next-app">create-next-app</a>
