@@ -4,9 +4,6 @@
   <strong>Revolutionize your learning with Qwizz – your all-in-one, personalized education assistant.</strong><br>
   Integrate AI-powered tools to absorb and retain knowledge for long-term success.<br>
   Unlimited MCQ, flashcard generation, and more for standardized tests, difficult subjects, and active recall.<br>
-</p>
-
-<p align="center">
   <a href="https://devpost.com/software/studybuddy-qgdn7b">Best Education Project</a> • Boost Hacks II
 </p>
 
@@ -14,41 +11,68 @@
 
 ## Overview
 
-Qwizz is an **all-in-one personalized education assistant** designed to revolutionize how students learn and retain information, empowering learners of all ages, backgrounds, and grade levels. It goes beyond just studying—it integrates **AI-powered tools** with intuitive features to ensure learners can absorb and retain meaningful knowledge for **long-term success**.
+Qwizz is an **all-in-one personalized education assistant** designed to **revolutionize** how students learn and retain information. Empowering learners of all ages and backgrounds, Qwizz goes beyond traditional studying by integrating **AI-powered tools** with intuitive features to ensure you absorb and retain meaningful knowledge for **long-term success**.
 
 ---
 
 ## Features
 
-### Magic Notes (In Development)
-A smart, interactive note-taking feature where users can perform **smart analysis**, **create mind maps**, **fact-check**, and receive **instant summarization**. Themed around casting spells, Magic Notes transforms disorganized information into structured, insightful learning resources.
+- **Highly Intuitive Design**: Qwizz boasts a modern, minimalistic, and user-friendly interface built with **glassmorphism**. Smooth animations, dynamic shadows, and cursor-tracked visuals make learning engaging and visually appealing, catering to students of all levels.
 
-### Memory Vault (In Development)
-A "second brain" feature where users can store important knowledge, ensuring they retain and recall critical information over time. It helps students **save and lock away** their most important learnings for when they are needed most.
+- **Dashboard Overview**: Access real-time statistics with smooth animations for an interactive experience.
+  <p align="center">
+    <img src="https://github.com/user-attachments/assets/33cfdb54-187d-4814-b175-21fbe5fedc0e" alt="Dashboard and Statistics Page" width="600">
+  </p>
 
-### Active Memory Recall (In Development)
-An advanced algorithm to personalize the learning experience, optimizing for **long-term retention** and **active recall**.
+- **Responsive Onboarding**: Easily upload documents and utilize advanced OCR via Tesseract.js, linked to local storage for a refresh-resistant experience.
+  <p align="center">
+    <img src="https://github.com/user-attachments/assets/3617e8c8-9511-4462-90ef-a42773edd12e" alt="Onboarding" width="600">
+  </p>
 
-### Flashcards (Completed)
-**AI-powered flashcard generation** from your study materials to enhance learning and retention.
 
-### Knowledge Web (In Development)
-Visualize how concepts and ideas interconnect in a **node-web structure**. Build a map of your mind to understand how concepts relate and stack upon one another for **long-term retention**.
+- **Magic Notes** *(In Development)*: A smart, interactive note-taking feature where you can perform **smart analysis**, **create mind maps**, **fact-check**, and receive **instant summarization**. Themed around casting spells, Magic Notes transforms disorganized information into structured, insightful learning resources.
 
-### Study Planning & Notifications (In Development)
-Integrated study planning features connect directly to the **Google Calendar API**, allowing you to plan your study schedules seamlessly. Stay **consistent** with notifications and reminders to keep you on track with your goals.
+- **Memory Vault** *(In Development)*: Your personal "second brain" to store important knowledge, ensuring you retain and recall critical information over time.
 
-### Dashboard Overview
-Smooth animations and real-time statistics.
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/33cfdb54-187d-4814-b175-21fbe5fedc0e" alt="Dashboard and Statistics Page" width="600">
-</p>
+- **Active Memory Recall** *(In Development)*: An advanced algorithm that personalizes your learning experience, optimizing for **long-term retention** and **active recall**.
 
-### Responsive Onboarding
-Document upload & advanced OCR (server computing via Tesseract.js) linking to local storage (refresh resistant).
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/3617e8c8-9511-4462-90ef-a42773edd12e" alt="Onboarding" width="600">
-</p>
+- **Flashcards** *(Completed)*: **AI-powered flashcard generation** from your study materials to enhance learning and retention.
+
+- **Knowledge Web** *(In Development)*: Visualize how concepts and ideas interconnect in a **node-web structure**. Build a map of your mind to understand how concepts relate and build upon one another.
+
+- **Study Planning & Notifications** *(In Development)*: Integrated study planning features connect directly to the **Google Calendar API**, allowing you to plan your study schedules seamlessly. Stay consistent with notifications and reminders to keep you on track with your goals.
+
+---
+
+## Project Status
+
+Our mission is to **seamlessly integrate learning tools** into students' study routines through a unified platform that offers note-taking, concept mapping, quizzes, and study planning. We aim to help users **retain knowledge for a lifetime** by fostering long-term learning habits rather than relying on cramming.
+
+### In Development
+
+- [ ] **New Features: Magic Notes, Memory Vault, Knowledge Web**
+- [ ] More robust, personalized **Active Memory Recall**
+- [ ] **Study Planning & Notifications**
+- [ ] Personalized shuffle and "next-up" algorithm
+- [ ] **Integration with popular learning management systems (e.g., Notion)**
+- [ ] **Personalized shuffle algorithm** for enhanced active recall
+- [ ] **Robust fact-checking** for optimal accuracy
+- [ ] Better mobile support
+- [ ] **Deployment of backend** to sustainable services with GPU access
+- [ ] **Automated testing pipeline**
+- [ ] **Dockerization** of the application for easier deployment
+
+### Completed
+
+- [x] **Flashcards** feature for enhanced learning and retention
+- [x] Designed and implemented the dashboard UI
+- [x] Implemented a robust user authentication system with settings, confirmation emails, password changing, and more
+- [x] Set up a MongoDB database with Prisma ORM, connected with the OpenAI API using Flask
+- [x] Developed an **AI-powered learning system** accepting long context files for optimal question and flashcard generation
+- [x] Implemented basic **fact-checking** for material generation
+- [x] Enabled document upload functionality
+- [x] Integrated Tesseract.js for OCR capabilities
+- [x] Created an intuitive and modern, sleek design
 
 ---
 
@@ -75,51 +99,21 @@ Document upload & advanced OCR (server computing via Tesseract.js) linking to lo
 
 ---
 
-## Project Status
+## Lessons Learned
 
-### Goals
-- **Seamlessly integrate learning tools** into students' study routines through a unified platform that offers note-taking, concept mapping, quizzes, and study planning.
-- Help users **retain knowledge for a lifetime** by creating long-term learning habits rather than relying on cramming for exams.
-- Enable students to excel in school and exams by preparing them with personalized study plans, intelligent tools, and reminders, ensuring they consistently stay on top of their learning journey.
+Our team gained valuable experience in:
 
-### To-Do
-- [ ] Develop even more personalized shuffle algorithm for better active recall
-- [ ] Implement more robust fact-checking for optimal accuracy
-- [ ] Integrate with popular learning management systems (such as Notion)
-- [ ] Deploy backend to sustainable service (GPU access)
-- [ ] Set up automated testing pipeline
-- [ ] **Dockerize** the application for easier deployment
-
-### Completed
-- [x] Designed and implemented dashboard UI
-- [x] Implemented robust user authentication system with settings, confirmation emails, password changing, and more
-- [x] Set up MongoDB database with Prisma ORM, connected with OpenAI API using Flask
-- [x] **AI-powered learning system** accepting long context files for optimal question and flashcard generation
-- [x] Basic **fact-checking** for material generation
-- [x] Implemented document upload functionality
-- [x] Integrated Tesseract.js for OCR capabilities
-- [x] Created mobile-responsive design
-- [x] Completed **Flashcards** feature for enhanced learning and retention
-
----
-
-## Design & Theme
-
-Built with **modern glassmorphism**, Qwizz offers a smooth and interactive user experience, with hover animations, dynamic shadows, and cursor-tracked visuals that make learning both engaging and visually appealing.
-
-Qwizz embraces a **wizard/magic theme**, where features are framed as spells and magical tools to make the learning process feel exciting and less technical, particularly appealing to students.
-
----
-
-## Target Audience
-
-Designed for students of all levels, Qwizz aims to **simplify complex subjects**, making learning engaging and effective. It offers personalized tools for students prepping for school exams, while also fostering **deep learning and retention** for lifelong knowledge.
+- Effectively using Next.js for dynamic **full-stack** development
+- Implementing AI tools on the backend, including GPT's APIs for content generation
+- Debugging and problem-solving in a hackathon environment
+- Project management and effective team communication
 
 ---
 
 ## How to Run
 
 ### Requirements
+
 Before you begin, ensure you have met the following requirements:
 
 - A modern web browser
@@ -128,27 +122,31 @@ Before you begin, ensure you have met the following requirements:
 - A JS package manager (pnpm recommended)
 
 ### Step 1: Node Setup and Run
+
 ```bash
 # Using pnpm (recommended)
 ./setup.sh  # or ./setup.bat on Windows
 
 # Or, if not using pnpm
 <package manager> install
-<package manager run (ex: npx)> prisma generate
-<package manager run (ex: npx)> prisma db push
+<package manager run (e.g., npx)> prisma generate
+<package manager run (e.g., npx)> prisma db push
 <package manager> run dev
 ```
 
 ### Step 2: Python Setup and Run
+
 ```bash
 cd ./Backend
 pip install -r ./requirements.txt
 python -m flask run
 ```
+
 > Ensure the Flask app runs on port 5000 or update the `.env` file accordingly.
 > Default: `FLASK_API_URL=http://127.0.0.1:5000/`
 
 ### Step 3: Run Next.js Dev Server
+
 ```bash
 cd ..
 next dev  # or npm/pnpm run dev, depending on your setup
@@ -160,3 +158,5 @@ next dev  # or npm/pnpm run dev, depending on your setup
   <a href="https://nextjs.org/">Next.js</a> •
   <a href="https://github.com/vercel/next.js/tree/canary/packages/create-next-app">create-next-app</a>
 </p>
+
+<p align="center">Made with ❤️ by the Qwizz team © 2024</p>
