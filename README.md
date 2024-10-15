@@ -4,8 +4,13 @@
   <strong>Revolutionize your learning with Qwizz – your all-in-one, personalized education assistant.</strong><br>
   Integrate AI-powered tools to absorb and retain knowledge for long-term success.<br>
   Unlimited MCQ, flashcard generation, and more for standardized tests, difficult subjects, and active recall.<br>
+</p>
+
+<p align="center">
   <a href="https://devpost.com/software/studybuddy-qgdn7b">Best Education Project</a> • Boost Hacks II
 </p>
+
+
 
 ---
 
