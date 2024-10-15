@@ -17,7 +17,7 @@
 > [!CAUTION]
 > ### Important Notice
 >
->  This project is currently in **early development** and is **not ready for deployment or public use**. We are actively working on new features and optimizations, and as > such, the codebase is subject to significant changes. A **limited alpha test** is planned for early **2025**.
+>  This project is currently in **early development** and is **not ready for deployment or public use**. We are actively working on new features and optimizations, and as such, the codebase is subject to significant changes. A **limited alpha test** is planned for early **2025**.
 > 
 > ### Code Usage and Distribution
 >
