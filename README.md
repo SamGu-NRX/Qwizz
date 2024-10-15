@@ -10,7 +10,18 @@
   <a href="https://devpost.com/software/studybuddy-qgdn7b">Best Education Project</a> • Boost Hacks II
 </p>
 
+---
 
+## Disclaimer
+
+> [!CAUTION]
+> ### Important Notice
+>
+>  This project is currently in **early development** and is **not ready for deployment or public use**. We are actively working on new features and optimizations, and as > such, the codebase is subject to significant changes. A **limited alpha test** is planned for early **2025**.
+> 
+> ### Code Usage and Distribution
+>
+> All code within this repository is **proprietary and confidential**. Unauthorized distribution, copying, or use of the code in any form is **strictly prohibited**. Please **do not distribute or use** any part of this code without explicit permission from the Qwizz team.
 
 ---
 
@@ -117,6 +128,8 @@ Our team gained valuable experience in:
 
 ## How to Run
 
+*This section is currently intended for internal team use. Since the project is proprietary and not open for public deployment, we are not providing detailed setup instructions at this time. The below instructions are irrelevant for personal usage*
+
 ### Requirements
 
 Before you begin, ensure you have met the following requirements:
@@ -169,6 +182,30 @@ next dev  # or npm/pnpm run dev, depending on your setup
 
 We take your privacy seriously. Qwizz complies with the **Family Educational Rights and Privacy Act (FERPA)** to protect your educational records. We implement appropriate security measures to safeguard your personal information and do not share your data with third parties without your explicit consent.
 
+### 3. Can I use or contribute to the Qwizz codebase?
+
+At this time, Qwizz is a **proprietary project under active development**, and we are not accepting external contributions. The code is not available for public use or distribution. We appreciate your interest and encourage you to check back after our planned alpha release in early 2025.
+
+### 4. When will the alpha test be available?
+
+We are planning a **limited alpha test** for early **2025**. Stay tuned for updates by following our announcements.
+
+### 5. How can I participate in the alpha test?
+
+Details about participating in the alpha test will be shared closer to the release date. Keep an eye on our official channels for the opportunity to sign up.
+
+### 6. What features will be available in the alpha test?
+
+The alpha test will focus on core features like **Magic Notes**, **Memory Vault**, and **Active Memory Recall**, allowing us to gather valuable feedback for improvements.
+
+### 7. Is my data safe during the alpha test?
+
+Yes, even during the alpha phase, we are committed to ensuring your data's security and privacy in compliance with FERPA and our Privacy Policy.
+
+<details>
+<summary>
+  hidden info
+</summary>
 ### 3. What personal information does Qwizz collect?
 
 When you use Qwizz, we may collect:
@@ -246,8 +283,10 @@ We are continually developing Qwizz to add new features and improve existing one
 ### 15. How can I provide feedback or report issues?
 
 We value your feedback! Please contact us at **[Email Address]** to share your thoughts or report any issues.
+</details>
 
 ---
+
 <p align="center">
   <a href="https://nextjs.org/">Next.js</a> •
   <a href="https://github.com/vercel/next.js/tree/canary/packages/create-next-app">create-next-app</a>
