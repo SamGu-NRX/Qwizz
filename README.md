@@ -89,7 +89,7 @@ Our mission is to **seamlessly integrate learning tools** into students' study r
   </tr>
   <tr>
     <td><strong>APIs</strong></td>
-    <td>Resend (Emailing/Authentication), NextAuth (Authentication), Tesseract.js (OCR)</td>
+    <td>Resend (Emailing/Authentication), Auth.js (Authentication), Tesseract.js (OCR)</td>
   </tr>
   <tr>
     <td><strong>Hosting</strong></td>
