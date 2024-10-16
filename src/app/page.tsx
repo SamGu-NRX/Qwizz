@@ -23,7 +23,8 @@ const HomePage = () => {
 
   useEffect(() => {
     if (heroRef.current) {
-      fadeUp(elementsRef.current.filter(el => el !== null) as HTMLElement[], heroRef.current, { delay: 0.05, start: 'top 80%', ease: 'power3.inOut' });
+      fadeUp(elementsRef.current.filter(el => el !== null) as HTMLElement[], heroRef.current,
+      { delay: 0.05 });
     }
   }, []);
 
@@ -33,7 +34,7 @@ const HomePage = () => {
       <Navbar />
       <Hero />
       <DemoGrid />
-      <HomeGrid /> 
+      <HomeGrid />
       {/* <FeatureCardsDeck /> */}
       <Testimonials />
       <Pricing />

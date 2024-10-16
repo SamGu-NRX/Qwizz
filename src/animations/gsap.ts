@@ -12,7 +12,7 @@ interface FadeUpOptions extends gsap.TweenVars {
 
 export const fadeUp = (targets: gsap.TweenTarget, trigger: gsap.DOMTarget, options?: FadeUpOptions) => {
   const { start = 'top 90%', ease = 'power3.out', ...rest } = options || {};
-  
+
   gsap.fromTo(
     targets,
     { opacity: 0, y: 50 },
@@ -25,7 +25,7 @@ export const fadeUp = (targets: gsap.TweenTarget, trigger: gsap.DOMTarget, optio
       scrollTrigger: {
         trigger: trigger,
         start: start, // start the animation when the top of the section hits 80% of the viewport height
-        toggleActions: 'play reverse restart reset',
+        toggleActions: 'play reset restart reverse',
       },
       ...rest
     }
