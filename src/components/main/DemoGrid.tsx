@@ -8,7 +8,6 @@ import {
   ShareIcon,
   LockClosedIcon,
   BookOpenIcon,
-  LightBulbIcon,
 } from "@heroicons/react/24/outline";
 import { CardSpotlight } from "../ui/card-spotlight";
 import { fadeUp } from "@/animations/gsap";
@@ -53,7 +52,8 @@ const FeaturesGrid = () => {
 
   useEffect(() => {
     cardRefs.current.forEach((card, index) => {
-      fadeUp(card, card, { delay: index * 0.15 });
+      fadeUp(card, card,
+        { start: 'top 80%', delay: index * 0.15 });
     });
   }, []);
 
@@ -91,21 +91,24 @@ const FeaturesGrid = () => {
               : "md:col-span-6 lg:col-span-8";
 
             return (
+              // Outer wrapper div should be a grid item (inherits grid class) and non-intrusive
               <div
                 key={index}
                 ref={(el) => {
                   if (el) cardRefs.current[index] = el;
                 }}
                 className={twMerge(
-                  "group relative flex flex-col justify-between overflow-hidden rounded-2xl",
-                  colSpanClass
+                  colSpanClass, // This keeps the original column span
+                  "grid p-0 m-0" // Ensure no extra padding/margin from the wrapper
                 )}
               >
                 <CardSpotlight
                   key={index}
-                  className="transform-gpu transition-all duration-300 group relative flex md:p-3 lg:p-5 flex-col justify-between overflow-hidden rounded-2xl"
+                  className={twMerge(
+                    "transform-gpu duration-300 group relative flex md:p-3 lg:p-5 flex-col justify-between overflow-hidden rounded-2xl"
+                  )}
                 >
-                  <div className="h-full flex flex-col justify-between p-5 group-hover:-translate-y-3">
+                  <div className="h-full flex flex-col justify-between p-5 transition-transform duration-300 group-hover:-translate-y-3">
                     <div className="z-10 flex flex-col gap-3 mb-6">
                       <div className="mb-2">{feature.icon}</div>
                       <h3 className="text-2xl font-semibold text-neutral-900 md:text-3xl">
@@ -125,6 +128,7 @@ const FeaturesGrid = () => {
                       {feature.linkText}
                     </a>
                   </div>
+
                 </CardSpotlight>
               </div>
             );

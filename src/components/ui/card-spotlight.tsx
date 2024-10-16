@@ -15,65 +15,62 @@ export const CardSpotlight = forwardRef<
     color?: string;
     children: React.ReactNode;
   } & React.HTMLAttributes<HTMLDivElement>
-  >(({
-    children,
-    radius = 150,
-    color = "#ffffff",
-    className,
-    ...props },
-  ref) => {
+>(
+  ({ children, radius = 150, color = "#ffffff", className, ...props }, ref) => {
+    const mouseX = useMotionValue(0);
+    const mouseY = useMotionValue(0);
 
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
+    function handleMouseMove({
+      currentTarget,
+      clientX,
+      clientY,
+    }: ReactMouseEvent<HTMLDivElement>) {
+      let { left, top } = currentTarget.getBoundingClientRect();
+      mouseX.set(clientX - left);
+      mouseY.set(clientY - top);
+    }
 
-  function handleMouseMove({
-    currentTarget,
-    clientX,
-    clientY,
-  }: ReactMouseEvent<HTMLDivElement>) {
-    let { left, top } = currentTarget.getBoundingClientRect();
-    mouseX.set(clientX - left);
-    mouseY.set(clientY - top);
-  }
+    const [isHovering, setIsHovering] = useState(false);
+    const handleMouseEnter = () => setIsHovering(true);
+    const handleMouseLeave = () => setIsHovering(false);
 
-  const [isHovering, setIsHovering] = useState(false);
-  const handleMouseEnter = () => setIsHovering(true);
-  const handleMouseLeave = () => setIsHovering(false);
-
-  return (
-    <div
-      ref={ref} // Forward the ref here
-      className={cn(
-        "group/spotlight relative rounded-xl border border-white/30 shadow-lg transition-all duration-300 ease-in-out transform",
-        "hover:scale-[101%]", // Maintain hover effect
-        className
-      )}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      {...props}
-    >
-      <div className="absolute h-full w-full overflow-hidden opacity-20 [perspective:200px]">
-        <div className="absolute inset-0 [transform:rotateX(45deg)]">
-          <div className="overflow-hidden inset-0 h-screen animate-move bg-repeat [background-image:linear-gradient(to_right,rgba(0,0,0,0.4)_1px,transparent_0),linear-gradient(to_bottom,rgba(0,0,0,0.4)_1px,transparent_0)] [background-size:60px_30px] [transform-origin:100%_0_0]"></div>
+    return (
+      <div
+        ref={ref}
+        className={cn(
+          "group/spotlight relative rounded-xl border border-white/30 shadow-lg transition-transform duration-300 ease-in-out transform",
+          "hover:scale-[102%]",
+          className
+        )}
+        onMouseMove={handleMouseMove}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        {...props}
+      >
+        <div className="absolute h-full w-full overflow-hidden opacity-20 [perspective:200px]">
+          <div className="absolute inset-0 [transform:rotateX(45deg)]">
+            <div className="overflow-hidden inset-0 h-screen animate-move bg-repeat [background-image:linear-gradient(to_right,rgba(0,0,0,0.4)_1px,transparent_0),linear-gradient(to_bottom,rgba(0,0,0,0.4)_1px,transparent_0)] [background-size:60px_30px] [transform-origin:100%_0_0]"></div>
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-b from-white to-transparent to-60%"></div>
         </div>
-        <div className="absolute inset-0 bg-gradient-to-b from-white to-transparent to-60%"></div>
-      </div>
 
-      <motion.div
-        className="pointer-events-none absolute z-0 -inset-px rounded-md opacity-0 transition-all duration-300 group-hover/spotlight:opacity-100"
-        style={{
-          backgroundColor: color,
-          maskImage: useMotionTemplate`
+        {/* Spotlight effect with smooth fade in and out */}
+        <motion.div
+          className="pointer-events-none absolute z-0 -inset-px rounded-md"
+          style={{
+            backgroundColor: color,
+            maskImage: useMotionTemplate`
               radial-gradient(
                 ${radius}px circle at ${mouseX}px ${mouseY}px,
                 white,
                 transparent 80%
               )
             `,
-        }}
-      >
-        {isHovering && (
+          }}
+          animate={{ opacity: isHovering ? 1 : 0 }}
+          transition={{ duration: 0.15 }} // Duration of the fade-out effect
+        >
+          {/* Always render the effect, but control opacity via motion.div */}
           <CanvasRevealEffect
             animationSpeed={5}
             containerClassName="bg-transparent absolute inset-0 pointer-events-none"
@@ -83,13 +80,13 @@ export const CardSpotlight = forwardRef<
             ]}
             dotSize={3}
           />
-        )}
-      </motion.div>
+        </motion.div>
 
-      {/* Actual card content goes here */}
-      {children}
-    </div>
-  );
-});
+        {/* Card content */}
+        {children}
+      </div>
+    );
+  }
+);
 
 CardSpotlight.displayName = "CardSpotlight";
