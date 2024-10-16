@@ -44,7 +44,7 @@ export const CardSpotlight = forwardRef<
     <div
       ref={ref} // Forward the ref here
       className={cn(
-        "group/spotlight relative rounded-xl border border-white/30 shadow-lg transition-transform duration-300 ease-in-out transform",
+        "group/spotlight relative rounded-xl border border-white/30 shadow-lg transition-all duration-300 ease-in-out transform",
         "hover:scale-[101%]", // Maintain hover effect
         className
       )}
@@ -61,7 +61,7 @@ export const CardSpotlight = forwardRef<
       </div>
 
       <motion.div
-        className="pointer-events-none absolute z-0 -inset-px rounded-md opacity-0 transition duration-300 group-hover/spotlight:opacity-100"
+        className="pointer-events-none absolute z-0 -inset-px rounded-md opacity-0 transition-all duration-300 group-hover/spotlight:opacity-100"
         style={{
           backgroundColor: color,
           maskImage: useMotionTemplate`

@@ -23,7 +23,7 @@ import { BentoItems } from "@/data";
 
   useEffect(() => {
     cardRefs.current.forEach((card, index) => {
-      fadeUp(card, card, { delay: index * 0.1 });
+      fadeUp(card, card, { delay: index * 0.15 });
     });
   }, []);
 
@@ -43,14 +43,17 @@ import { BentoItems } from "@/data";
           Features
         </div>
         <div className="text-center font-light text-base md:text-xl dark:text-neutral-200 py-4 max-w-3xl">
-          StudyBuddy offers a variety of functionalities that allow efficient studying for students and an automated process of generating study flashcards.   
+          StudyBuddy offers a variety of functionalities that allow efficient studying for students and an automated process of generating study flashcards.
         </div>
       </motion.div>
 
       <BentoGrid className="max-w-5xl mx-auto -mt-3">
         {BentoItems.map((item, index) => (
-          <div key={item.title}   
-          ref={el => { if (el) cardRefs.current[index] = el; }} className={index === 4? "md:col-span-2 " : ""}>
+          <div key={item.title}
+          ref={el => {
+             if (el) cardRefs.current[index] = el;
+          }}
+          className={index === 4? "md:col-span-2 " : ""}>
             <BentoGridItem
               key={index}
               title={item.title}
@@ -68,6 +71,6 @@ import { BentoItems } from "@/data";
   const Skeleton = () => (
     <div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl bg-gradient-to-br from-neutral-200 dark:from-neutral-900 dark:to-neutral-800 to-neutral-100"></div>
   );
-  
+
 
 export default HomeGrid;

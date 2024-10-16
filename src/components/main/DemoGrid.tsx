@@ -53,12 +53,12 @@ const FeaturesGrid = () => {
 
   useEffect(() => {
     cardRefs.current.forEach((card, index) => {
-      fadeUp(card, card, { delay: index * 0.1 });
+      fadeUp(card, card, { delay: index * 0.15 });
     });
   }, []);
 
   return (
-    <section className="bg-neutral-100 py-10 md:py-20 lg:py-28">
+    <div className="bg-neutral-100 py-10 md:py-20 lg:py-28">
       <div className="container mx-auto space-y-10">
         <motion.div
           initial={{ opacity: 0.0, y: 40 }}
@@ -91,42 +91,47 @@ const FeaturesGrid = () => {
               : "md:col-span-6 lg:col-span-8";
 
             return (
-              <CardSpotlight
+              <div
                 key={index}
                 ref={(el) => {
                   if (el) cardRefs.current[index] = el;
                 }}
                 className={twMerge(
-                  "group relative flex transform-gpu md:p-3 lg:p-5 flex-col justify-between overflow-hidden rounded-2xl",
+                  "group relative flex flex-col justify-between overflow-hidden rounded-2xl",
                   colSpanClass
                 )}
               >
-                <div className="h-full flex flex-col justify-between p-5 group-hover:-translate-y-3">
-                  <div className="z-10 flex flex-col gap-3 mb-6">
-                    <div className="mb-2">{feature.icon}</div>
-                    <h3 className="text-2xl font-semibold text-neutral-900 md:text-3xl">
-                      {feature.title}
-                    </h3>
-                    <p className="text-base text-neutral-600 md:text-lg">
-                      {feature.description}
-                    </p>
+                <CardSpotlight
+                  key={index}
+                  className="transform-gpu transition-all duration-300 group relative flex md:p-3 lg:p-5 flex-col justify-between overflow-hidden rounded-2xl"
+                >
+                  <div className="h-full flex flex-col justify-between p-5 group-hover:-translate-y-3">
+                    <div className="z-10 flex flex-col gap-3 mb-6">
+                      <div className="mb-2">{feature.icon}</div>
+                      <h3 className="text-2xl font-semibold text-neutral-900 md:text-3xl">
+                        {feature.title}
+                      </h3>
+                      <p className="text-base text-neutral-600 md:text-lg">
+                        {feature.description}
+                      </p>
+                    </div>
                   </div>
-                </div>
 
-                <div className="md:-ml-3 lg:-ml-5 absolute bottom-0 flex w-full translate-y-10 transform-gpu flex-row items-center opacity-0 group-hover:translate-y-0 group-hover:opacity-100">
-                  <a
-                    href={feature.link}
-                    className="gradient-border flex w-full items-center justify-center bg-black py-2.5 text-sm uppercase text-white"
-                  >
-                    {feature.linkText}
-                  </a>
-                </div>
-              </CardSpotlight>
+                  <div className="md:-ml-3 lg:-ml-5 absolute bottom-0 flex w-full translate-y-10 transform-gpu flex-row items-center opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+                    <a
+                      href={feature.link}
+                      className="gradient-border flex w-full items-center justify-center bg-black py-2.5 text-sm uppercase text-white"
+                    >
+                      {feature.linkText}
+                    </a>
+                  </div>
+                </CardSpotlight>
+              </div>
             );
           })}
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 
