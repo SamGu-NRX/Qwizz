@@ -35,20 +35,20 @@ const features = [
     icon: <ShareIcon className="h-8 w-8 text-green-500" />,
   },
   {
+    title: "Learning Tools",
+    description:
+      "Think of them as your magic toolkit. Flashcards, quizzes, and MCQs—all in formats that make learning effortless. Transform study materials into something that actually sticks.",
+    linkText: "Transform your learning",
+    link: "#",
+    icon: <BookOpenIcon className="h-8 w-8 text-yellow-500" />,
+  },
+  {
     title: "Memory Vault",
     description:
       "Your second brain. Store your most important knowledge here, like memories locked away, ready for when you need them most.",
     linkText: "Access the vault",
     link: "#",
     icon: <LockClosedIcon className="h-8 w-8 text-red-500" />,
-  },
-  {
-    title: "Learning Tools",
-    description:
-      "Whether it’s MCQs, flashcards, or quizzes, Alchemy transforms all your study materials into formats that work best for you. Turn information into powerful learning spells.",
-    linkText: "Transform your learning",
-    link: "#",
-    icon: <BookOpenIcon className="h-8 w-8 text-yellow-500" />,
   },
 ];
 
