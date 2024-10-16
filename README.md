@@ -29,6 +29,10 @@
 
 Qwizz is an **all-in-one personalized education assistant** designed to **revolutionize** how students learn and retain information. Empowering learners of all ages and backgrounds, Qwizz goes beyond traditional studying by integrating **AI-powered tools** with intuitive features to ensure you absorb and retain meaningful knowledge for **long-term success**.
 
+## Our Mission
+
+Our mission is to **seamlessly integrate learning tools** into students' study routines through a unified platform that offers note-taking, concept mapping, quizzes, and study planning. We aim to help users **retain knowledge for a lifetime** by fostering long-term learning habits rather than relying on cramming.
+
 ---
 
 ## Features
@@ -45,14 +49,13 @@ Qwizz is an **all-in-one personalized education assistant** designed to **revolu
     <img src="https://github.com/user-attachments/assets/3617e8c8-9511-4462-90ef-a42773edd12e" alt="Onboarding" width="600">
   </p>
 
+- **Flashcards** *(Completed)*: **AI-powered flashcard generation** from your study materials to enhance learning and retention.
 
 - **Magic Notes** *(In Development)*: A smart, interactive note-taking feature where you can perform **smart analysis**, **create mind maps**, **fact-check**, and receive **instant summarization**. Themed around casting spells, Magic Notes transforms disorganized information into structured, insightful learning resources.
 
 - **Memory Vault** *(In Development)*: Your personal "second brain" to store important knowledge, ensuring you retain and recall critical information over time.
 
 - **Active Memory Recall** *(In Development)*: An advanced algorithm that personalizes your learning experience, optimizing for **long-term retention** and **active recall**.
-
-- **Flashcards** *(Completed)*: **AI-powered flashcard generation** from your study materials to enhance learning and retention.
 
 - **Knowledge Web** *(In Development)*: Visualize how concepts and ideas interconnect in a **node-web structure**. Build a map of your mind to understand how concepts relate and build upon one another.
 
@@ -61,8 +64,6 @@ Qwizz is an **all-in-one personalized education assistant** designed to **revolu
 ---
 
 ## Project Status
-
-Our mission is to **seamlessly integrate learning tools** into students' study routines through a unified platform that offers note-taking, concept mapping, quizzes, and study planning. We aim to help users **retain knowledge for a lifetime** by fostering long-term learning habits rather than relying on cramming.
 
 ### In Development
 
