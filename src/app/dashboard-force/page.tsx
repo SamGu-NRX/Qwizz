@@ -42,11 +42,9 @@ interface DashboardProps {
   yearData: Question[];
 }
 
-const Dashboard: React.FC<DashboardProps> = (  const yearData: Question[] = [];
-  const monthData: Question[] = [];
-  const weekData: Question[] = [];
-  const lastWeekData: Question[] = [];
-) => {
+const Dashboard: React.FC<DashboardProps> = ({
+ todayDate, weekData, lastWeekData, monthData, yearData
+}) => {
   const dashboardRef = useRef<HTMLDivElement>(null);
   const elementsRef = useRef<(HTMLHeadingElement | HTMLParagraphElement | HTMLButtonElement)[]>([]);
 
