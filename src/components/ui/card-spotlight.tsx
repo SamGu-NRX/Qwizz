@@ -15,7 +15,7 @@ export const CardSpotlight = forwardRef<
     color?: string;
     children: React.ReactNode;
   } & React.HTMLAttributes<HTMLDivElement>
->(({ children, radius = 150, color = "#ffffff", className, ...props }, ref) => {
+>(({ children, radius = 150, color = "#ffffff45", className, ...props }, ref) => {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
@@ -37,7 +37,7 @@ export const CardSpotlight = forwardRef<
     <div
       ref={ref}
       className={cn(
-        "group/spotlight relative rounded-xl border border-white/30 shadow-lg transition-transform duration-300 ease-in-out transform",
+        "group/spotlight relative rounded-xl border bg-white/15 border-white/35 shadow-lg transition-transform duration-300 ease-in-out transform",
         "hover:scale-[102%]",
         className
       )}
@@ -61,7 +61,7 @@ export const CardSpotlight = forwardRef<
           maskImage: useMotionTemplate`
               radial-gradient(
                 ${radius}px circle at ${mouseX}px ${mouseY}px,
-                white,
+                rgba(255, 255, 255, 0.5),
                 transparent 80%
               )
             `,
@@ -82,7 +82,7 @@ export const CardSpotlight = forwardRef<
       </motion.div>
 
       {/* Card content */}
-      {children}
+      <div className="md:p-3 lg:p-5">{children}</div>
     </div>
   );
 });

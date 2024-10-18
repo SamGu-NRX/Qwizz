@@ -3,13 +3,13 @@ import { auth } from "@/../auth";
 import { db } from '@/lib/db';
 
 export async function POST(req: NextRequest) {
-    const session = await auth(req);
+    const session = await auth();
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-  
+
     const { flashcards, title, subject, flashcardSetId } = await req.json();
-  
+
     try {
       let flashcardSet;
       if (flashcardSetId) {
@@ -67,11 +67,10 @@ export async function POST(req: NextRequest) {
           },
         });
       }
-  
+
       return NextResponse.json({ success: true, flashcardSet });
     } catch (error) {
       console.error('Error saving flashcards:', error);
       return NextResponse.json({ error: 'Error saving flashcards' }, { status: 500 });
     }
   }
-  

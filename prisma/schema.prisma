@@ -192,8 +192,10 @@ model Flashcard {
   title       String // Title or topic of the flashcard
   front       String // Question or prompt side
   back        String // Answer or explanation side
+
   isPublic    Boolean @default(false)
   createdByAI Boolean @default(false) // Indicates if created by the chatbot, if so show disclaimer in the flashcard set
+  isSaved     Boolean @default(false) // Indicates if the flashcard is saved by the user ("starred")
 
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt

@@ -52,13 +52,12 @@ const FeaturesGrid = () => {
 
   useEffect(() => {
     cardRefs.current.forEach((card, index) => {
-      fadeUp(card, card,
-        { start: 'top 80%', delay: index * 0.15 });
+      fadeUp(card, card, { start: "top 80%", delay: index * 0.15 });
     });
   }, []);
 
   return (
-    <div className="bg-neutral-100 py-10 md:py-20 lg:py-28">
+    <div className="bg-blue-200 py-10 md:py-20 lg:py-28">
       <div className="container mx-auto space-y-10">
         <motion.div
           initial={{ opacity: 0.0, y: 40 }}
@@ -101,11 +100,12 @@ const FeaturesGrid = () => {
                   colSpanClass, // This keeps the original column span
                   "grid p-0 m-0" // Ensure no extra padding/margin from the wrapper
                 )}
+                onClick={() => window.location.href = feature.link}
               >
                 <CardSpotlight
                   key={index}
                   className={twMerge(
-                    "transform-gpu duration-300 group relative flex md:p-3 lg:p-5 flex-col justify-between overflow-hidden rounded-2xl"
+                    "transform-gpu duration-300 group relative flex flex-col justify-between overflow-hidden rounded-2xl"
                   )}
                 >
                   <div className="h-full flex flex-col justify-between p-5 transition-transform duration-300 group-hover:-translate-y-3">
@@ -128,7 +128,6 @@ const FeaturesGrid = () => {
                       {feature.linkText}
                     </a>
                   </div>
-
                 </CardSpotlight>
               </div>
             );
