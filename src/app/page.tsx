@@ -13,7 +13,6 @@ import Hero from '@/components/main/Hero';
 // import CTA from '@/components/main/CTA';
 import Footer from '@/components/Footer';
 import Testimonials from '@/components/main/Testimonials';
-import GlassmorphicTestimonialCarousel from '@/components/main/Testimonials copy';
 import FeatureCardsDeck from '@/components/main/Features';
 import HomeGrid from "@/components/main/HomeCards";
 import DemoGrid from '@/components/main/DemoGrid';
@@ -38,7 +37,6 @@ const HomePage = () => {
       <HomeGrid />
       {/* <FeatureCardsDeck /> */}
       <Testimonials />
-      <GlassmorphicTestimonialCarousel />
       <Pricing />
       <Footer />
     </div>
