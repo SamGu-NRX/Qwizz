@@ -9,7 +9,6 @@ import {
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { twMerge } from "tailwind-merge";
 import { fadeUp } from "@/animations/gsap";
-import { useEditable } from "@chakra-ui/react";
 
 enum Tier {
   Free = "Free",
