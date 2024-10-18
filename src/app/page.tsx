@@ -16,7 +16,7 @@ import Testimonials from '@/components/main/Testimonials';
 import FeatureCardsDeck from '@/components/main/Features';
 import HomeGrid from "@/components/main/HomeCards";
 import DemoGrid from '@/components/main/DemoGrid';
-import InnovativePricingSection from '@/components/main/Pricing copy';
+import InnovativePricingSection from '@/components/main/NewPricing';
 
 const HomePage = () => {
   const heroRef = useRef<HTMLDivElement>(null);

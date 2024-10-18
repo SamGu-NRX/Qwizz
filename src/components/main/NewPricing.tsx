@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Check, X, HelpCircle } from "lucide-react";
-import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 
 interface Feature {
@@ -13,7 +17,8 @@ interface Feature {
 const features: Feature[] = [
   {
     name: "Content Sets",
-    description: "Number of MCQs, flashcards, and notes you can create per month",
+    description:
+      "Number of MCQs, flashcards, and notes you can create per month",
     tiers: ["Free", "Pro", "Wizard"],
   },
   {
@@ -81,14 +86,17 @@ const InnovativePricingSection: React.FC = () => {
             Choose Your Learning Adventure
           </h2>
           <p className="text-xl text-center text-gray-600 dark:text-gray-300 mb-12 max-w-3xl mx-auto">
-            Unlock your full potential with our flexible pricing plans. Find the perfect fit for your learning journey.
+            Unlock your full potential with our flexible pricing plans. Find the
+            perfect fit for your learning journey.
           </p>
 
           <div className="flex justify-center mb-12">
             <div className="bg-white dark:bg-gray-800 rounded-full p-1 flex items-center shadow-lg">
               <button
                 className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
-                  !isYearly ? "bg-indigo-500 text-white" : "text-gray-700 dark:text-gray-300"
+                  !isYearly
+                    ? "bg-indigo-500 text-white"
+                    : "text-gray-700 dark:text-gray-300"
                 }`}
                 onClick={() => setIsYearly(false)}
               >
@@ -96,7 +104,9 @@ const InnovativePricingSection: React.FC = () => {
               </button>
               <button
                 className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
-                  isYearly ? "bg-indigo-500 text-white" : "text-gray-700 dark:text-gray-300"
+                  isYearly
+                    ? "bg-indigo-500 text-white"
+                    : "text-gray-700 dark:text-gray-300"
                 }`}
                 onClick={() => setIsYearly(true)}
               >
@@ -126,7 +136,10 @@ const InnovativePricingSection: React.FC = () => {
                   </h3>
                   <div className="flex items-baseline mb-6">
                     <span className="text-4xl font-bold text-gray-900 dark:text-white">
-                      ${isYearly ? (tier.price * 12 * 0.8).toFixed(2) : tier.price}
+                      $
+                      {isYearly
+                        ? (tier.price * 12 * 0.8).toFixed(2)
+                        : tier.price}
                     </span>
                     <span className="text-gray-500 dark:text-gray-400 ml-2">
                       /{isYearly ? "year" : "month"}
@@ -140,7 +153,9 @@ const InnovativePricingSection: React.FC = () => {
                     }`}
                     onClick={() => setSelectedTier(tier.name)}
                   >
-                    {selectedTier === tier.name ? "Current Plan" : "Select Plan"}
+                    {selectedTier === tier.name
+                      ? "Current Plan"
+                      : "Select Plan"}
                   </button>
                 </div>
               </motion.div>
@@ -168,9 +183,7 @@ const InnovativePricingSection: React.FC = () => {
                       <TooltipTrigger asChild>
                         <HelpCircle className="w-4 h-4 ml-2 text-gray-400 cursor-pointer" />
                       </TooltipTrigger>
-                      <TooltipContent>
-                        {feature.description}
-                      </TooltipContent>
+                      <TooltipContent>{feature.description}</TooltipContent>
                     </Tooltip>
                   </div>
                   {tiers.map((tier) => (
