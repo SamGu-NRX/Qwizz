@@ -34,23 +34,12 @@ function getAccuracy(data: Question[]) {
   return Math.round((correct / total) * 100);
 }
 
-interface DashboardProps {
-  todayDate: Date;
-  weekData: Question[];
-  lastWeekData: Question[];
-  monthData: Question[];
-  yearData: Question[];
-}
 
-const Dashboard: React.FC<DashboardProps> = ({
- todayDate, weekData, lastWeekData, monthData, yearData
-}) => {
+const Dashboard = () => {
   const dashboardRef = useRef<HTMLDivElement>(null);
   const elementsRef = useRef<(HTMLHeadingElement | HTMLParagraphElement | HTMLButtonElement)[]>([]);
 
   const [loading, setLoading] = useState(true);
-
-
 
   const redirectGenerate = () => {
     window.location.href = '/dashboard-force/flashcards';
@@ -63,8 +52,6 @@ const Dashboard: React.FC<DashboardProps> = ({
         { delay: 0.05, stagger: 0.1 });
       }
     }, []);
-
-
 
   if (data && Array.isArray(data) && data.length > 0) {
     for (let i = 0; i < data.length; i++) {

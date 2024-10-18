@@ -10,6 +10,8 @@ export type Question = {
   title: string;
   id: string;
   type: string;
+  question: string;
+  options: string[];
   date: Date;
   accuracy: number;
   "set-size": number;

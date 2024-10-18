@@ -96,7 +96,7 @@ const Testimonials: React.FC = () => {
                     )}
                   </Avatar>
                   <p className="text-3xl font-semibold text-white mb-6 leading-tight">
-&quot;{testimonials[currentIndex].quote}&quot;
+                    &quot;{testimonials[currentIndex].quote}&quot;
                   </p>
                   <p className="text-lg text-white/90 mb-8 max-w-2xl">
                     {testimonials[currentIndex].description}

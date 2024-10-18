@@ -7,11 +7,18 @@ import {
   TooltipContent,
 } from "@/components/ui/tooltip";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
+import { twMerge } from "tailwind-merge";
+
+enum Tier {
+  Free = "Free",
+  Pro = "Pro",
+  Wizard = "Wizard",
+}
 
 interface Feature {
   name: string;
   description: string;
-  tiers: ("Free" | "Pro" | "Wizard")[];
+  tiers: Tier[];
 }
 
 const features: Feature[] = [
@@ -19,68 +26,68 @@ const features: Feature[] = [
     name: "Content Sets",
     description:
       "Number of MCQs, flashcards, and notes you can create per month",
-    tiers: ["Free", "Pro", "Wizard"],
+    tiers: [Tier.Free, Tier.Pro, Tier.Wizard],
   },
   {
     name: "AI Credits",
     description: "Credits for using AI-powered features",
-    tiers: ["Free", "Pro", "Wizard"],
+    tiers: [Tier.Free, Tier.Pro, Tier.Wizard],
   },
   {
     name: "Magic Notes",
     description: "AI-enhanced note-taking and studying tools",
-    tiers: ["Free", "Pro", "Wizard"],
+    tiers: [Tier.Free, Tier.Pro, Tier.Wizard],
   },
   {
     name: "Memory Vault",
     description: "Save and organize your study materials",
-    tiers: ["Free", "Pro", "Wizard"],
+    tiers: [Tier.Free, Tier.Pro, Tier.Wizard],
   },
   {
     name: "Tree of Knowledge",
     description: "Visualize connections between concepts",
-    tiers: ["Free", "Pro", "Wizard"],
+    tiers: [Tier.Free, Tier.Pro, Tier.Wizard],
   },
   {
     name: "Advanced AI Models",
     description: "Access to more sophisticated AI assistance",
-    tiers: ["Pro", "Wizard"],
+    tiers: [Tier.Pro, Tier.Wizard],
   },
   {
     name: "Customer Support",
     description: "Get help when you need it",
-    tiers: ["Free", "Pro", "Wizard"],
+    tiers: [Tier.Free, Tier.Pro, Tier.Wizard],
   },
   {
     name: "Content Export",
     description: "Save and export your study materials",
-    tiers: ["Pro", "Wizard"],
+    tiers: [Tier.Pro, Tier.Wizard],
   },
   {
     name: "Custom Integrations",
     description: "Connect Qwizz with your other learning tools",
-    tiers: ["Wizard"],
+    tiers: [Tier.Wizard],
   },
   {
     name: "Advanced Analytics",
     description: "Get detailed insights into your learning progress",
-    tiers: ["Wizard"],
+    tiers: [Tier.Wizard],
   },
 ];
 
 const tiers = [
   { name: "Free", price: 0, popular: false },
-  { name: "Pro", price: 9, popular: true },
-  { name: "Wizard", price: 19, popular: false },
+  { name: "Pro", price: 9, popular: false },
+  { name: "Wizard", price: 19, popular: true },
 ];
 
 const InnovativePricingSection: React.FC = () => {
-  const [selectedTier, setSelectedTier] = useState<string>("Pro");
+  const [selectedTier, setSelectedTier] = useState<string>("Free");
   const [isYearly, setIsYearly] = useState<boolean>(false);
 
   return (
     <TooltipProvider>
-      <section className="py-24 bg-gradient-to-br from-purple-50 to-indigo-100 dark:from-gray-900 dark:to-indigo-950">
+      <section className="py-24 bg-gradient-to-br from-purple to-indigo-500 dark:from-gray-900 dark:to-indigo-950">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl md:text-5xl font-bold text-center text-gray-900 dark:text-white mb-4">
             Choose Your Learning Adventure
@@ -91,7 +98,7 @@ const InnovativePricingSection: React.FC = () => {
           </p>
 
           <div className="flex justify-center mb-12">
-            <div className="bg-white dark:bg-gray-800 rounded-full p-1 flex items-center shadow-lg">
+            <div className="bg-white/20 border-[0.8px] border-white/30 dark:bg-gray-800 rounded-full p-1 flex items-center shadow-lg">
               <button
                 className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
                   !isYearly
@@ -120,8 +127,10 @@ const InnovativePricingSection: React.FC = () => {
             {tiers.map((tier) => (
               <motion.div
                 key={tier.name}
-                className={`bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden transition-all ${
-                  tier.popular ? "ring-2 ring-indigo-500" : ""
+                className={`bg-white/30 dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden transition-all ${
+                  tier.popular
+                    ? "ring-2 ring-indigo-500"
+                    : "border border-white/35"
                 }`}
                 whileHover={{ y: -5 }}
               >
@@ -131,7 +140,12 @@ const InnovativePricingSection: React.FC = () => {
                   </div>
                 )}
                 <div className="p-8">
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+                  <h3
+                    className={twMerge(
+                      "text-2xl font-bold text-gray-900 dark:text-white mb-4",
+                      !tier.popular ? "pt-8" : ""
+                    )}
+                  >
                     {tier.name}
                   </h3>
                   <div className="flex items-baseline mb-6">
@@ -146,10 +160,10 @@ const InnovativePricingSection: React.FC = () => {
                     </span>
                   </div>
                   <button
-                    className={`w-full py-3 rounded-lg font-semibold text-lg transition-all ${
+                    className={`w-full py-3 rounded-lg font-semibold text-lg transition-all border-[0.5px] border-white/60 ${
                       selectedTier === tier.name
                         ? "bg-indigo-500 text-white"
-                        : "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white hover:bg-indigo-100 dark:hover:bg-indigo-900"
+                        : "bg-gray-100/60 dark:bg-gray-700/60 text-gray-900 dark:text-white hover:bg-indigo-100/80 dark:hover:bg-indigo-900/80"
                     }`}
                     onClick={() => setSelectedTier(tier.name)}
                   >
@@ -162,7 +176,7 @@ const InnovativePricingSection: React.FC = () => {
             ))}
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
+          <div className="bg-white/60 border border-white/80 dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
             <div className="grid grid-cols-4 gap-4 p-8">
               <div className="col-span-1 font-medium text-gray-700 dark:text-gray-300">
                 Feature
@@ -191,7 +205,7 @@ const InnovativePricingSection: React.FC = () => {
                       key={tier.name}
                       className="flex justify-center items-center"
                     >
-                      {feature.tiers.includes(tier.name) ? (
+                      {feature.tiers.includes(tier.name as Tier) ? (
                         <Check className="w-6 h-6 text-green-500" />
                       ) : (
                         <X className="w-6 h-6 text-red-500" />
