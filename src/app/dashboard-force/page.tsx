@@ -112,7 +112,7 @@ const Dashboard = () => {
             x-chunk="dashboard-05-chunk-3"
             id="questions"
             ref={(el) => {
-            if (el) elementsRef.current[3] = el;
+              if (el) elementsRef.current[3] = el;
             }}
             >
               <CardHeader className="px-7">

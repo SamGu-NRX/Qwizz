@@ -30,7 +30,7 @@ export default function StatCharts({ weekData = [], lastWeekData = [] }: StatCha
 
   useEffect(() => {
     cardRefs.current.forEach((card, index) => {
-      fadeUp(card, card, { delay: index * 0.1 + 1, start: "top 100%" });
+      fadeUp(card, card, { delay: index * 0.1 + 1});
     });
   }, []);
 

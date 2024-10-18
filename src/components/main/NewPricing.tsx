@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Check, X, HelpCircle } from "lucide-react";
 import {
@@ -8,6 +8,8 @@ import {
 } from "@/components/ui/tooltip";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { twMerge } from "tailwind-merge";
+import { fadeUp } from "@/animations/gsap";
+import { useEditable } from "@chakra-ui/react";
 
 enum Tier {
   Free = "Free",
@@ -81,59 +83,103 @@ const tiers = [
   { name: "Wizard", price: 19, popular: true },
 ];
 
-const InnovativePricingSection: React.FC = () => {
+const PricingSection: React.FC = () => {
   const [selectedTier, setSelectedTier] = useState<string>("Free");
   const [isYearly, setIsYearly] = useState<boolean>(false);
+  const elementsRef = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    elementsRef.current.forEach((element, index) => {
+      fadeUp(element, element, { delay: index * 0.3 });
+    });
+  }, []);
+
 
   return (
     <TooltipProvider>
-      <section className="py-24 bg-gradient-to-br from-purple to-indigo-500 dark:from-gray-900 dark:to-indigo-950">
+      <section className="pt-24 pb-12 px-4 bg-gradient-to-br from-purple/55 to-indigo-500/55 dark:from-gray-900 dark:to-indigo-950">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl md:text-5xl font-bold text-center text-gray-900 dark:text-white mb-4">
-            Choose Your Learning Adventure
-          </h2>
-          <p className="text-xl text-center text-gray-600 dark:text-gray-300 mb-12 max-w-3xl mx-auto">
-            Unlock your full potential with our flexible pricing plans. Find the
-            perfect fit for your learning journey.
-          </p>
+          <motion.div
+            initial={{ opacity: 0.0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{
+              delay: 0.15,
+              duration: 0.5,
+              ease: "easeInOut",
+            }}
+          >
+            <h2 className="text-4xl md:text-5xl font-bold text-center text-gray-900 dark:text-white mb-4">
+              Choose Your Learning Adventure
+            </h2>
+            <p className="text-xl text-center text-gray-600 dark:text-gray-300 mb-12 max-w-3xl mx-auto">
+              Unlock your full potential with our flexible pricing plans. Find
+              the perfect fit for your learning journey.
+            </p>
+          </motion.div>
 
-          <div className="flex justify-center mb-12">
-            <div className="bg-white/20 border-[0.8px] border-white/30 dark:bg-gray-800 rounded-full p-1 flex items-center shadow-lg">
+          {/* Dynamic Slider */}
+          <div
+            className="flex justify-center mb-12"
+            ref={(el) => {
+              if (el) elementsRef.current[1] = el;
+            }}
+          >
+            <div className="relative py-5 pr-[10px] w-80 bg-white/20 border-[0.8px] border-white/35 dark:bg-gray-800 rounded-full shadow-lg flex items-center justify-between ">
+              <motion.div
+                className="absolute top-0 bottom-0 w-[44%] m-2 bg-indigo-500 rounded-full shadow-lg p-2"
+                layout
+                initial={false}
+                animate={{
+                  x: isYearly ? "91%" : "0%",
+                  width: isYearly ? "50%" : "44%",
+                }}
+                transition={{ type: "spring", stiffness: 200, damping: 20 }}
+                style={{
+                  width: isYearly
+                    ? "calc(100% / 2 - 0.5rem)"
+                    : "calc(100% / 2 - 0.5rem)",
+                }}
+              />
               <button
-                className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
-                  !isYearly
-                    ? "bg-indigo-500 text-white"
-                    : "text-gray-700 dark:text-gray-300"
+                className={`w-1/2 text-center z-10 text-md font-medium transition-all ${
+                  !isYearly ? "text-white" : "text-gray-700 dark:text-gray-300"
                 }`}
                 onClick={() => setIsYearly(false)}
               >
                 Monthly
               </button>
               <button
-                className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
-                  isYearly
-                    ? "bg-indigo-500 text-white"
-                    : "text-gray-700 dark:text-gray-300"
+                className={`w-1/2 text-center z-10 text-md font-medium transition-all ${
+                  isYearly ? "text-white" : "text-gray-700 dark:text-gray-300"
                 }`}
                 onClick={() => setIsYearly(true)}
               >
                 Yearly{" "}
-                <span className="text-xs font-normal ml-1">(Save 20%)</span>
+                <span className="text-sm font-normal ml-1">(Save 20%)</span>
               </button>
             </div>
           </div>
 
+          {/* Pricing Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-            {tiers.map((tier) => (
-              <motion.div
-                key={tier.name}
-                className={`bg-white/30 dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden transition-all ${
-                  tier.popular
-                    ? "ring-2 ring-indigo-500"
-                    : "border border-white/35"
-                }`}
-                whileHover={{ y: -5 }}
-              >
+            {tiers.map((tier, index) => (
+              <div
+                key={index}
+                ref={(el) => {
+                  if (el) elementsRef.current[index+2] = el;
+                }}
+                className={twMerge(
+                  "grid p-0 m-0" // Ensure no extra padding/margin from the wrapper
+                )}>
+                <motion.div
+                  key={tier.name}
+                  className={`bg-white/30 dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden transition-all ${
+                    tier.popular
+                      ? "ring-2 ring-indigo-500"
+                      : "border border-white/35"
+                  }`}
+                  whileHover={{ y: -5 }}
+                >
                 {tier.popular && (
                   <div className="bg-indigo-500 text-white text-center py-2 text-sm font-medium">
                     Most Popular
@@ -173,13 +219,19 @@ const InnovativePricingSection: React.FC = () => {
                   </button>
                 </div>
               </motion.div>
+              </div>
             ))}
           </div>
 
-          <div className="bg-white/60 border border-white/80 dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
+          <div
+            className="bg-white/60 border border-white/80 dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden"
+            ref={(el) => {
+              if (el) elementsRef.current[5] = el;
+            }}
+          >
             <div className="grid grid-cols-4 gap-4 p-8">
-              <div className="col-span-1 font-medium text-gray-700 dark:text-gray-300">
-                Feature
+              <div className="col-span-1 font-bold text-lg text-gray-700 dark:text-gray-300">
+                Features
               </div>
               {tiers.map((tier) => (
                 <div
@@ -215,15 +267,20 @@ const InnovativePricingSection: React.FC = () => {
                 </React.Fragment>
               ))}
             </div>
-          </div>
 
-          <div className="mt-16 text-center">
-            <p className="text-gray-600 dark:text-gray-400 mb-4">
-              Still not sure? Try our 14-day free trial on any plan.
-            </p>
-            <button className="bg-indigo-500 text-white px-8 py-3 rounded-lg font-semibold text-lg hover:bg-indigo-600 transition-all">
-              Start Free Trial
-            </button>
+            <div className="my-6 mt-4 py-8 px-6 text-center bg-white/10 border border-white/50 dark:bg-gray-800 rounded-xl shadow-md max-w-2xl mx-auto">
+              <motion.div
+                className="inline-block bg-indigo-500 text-white px-8 py-4 rounded-full font-semibold text-lg cursor-pointer shadow-lg hover:bg-indigo-600 transition-all"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => alert("Free Trial Started!")}
+              >
+                Start Free Trial
+              </motion.div>
+              <p className="text-gray-600 dark:text-gray-400 mt-6">
+                Still not sure? Try our 14-day free trial on any plan.
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -231,4 +288,4 @@ const InnovativePricingSection: React.FC = () => {
   );
 };
 
-export default InnovativePricingSection;
+export default PricingSection;

@@ -15,7 +15,7 @@ export const fadeUp = (
   trigger: gsap.DOMTarget,
   options?: FadeUpOptions
 ) => {
-  const { start = "top 90%", ease = "power3.out", ...rest } = options || {};
+  const { start = "top 92%", ease = "power3.out", ...rest } = options || {};
 
   gsap.fromTo(
     targets,

@@ -16,7 +16,7 @@ import Testimonials from '@/components/main/Testimonials';
 import FeatureCardsDeck from '@/components/main/Features';
 import HomeGrid from "@/components/main/HomeCards";
 import DemoGrid from '@/components/main/DemoGrid';
-import InnovativePricingSection from '@/components/main/NewPricing';
+import PricingSection from '@/components/main/NewPricing';
 
 const HomePage = () => {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -38,8 +38,8 @@ const HomePage = () => {
       <HomeGrid />
       {/* <FeatureCardsDeck /> */}
       <Testimonials />
-      <Pricing />
-      <InnovativePricingSection/>
+      {/* <Pricing /> */}
+      <PricingSection/>
       <Footer />
     </div>
   );

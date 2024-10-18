@@ -11,10 +11,10 @@ const Home = () => {
 
   useEffect(() => {
     if (dashboardRef.current) {
-      fadeUp(elementsRef.current.filter(el => el !== null) as HTMLElement[], dashboardRef.current, { delay: 0.05, start: 'top 80%', ease: 'power3.inOut', stagger: 0.1 });
+      fadeUp(elementsRef.current.filter(el => el !== null) as HTMLElement[], dashboardRef.current, { delay: 0.05, ease: 'power3.inOut', stagger: 0.1 });
     }
   }, []);
-  
+
   return (
     <div className="flex w-full flex-col bg-muted/40">
       <Sidebar />

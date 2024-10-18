@@ -45,7 +45,7 @@ const Testimonials: React.FC = () => {
   }, []);
 
   return (
-    <div className="w-full py-24 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 relative">
+    <div className="w-full py-24 bg-gradient-to-br from-indigo-600/75 via-purple-600/75 to-pink-500/75 relative">
       <div className="absolute inset-0 bg-white/10 backdrop-blur-[120px] z-0"></div>
       <div className="container mx-auto px-4 relative z-10">
 
