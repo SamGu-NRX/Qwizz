@@ -13,8 +13,12 @@ export async function POST(req: NextRequest) {
   try {
     const flashcard = await db.flashcard.update({
       where: { id },
-      data: { isSaved },
+      data:{
+        isSaved: true,
+        
+      }
     });
+
 
     return NextResponse.json({ success: true, flashcard });
   } catch (error) {

@@ -129,7 +129,7 @@ const PricingSection: React.FC = () => {
                 layout
                 initial={false}
                 animate={{
-                  x: isYearly ? "91%" : "0%",
+                  x: isYearly ? "90%" : "0%",
                   width: isYearly ? "50%" : "44%",
                 }}
                 transition={{ type: "spring", stiffness: 200, damping: 20 }}
