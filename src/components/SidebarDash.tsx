@@ -1,4 +1,10 @@
 "use client";
+import React, { useState, useEffect, useRef } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import {
   Tooltip,
   TooltipContent,
@@ -17,16 +23,20 @@ import {
   BookOpenCheck,
   Menu,
 } from "lucide-react";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { usePathname } from "next/navigation";
-import { useEffect, useRef } from "react";
 import { fadeUp } from "@/animations/gsap";
 import logoPic from "../assets/StudyBuddyLogo.png";
 import Image from "next/image";
 
-export default function Sidebar() {
+// Import the Sidebar components from Aceternity UI
+import { Sidebar, SidebarBody, SidebarLink } from "./ui/sidebar";
+
+interface SidebarDemoProps {
+  children: React.ReactNode;
+}
+
+export default function SidebarDemo({ children }: SidebarDemoProps) {
   const pathName = usePathname();
+  const [open, setOpen] = useState(true); // Sidebar open state
   const iconRefs = useRef<HTMLAnchorElement[] | null>(null);
 
   useEffect(() => {
@@ -46,205 +56,112 @@ export default function Sidebar() {
   const mutedLinkStyle =
     "flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground";
 
+  const links = [
+    {
+      label: "Dashboard",
+      href: "/dashboard-force",
+      icon: <Home className="h-5 w-5" />,
+    },
+    {
+      label: "Learn with Flashcards",
+      href: "/dashboard-force/flashcards",
+      icon: <BookPlus className="h-5 w-5" />,
+    },
+    {
+      label: "Review Flashcards",
+      href: "/dashboard-force/review",
+      icon: <BookOpenCheck className="h-5 w-5" />,
+    },
+    {
+      label: "Settings",
+      href: "/dashboard-force/settings",
+      icon: <Settings className="h-5 w-5" />,
+    },
+  ];
+
   return (
-    <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
-      <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
-        <Sheet>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <SheetTrigger asChild>
-                  <Button variant="outline" size="icon">
-                    <Menu className="h-6 w-6" />
-                  </Button>
-                </SheetTrigger>
-              </TooltipTrigger>
-              <TooltipContent side="right">Menu</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          <SheetContent side="left" className="sm:max-w-xs">
-            <nav className="grid gap-6 text-lg font-medium">
-              <Link
-                href="/"
-                className={accentLinkStyle}
-                // ref={(el) => { if (el) iconRefs.current![0] = el; }}
-              >
-                <Image src={logoPic} width={40} height={40} alt="logo" />
-                StudyBuddy
-              </Link>
+    <div
+      className={cn(
+        "flex h-screen overflow-hidden bg-gray-100 dark:bg-neutral-800"
+      )}
+    >
+      {/* Sidebar using Aceternity UI components */}
+      <Sidebar open={open} setOpen={setOpen}>
+        <SidebarBody className="justify-between gap-10">
+          <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
+            {/* Logo */}
+            {open ? <Logo /> : <LogoIcon />}
+            {/* Navigation Links */}
+            <div className="mt-8 flex flex-col gap-2">
+              {links.map((link, idx) => (
+                <SidebarLink
+                  key={idx}
+                  link={{
+                    label: link.label,
+                    href: link.href,
+                    icon: link.icon,
+                  }}
+                  active={
+                    pathName === link.href || pathName.startsWith(link.href)
+                  }
+                />
+              ))}
+            </div>
+          </div>
+          {/* User Profile */}
+          <div>
+            <SidebarLink
+              link={{
+                label: "Your Name",
+                href: "#",
+                icon: (
+                  <Image
+                    src="/path/to/your/avatar.png" // Update with your avatar path
+                    className="h-7 w-7 flex-shrink-0 rounded-full"
+                    width={28}
+                    height={28}
+                    alt="Avatar"
+                  />
+                ),
+              }}
+            />
+          </div>
+        </SidebarBody>
+      </Sidebar>
 
-              <Link
-                href="/dashboard-force"
-                className={
-                  pathName == "/dashboard-force"
-                    ? accentLinkStyle
-                    : mutedLinkStyle
-                }
-              >
-                <Home className="h-5 w-5" />
-                Dashboard
-              </Link>
-
-              <Link
-                href="/dashboard-force/flashcards"
-                className={
-                  pathName.startsWith("/dashboard-force/flashcards")
-                    ? accentLinkStyle
-                    : mutedLinkStyle
-                }
-              >
-                <BookPlus className="h-5 w-5" />
-                Learn with Flashcards
-              </Link>
-
-              <Link
-                href="/dashboard-force/review"
-                className={
-                  pathName.startsWith("/dashboard-force/review")
-                    ? accentLinkStyle
-                    : mutedLinkStyle
-                }
-              >
-                <BookOpenCheck className="h-5 w-5" />
-                Review Flashcards
-              </Link>
-
-              {/* <Link
-                  href="/dashboard-force/stats"
-                  className= {pathName.startsWith("/dashboard-force/stats") ? accentLinkStyle : mutedLinkStyle}
-                >
-                  <LineChart className="h-5 w-5" />
-                  Stats
-                </Link> */}
-
-              {/* <Link
-                  href="/dashboard-force/upgrade"
-                  className= {pathName.startsWith("/dashboard-force/upgrade") ? accentLinkStyle : mutedLinkStyle}
-                >
-                  <ShoppingCart className="h-5 w-5" />
-                  Upgrade
-                </Link> */}
-
-              <Link
-                href="/dashboard-force/settings"
-                className={
-                  pathName.startsWith("/dashboard-force/settings")
-                    ? accentLinkStyle
-                    : mutedLinkStyle
-                }
-              >
-                <Settings className="h-5 w-5" />
-                Settings
-              </Link>
-            </nav>
-          </SheetContent>
-        </Sheet>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild id="dashboard">
-              <Link
-                href="/dashboard-force"
-                className={
-                  pathName == "/dashboard-force"
-                    ? accentIconStyle
-                    : mutedIconStyle
-                }
-              >
-                <Home className="h-5 w-5" />
-                <span className="sr-only">Dashboard</span>
-              </Link>
-            </TooltipTrigger>
-            <TooltipContent side="right">Dashboard</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild id="review">
-              <Link
-                href="/dashboard-force/review"
-                className={
-                  pathName.startsWith("/dashboard-force/review")
-                    ? accentIconStyle
-                    : mutedIconStyle
-                }
-              >
-                <BookOpenCheck className="h-5 w-5" />
-                <span className="sr-only">Review Flashcards</span>
-              </Link>
-            </TooltipTrigger>
-            <TooltipContent side="right">Review Flashcards</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-
-        {/* <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild id="stats">
-              <Link
-                href="/dashboard-force/stats"
-                className={pathName.startsWith("/dashboard-force/stats") ? accentIconStyle : mutedIconStyle}
-              >
-                <LineChart className="h-5 w-5" />
-                <span className="sr-only">Stats</span>
-              </Link>
-            </TooltipTrigger>
-            <TooltipContent side="right">Stats</TooltipContent>
-          </Tooltip>
-          </TooltipProvider> */}
-
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild id="flashcards">
-              <Link
-                href="/dashboard-force/flashcards"
-                className={
-                  pathName.startsWith("/dashboard-force/flashcards")
-                    ? accentIconStyle
-                    : mutedIconStyle
-                }
-              >
-                <BookPlus className="h-5 w-5" />
-                <span className="sr-only">Learn with Flashcards</span>
-              </Link>
-            </TooltipTrigger>
-            <TooltipContent side="right">Learn with Flashcards</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-
-        {/* <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild id="upgrade">
-              <Link
-                href="/dashboard-force/upgrade"
-                className={pathName.startsWith("/dashboard-force/upgrade") ? accentIconStyle : mutedIconStyle}
-              >
-                <ShoppingCart className="h-5 w-5" />
-                <span className="sr-only">Upgrade</span>
-              </Link>
-            </TooltipTrigger>
-            <TooltipContent side="right">Upgrade</TooltipContent>
-          </Tooltip>
-          </TooltipProvider> */}
-
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild id="settings">
-              <Link
-                href="/dashboard-force/settings"
-                className={
-                  pathName.startsWith("/dashboard-force/settings")
-                    ? accentIconStyle
-                    : mutedIconStyle
-                }
-              >
-                <Settings className="h-5 w-5" />
-                <span className="sr-only">Settings</span>
-              </Link>
-            </TooltipTrigger>
-            <TooltipContent side="right">Settings</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      </nav>
-    </aside>
+      {/* Main Content */}
+      <div className="flex flex-col flex-1 overflow-hidden">
+        {/* Header */}
+        <div className="flex items-center justify-between h-16 px-4 bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-700">
+          <Button variant="ghost" size="icon" onClick={() => setOpen(!open)}>
+            <Menu className="h-6 w-6" />
+          </Button>
+          {/* Add any header content here */}
+        </div>
+        {/* Content */}
+        <main className="flex-1 relative overflow-y-auto focus:outline-none">
+          {children}
+        </main>
+      </div>
+    </div>
   );
 }
+
+export const Logo = () => (
+  <Link href="/" className="flex items-center px-4">
+    <Image src={logoPic} width={40} height={40} alt="logo" />
+    <motion.span
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="ml-3 text-xl font-semibold text-black dark:text-white"
+    >
+      StudyBuddy
+    </motion.span>
+  </Link>
+);
+
+export const LogoIcon = () => (
+  <Link href="/" className="flex items-center px-4">
+    <Image src={logoPic} width={40} height={40} alt="logo" />
+  </Link>
+);

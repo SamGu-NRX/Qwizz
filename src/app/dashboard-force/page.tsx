@@ -73,93 +73,127 @@ const Dashboard = () => {
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <ClientOverlay />
-      <Sidebar />
-      <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
+      <div className="flex flex-col sm:gap-4 sm:py-4">
         <Header />
-        <main
-          className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3"
-          ref={dashboardRef}
-        >
-          <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
-            <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
+        <Sidebar>
+          <main
+            className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3"
+            ref={dashboardRef}
+          >
+            <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
+              <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
+                <Card
+                  className="sm:col-span-2"
+                  x-chunk="dashboard-05-chunk-0"
+                  ref={(el) => {
+                    if (el) elementsRef.current[1] = el;
+                  }}
+                >
+                  <CardHeader className="pb-3">
+                    <CardTitle>Hello, Sam!</CardTitle>
+                    <CardDescription className="max-w-lg text-balance leading-relaxed">
+                      Welcome back to StudyBuddy, your intelligent study
+                      companion! Start improving your learning with AI today!
+                    </CardDescription>
+                  </CardHeader>
+                  <CardFooter>
+                    <Button id="start-studying" onClick={redirectGenerate}>
+                      Start Studying
+                    </Button>
+                  </CardFooter>
+                </Card>
+                <ProgressBars
+                  percent1={getAccuracy(weekData)}
+                  percent2={getAccuracy(monthData)}
+                  ref={(
+                    el:
+                      | HTMLHeadingElement
+                      | HTMLParagraphElement
+                      | HTMLButtonElement
+                  ) => {
+                    if (el) elementsRef.current[2] = el;
+                  }}
+                />
+              </div>
               <Card
-                className="sm:col-span-2"
-                x-chunk="dashboard-05-chunk-0"
+                x-chunk="dashboard-05-chunk-3"
+                id="questions"
                 ref={(el) => {
-                  if (el) elementsRef.current[1] = el;
+                  if (el) elementsRef.current[3] = el;
                 }}
               >
-                <CardHeader className="pb-3">
-                  <CardTitle>Hello, Sam!</CardTitle>
-                  <CardDescription className="max-w-lg text-balance leading-relaxed">
-                    Welcome back to StudyBuddy, your intelligent study companion! Start improving your learning with AI today!
+                <CardHeader className="px-7">
+                  <CardTitle>Questions</CardTitle>
+                  <CardDescription>
+                    Recent questions you answered this week.
                   </CardDescription>
                 </CardHeader>
-                <CardFooter>
-                  <Button id="start-studying" onClick={redirectGenerate}>
-                    Start Studying</Button>
-                </CardFooter>
+                <CardContent>
+                  {Array.isArray(data) && data.length > 0 ? (
+                    <QuestionTable />
+                  ) : (
+                    <div>
+                      You haven&apos;t answered any questions today! Go
+                      practice!
+                    </div>
+                  )}
+                </CardContent>
               </Card>
-              <ProgressBars
-                percent1={getAccuracy(weekData)}
-                percent2={getAccuracy(monthData)}
-                ref={(el: HTMLHeadingElement | HTMLParagraphElement | HTMLButtonElement) => {
-                  if (el) elementsRef.current[2] = el;
-                }}
-              />
             </div>
-            <Card
-            x-chunk="dashboard-05-chunk-3"
-            id="questions"
-            ref={(el) => {
-              if (el) elementsRef.current[3] = el;
-            }}
-            >
-              <CardHeader className="px-7">
-                <CardTitle>Questions</CardTitle>
-                  <CardDescription>Recent questions you answered this week.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                {Array.isArray(data) && data.length > 0 ? (
-                <QuestionTable />
-                ) : (
-                <div>You haven&apos;t answered any questions today! Go practice!</div>
-                )}
-              </CardContent>
-            </Card>
-          </div>
-          <div>
-            <Card className="overflow-hidden" x-chunk="dashboard-05-chunk-4" id="your-performance">
-              <CardHeader className="flex flex-row items-start bg-muted/50" ref={(el) => { if (el) elementsRef.current[4] = el; }}>
-                <div className="grid gap-0.5">
-                  <CardTitle className="group flex items-center gap-2 text-lg">
-                    Weekly Performance
-                  </CardTitle>
-                  <CardDescription>See how you performed across flashcard sets from the past week.</CardDescription>
-                </div>
-                <div className="ml-auto flex items-center gap-1">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button size="icon" variant="outline" className="h-8 w-8">
-                        <MoreVertical className="h-3.5 w-3.5" />
-                        <span className="sr-only">More</span>
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem>Edit</DropdownMenuItem>
-                      <DropdownMenuItem>Export</DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem>Trash</DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-              </CardHeader>
-              <CardContent className="p-6 text-sm" ref={(el) => { if (el) elementsRef.current[5] = el; }}>
-                <StatCharts weekData={weekData} lastWeekData={lastWeekData} />
-              </CardContent>
-            </Card>
-          </div>
-        </main>
+            <div>
+              <Card
+                className="overflow-hidden"
+                x-chunk="dashboard-05-chunk-4"
+                id="your-performance"
+              >
+                <CardHeader
+                  className="flex flex-row items-start bg-muted/50"
+                  ref={(el) => {
+                    if (el) elementsRef.current[4] = el;
+                  }}
+                >
+                  <div className="grid gap-0.5">
+                    <CardTitle className="group flex items-center gap-2 text-lg">
+                      Weekly Performance
+                    </CardTitle>
+                    <CardDescription>
+                      See how you performed across flashcard sets from the past
+                      week.
+                    </CardDescription>
+                  </div>
+                  <div className="ml-auto flex items-center gap-1">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          size="icon"
+                          variant="outline"
+                          className="h-8 w-8"
+                        >
+                          <MoreVertical className="h-3.5 w-3.5" />
+                          <span className="sr-only">More</span>
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem>Edit</DropdownMenuItem>
+                        <DropdownMenuItem>Export</DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem>Trash</DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                </CardHeader>
+                <CardContent
+                  className="p-6 text-sm"
+                  ref={(el) => {
+                    if (el) elementsRef.current[5] = el;
+                  }}
+                >
+                  <StatCharts weekData={weekData} lastWeekData={lastWeekData} />
+                </CardContent>
+              </Card>
+            </div>
+          </main>
+        </Sidebar>
       </div>
     </div>
   );
