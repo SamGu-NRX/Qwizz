@@ -29,6 +29,7 @@ import Image from "next/image";
 
 // Import the Sidebar components from Aceternity UI
 import { Sidebar, SidebarBody, SidebarLink } from "./ui/sidebar";
+import HeaderDash from "./HeaderDash";
 
 interface SidebarDemoProps {
   children: React.ReactNode;
@@ -82,7 +83,8 @@ export default function SidebarDemo({ children }: SidebarDemoProps) {
   return (
     <div
       className={cn(
-        "flex h-screen overflow-hidden bg-gray-100 dark:bg-neutral-800"
+        "flex rounded-md flex-col md:flex-row dark:bg-neutral-800 w-full flex-1 mx-auto border border-neutral-200 dark:border-neutral-700 overflow-hidden",
+        "h-screen"
       )}
     >
       {/* Sidebar using Aceternity UI components */}
@@ -132,15 +134,17 @@ export default function SidebarDemo({ children }: SidebarDemoProps) {
       {/* Main Content */}
       <div className="flex flex-col flex-1 overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between h-16 px-4 bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-700">
+        <div className="py-5 flex h-16 px-4">
           <Button variant="ghost" size="icon" onClick={() => setOpen(!open)}>
             <Menu className="h-6 w-6" />
           </Button>
-          {/* Add any header content here */}
+          <HeaderDash />
         </div>
         {/* Content */}
         <main className="flex-1 relative overflow-y-auto focus:outline-none">
-          {children}
+          <div className="p-2 md:p-10 rounded-tl-2xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 flex flex-col gap-2 flex-1 w-full h-full">
+            {children}
+          </div>
         </main>
       </div>
     </div>

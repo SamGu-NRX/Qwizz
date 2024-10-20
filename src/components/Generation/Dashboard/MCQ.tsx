@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Loader, Clock } from "lucide-react";
 import { gsap } from "gsap";
-import confetti from 'canvas-confetti';
+import confetti from "canvas-confetti";
 import { generate_mcq } from "@/actions/get-AI";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,6 +11,7 @@ import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import questions from "./mcq.json";
 
 interface MCQQuestion {
   id: number;
@@ -32,22 +33,22 @@ const MCQGenerator = () => {
 
   const questionRef = useRef(null);
 
-  const handleGenerateMCQ = async () => {
-    setIsLoading(true);
-    try {
-      const newMCQQuestions = await generate_mcq(context);
-      setMCQQuestions(newMCQQuestions);
-      setCurrentIndex(0);
-      setScore(0);
-      localStorage.setItem("mcqQuestions", JSON.stringify(newMCQQuestions));
-      localStorage.setItem("currentIndex", "0");
-      setIsTimerRunning(true);
-    } catch (error) {
-      console.error("Error generating MCQ questions:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  // const handleGenerateMCQ = async () => {
+  //   setIsLoading(true);
+  //   try {
+  //     const newMCQQuestions = await generate_mcq(context);
+  //     setMCQQuestions(newMCQQuestions);
+  //     setCurrentIndex(0);
+  //     setScore(0);
+  //     localStorage.setItem("mcqQuestions", JSON.stringify(newMCQQuestions));
+  //     localStorage.setItem("currentIndex", "0");
+  //     setIsTimerRunning(true);
+  //   } catch (error) {
+  //     console.error("Error generating MCQ questions:", error);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   const handleSubmit = useCallback(() => {
     setIsTimerRunning(false);
@@ -56,29 +57,34 @@ const MCQGenerator = () => {
       setScore(score + 1);
     }
   }, [selectedAnswer, currentIndex, mcqQuestions, score]);
-  
-  useEffect(() => {
-    const savedMCQQuestions = localStorage.getItem("mcqQuestions");
-    const savedIndex = localStorage.getItem("currentIndex");
-    if (savedMCQQuestions) {
-      try {
-        setMCQQuestions(JSON.parse(savedMCQQuestions));
-      } catch (error) {
-        console.error("Error parsing MCQ questions from localStorage:", error);
-        localStorage.removeItem("mcqQuestions");
-      }
-    }
-    if (savedIndex) {
-      setCurrentIndex(parseInt(savedIndex, 10));
-    }
-  }, []);
+
+  // useEffect(() => {
+  //   const savedMCQQuestions = localStorage.getItem("mcqQuestions");
+  //   const savedIndex = localStorage.getItem("currentIndex");
+  //   if (savedMCQQuestions) {
+  //     try {
+  //       setMCQQuestions(JSON.parse(savedMCQQuestions));
+  //     } catch (error) {
+  //       console.error("Error parsing MCQ questions from localStorage:", error);
+  //       localStorage.removeItem("mcqQuestions");
+  //     }
+  //   }
+  //   if (savedIndex) {
+  //     setCurrentIndex(parseInt(savedIndex, 10));
+  //   }
+  // }, []);
+
+  // useEffect(() => {
+  //   if (mcqQuestions) {
+  //     localStorage.setItem("mcqQuestions", JSON.stringify(mcqQuestions));
+  //     localStorage.setItem("currentIndex", currentIndex.toString());
+  //   }
+  // }, [mcqQuestions, currentIndex]);
 
   useEffect(() => {
-    if (mcqQuestions) {
-      localStorage.setItem("mcqQuestions", JSON.stringify(mcqQuestions));
-      localStorage.setItem("currentIndex", currentIndex.toString());
-    }
-  }, [mcqQuestions, currentIndex]);
+    // Set the initial questions from the JSON file
+    setMCQQuestions(questions);
+  }, []);
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -115,7 +121,7 @@ const MCQGenerator = () => {
       confetti({
         particleCount: 100,
         spread: 70,
-        origin: { y: 0.6 }
+        origin: { y: 0.6 },
       });
     }
   };
@@ -142,9 +148,10 @@ const MCQGenerator = () => {
     }
   };
 
-  
-
-  const progress = mcqQuestions && mcqQuestions.length > 0 ? ((currentIndex + 1) / mcqQuestions.length) * 100 : 0;
+  const progress =
+    mcqQuestions && mcqQuestions.length > 0
+      ? ((currentIndex + 1) / mcqQuestions.length) * 100
+      : 0;
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4">
@@ -188,10 +195,18 @@ const MCQGenerator = () => {
           >
             <Card className="w-full mb-4">
               <CardContent className="p-6">
-                <h2 className="text-xl font-semibold mb-4">{mcqQuestions[currentIndex].question}</h2>
-                <RadioGroup value={selectedAnswer} onValueChange={setSelectedAnswer}>
+                <h2 className="text-xl font-semibold mb-4">
+                  {mcqQuestions[currentIndex].question}
+                </h2>
+                <RadioGroup
+                  value={selectedAnswer}
+                  onValueChange={setSelectedAnswer}
+                >
                   {mcqQuestions[currentIndex].options.map((option, index) => (
-                    <div key={index} className="flex items-center space-x-2 mb-2">
+                    <div
+                      key={index}
+                      className="flex items-center space-x-2 mb-2"
+                    >
                       <RadioGroupItem value={option} id={`option-${index}`} />
                       <Label htmlFor={`option-${index}`}>{option}</Label>
                     </div>
@@ -201,7 +216,10 @@ const MCQGenerator = () => {
             </Card>
 
             <div className="flex justify-between items-center mb-4">
-              <Button onClick={handleSubmit} disabled={!selectedAnswer || showFeedback}>
+              <Button
+                onClick={handleSubmit}
+                disabled={!selectedAnswer || showFeedback}
+              >
                 Submit Answer
               </Button>
               <div className="flex items-center">
@@ -211,9 +229,17 @@ const MCQGenerator = () => {
             </div>
 
             {showFeedback && (
-              <Alert variant={selectedAnswer === mcqQuestions[currentIndex].correctAnswer ? "default" : "destructive"}>
+              <Alert
+                variant={
+                  selectedAnswer === mcqQuestions[currentIndex].correctAnswer
+                    ? "default"
+                    : "destructive"
+                }
+              >
                 <AlertTitle>
-                  {selectedAnswer === mcqQuestions[currentIndex].correctAnswer ? "Correct!" : "Incorrect"}
+                  {selectedAnswer === mcqQuestions[currentIndex].correctAnswer
+                    ? "Correct!"
+                    : "Incorrect"}
                 </AlertTitle>
                 <AlertDescription>
                   {selectedAnswer === mcqQuestions[currentIndex].correctAnswer
@@ -238,7 +264,8 @@ const MCQGenerator = () => {
         </motion.button>
 
         <div className="text-lg">
-          {mcqQuestions && mcqQuestions.length > 0 ? currentIndex + 1 : 0} / {mcqQuestions ? mcqQuestions.length : 0}
+          {mcqQuestions && mcqQuestions.length > 0 ? currentIndex + 1 : 0} /{" "}
+          {mcqQuestions ? mcqQuestions.length : 0}
         </div>
 
         <motion.button

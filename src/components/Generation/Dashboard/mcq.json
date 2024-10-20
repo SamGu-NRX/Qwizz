@@ -1,0 +1,67 @@
+[
+  {
+    "id": 1,
+    "question": "What is the capital of France?",
+    "options": ["Berlin", "Madrid", "Paris", "Rome"],
+    "correctAnswer": "Paris"
+  },
+  {
+    "id": 2,
+    "question": "Which planet is known as the Red Planet?",
+    "options": ["Earth", "Mars", "Jupiter", "Saturn"],
+    "correctAnswer": "Mars"
+  },
+  {
+    "id": 3,
+    "question": "Who wrote 'Hamlet'?",
+    "options": [
+      "Charles Dickens",
+      "Leo Tolstoy",
+      "William Shakespeare",
+      "Mark Twain"
+    ],
+    "correctAnswer": "William Shakespeare"
+  },
+  {
+    "id": 4,
+    "question": "What is the chemical symbol for water?",
+    "options": ["HO", "O2", "H2O", "CO2"],
+    "correctAnswer": "H2O"
+  },
+  {
+    "id": 5,
+    "question": "Which gas do plants primarily absorb from the atmosphere?",
+    "options": ["Oxygen", "Carbon Dioxide", "Nitrogen", "Hydrogen"],
+    "correctAnswer": "Carbon Dioxide"
+  },
+  {
+    "id": 6,
+    "question": "What is the largest mammal on Earth?",
+    "options": ["Elephant", "Blue Whale", "Giraffe", "Great White Shark"],
+    "correctAnswer": "Blue Whale"
+  },
+  {
+    "id": 7,
+    "question": "Which element is represented by the symbol 'Fe'?",
+    "options": ["Lead", "Iron", "Silver", "Gold"],
+    "correctAnswer": "Iron"
+  },
+  {
+    "id": 8,
+    "question": "In which year did the Titanic sink?",
+    "options": ["1912", "1922", "1932", "1942"],
+    "correctAnswer": "1912"
+  },
+  {
+    "id": 9,
+    "question": "What is the capital of Japan?",
+    "options": ["Beijing", "Seoul", "Bangkok", "Tokyo"],
+    "correctAnswer": "Tokyo"
+  },
+  {
+    "id": 10,
+    "question": "Which language is primarily spoken in Brazil?",
+    "options": ["Spanish", "Portuguese", "French", "English"],
+    "correctAnswer": "Portuguese"
+  }
+]
