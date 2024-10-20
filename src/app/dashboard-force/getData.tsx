@@ -1,41 +1,40 @@
-"use server";
-
 import dataJson from "@/app/dashboard.json";
-import { Question, columns } from "./columns";
+import { QuestionSet, columns } from "./columns";
 import { DataTable } from "./data-table";
 
-export async function getData(): Promise<Question[]> {
+export async function getData(): Promise<QuestionSet[]> {
   console.log("Fetching data...");
-  let dataTableInfo: Question[] = [];
+  let dataTableInfo: QuestionSet[] = [];
 
-  for (let i = 0; i < dataJson["flashcard-sets"].length; i++) {
+  for (let i = 0; i < dataJson["MCQ-sets"].length; i++) {
     var correct = 0;
-    const flashcardContent = dataJson["flashcard-sets"][i];
+    const MCQSetContent = dataJson["MCQ-sets"][i];
 
-    for (let index = 0; index < flashcardContent.cards.length; index++) {
+    for (let index = 0; index < MCQSetContent.MCQs.length; index++) {
       if (
-        flashcardContent.cards[index].correct ===
-        flashcardContent.cards[index].chosen
+        MCQSetContent.MCQs[index].correct === MCQSetContent.MCQs[index].chosen
       )
         correct++;
     }
 
-    let flashcardJson: Question = {
-      title: flashcardContent.title,
-      id: flashcardContent.ID,
-      type: flashcardContent.subject,
+    let MCQSetJson: QuestionSet = {
+      title: MCQSetContent.metadata.title,
+      id: MCQSetContent.metadata.ID,
+      type: MCQSetContent.metadata.subject,
       date: new Date(
-        flashcardContent.date.year,
-        flashcardContent.date.month - 1,
-        flashcardContent.date.day
+        MCQSetContent.metadata.date.year,
+        MCQSetContent.metadata.date.month - 1,
+        MCQSetContent.metadata.date.day
       ),
       accuracy: correct,
-      question: flashcardContent.cards[0]?.question || "", // Get the first question, adjust if needed
-      options: Object.values(flashcardContent.cards[0]?.choices || {}), // Get the choices as an array
-      "set-size": flashcardContent.cards.length,
+      question: MCQSetContent.MCQs[i]?.question || "", // Get the first question, adjust if needed
+      options: Object.values(MCQSetContent.MCQs[i]?.choices || {}), // Get the choices as an array
+      "set-size": MCQSetContent.MCQs.length
     };
 
-    dataTableInfo.push(flashcardJson);
+    console.log("MCQSetJson:", MCQSetJson);
+
+    dataTableInfo.push(MCQSetJson);
   }
 
   console.log("Data fetched:", dataTableInfo);
@@ -43,15 +42,15 @@ export async function getData(): Promise<Question[]> {
   return dataTableInfo;
 }
 
-export async function fetchTable() {
-  const data = await getData();
-  console.log("Fetched Data:", data);
-  return <DataTable columns={columns} data={data} />;
-}
+// export async function fetchTable() {
+//   const data = await getData();
+//   console.log("Fetched Data:", data);
+//   return <DataTable columns={columns} data={data} />;
+// }
 
-export const data = await getData();
+export const data = getData();
 export const todayDate = new Date(Date.now());
-export const weekData: Question[] = [];
-export const lastWeekData: Question[] = [];
-export const monthData: Question[] = [];
-export const yearData: Question[] = [];
+export const weekData: QuestionSet[] = [];
+export const lastWeekData: QuestionSet[] = [];
+export const monthData: QuestionSet[] = [];
+export const yearData: QuestionSet[] = [];

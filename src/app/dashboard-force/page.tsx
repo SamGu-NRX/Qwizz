@@ -17,12 +17,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Question, columns } from "./columns";
+import { QuestionSet, columns } from "./columns";
 import { DataTable } from "./data-table";
 import Header from "@/components/HeaderDash";
 import {
   data,
-  fetchTable as QuestionTable,
   todayDate,
   weekData,
   lastWeekData,
@@ -41,18 +40,17 @@ import StatCharts from "@/components/StatGraphs";
 import { fadeUp } from "@/animations/gsap";
 import { Table } from "@/components/ui/table";
 
-function getAccuracy(data: Question[]) {
+function getAccuracy(data: QuestionSet[]) {
   if (!data || data.length === 0) {
     return 90;
   }
 
-  var correct = 0;
-  var total = 0;
+  let sum = 0;
   for (let i = 0; i < data.length; i++) {
-    correct += data[i].accuracy;
-    total += data[i]["set-size"];
+    sum += data[i].accuracy;
   }
-  return Math.round((correct / total) * 100);
+
+  return sum / data.length;
 }
 
 const Dashboard = () => {
@@ -61,7 +59,8 @@ const Dashboard = () => {
     (HTMLHeadingElement | HTMLParagraphElement | HTMLButtonElement)[]
   >([]);
 
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
+  const [userData, setUserData] = useState<QuestionSet[]>([]);
 
   const redirectGenerate = () => {
     window.location.href = "/dashboard-force/flashcards";
@@ -92,7 +91,15 @@ const Dashboard = () => {
     }
   }
 
-  console.log(data);
+  useEffect(() => {
+    data
+      .then((dataSet) => {
+        setUserData(dataSet);
+      })
+      .catch(() => {
+        console.log("error with fetching");
+      });
+  }, []);
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40 dark:bg-neutral-800">
@@ -151,15 +158,7 @@ const Dashboard = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                {Array.isArray(data) && data.length > 0 ? (
-                  <QuestionTable />
-                )
-                : (
-                  <div>
-                    You haven&apos;t answered any questions today! Go practice!
-                  </div>
-                )
-              }
+                <DataTable columns={columns} data={userData} />
               </CardContent>
             </Card>
           </div>

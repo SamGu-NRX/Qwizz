@@ -24,8 +24,8 @@ import {
   Menu,
 } from "lucide-react";
 import { fadeUp } from "@/animations/gsap";
-import logoPic from "../assets/StudyBuddyLogo.png";
 import Image from "next/image";
+import Qwizz_Logo from "./public/Qwizz-Logo.svg";
 
 // Import the Sidebar components from Aceternity UI
 import { Sidebar, SidebarBody, SidebarLink } from "./ui/sidebar";
@@ -153,19 +153,19 @@ export default function SidebarDemo({ children }: SidebarDemoProps) {
 
 export const Logo = () => (
   <Link href="/" className="flex items-center px-4">
-    <Image src={logoPic} width={40} height={40} alt="logo" />
+    <Qwizz_Logo width={40} height={40} alt="logo" />
     <motion.span
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       className="ml-3 text-xl font-semibold text-black dark:text-white"
     >
-      StudyBuddy
+      Qwizz
     </motion.span>
   </Link>
 );
 
 export const LogoIcon = () => (
   <Link href="/" className="flex items-center px-4">
-    <Image src={logoPic} width={40} height={40} alt="logo" />
+    <Qwizz_Logo width={40} height={40} alt="logo" />
   </Link>
 );

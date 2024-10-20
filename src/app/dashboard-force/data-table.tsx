@@ -35,7 +35,7 @@ interface Data {
   type: string
   date: Date
   accuracy: number
-  'set-size': number
+  "set-size": number
 }
 
 // Define the props type

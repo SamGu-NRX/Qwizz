@@ -18,18 +18,13 @@ const Home = () => {
 
   return (
     <div className="flex w-full flex-col bg-muted/40">
-      <Sidebar />
-      <div className="sm:gap-4 sm:py-4 sm:pl-14">
-        <Header />
-        <main
-          className="justify-center items-center "
-          ref={dashboardRef}
-        >
+      <Sidebar>
+        <main className="justify-center items-center " ref={dashboardRef}>
           <MCQGenerator />
         </main>
-      </div>
+      </Sidebar>
     </div>
-  )
+  );
 }
 
 export default Home;
