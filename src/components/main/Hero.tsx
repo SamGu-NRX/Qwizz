@@ -11,7 +11,7 @@ const QwizzMagicalLander = () => {
   }, [controls]);
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800">
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-indigo-900 via-purple-900 to-pink-800">
       {/* Magical particle background that i messed the hell up on */}
       <div className="absolute inset-0 overflow-hidden">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
@@ -95,6 +95,7 @@ const QwizzMagicalLander = () => {
         </svg>
       </motion.div>
     </div>
+    
   );
 };
 
