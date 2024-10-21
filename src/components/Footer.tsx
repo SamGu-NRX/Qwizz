@@ -1,6 +1,6 @@
 // const Footer = () => {
 //     const currentYear = new Date().getFullYear();
-  
+
 //     return (
 //       <footer className="bg-gray-800 text-white text-center p-3 mt-8 text-sm transition-opacity duration-500 opacity-0"
 //       style={{ opacity: 0, transition: 'opacity 0.5s ease-in-out' }}>
@@ -8,9 +8,9 @@
 //       </footer>
 //     );
 //   };
-  
+
 //   export default Footer;
-  
+
 
 import { FaLocationArrow } from "react-icons/fa6";
 import { socialMedia } from "@/data";
@@ -36,10 +36,10 @@ const Footer = () => {
 
       {/* Call to Action Section */}
       <div className="flex flex-col items-center px-4 text-center">
-        <h1 className="heading lg:max-w-[45vw] text-2xl lg:text-5xl font-bold">
+        <h1 className="heading lg:max-w-[55vw] text-2xl lg:text-5xl font-bold">
           Want to <span className="text-purple">collaborate</span> with us?
         </h1>
-        <p className="text-white-200 md:mt-10 my-5 lg:text-lg">
+        <p className="text-white-200 md:mt-7 lg:text-lg">
           Reach out to us today and let&apos;s discuss how we can work together!
         </p>
         <a href="mailto:focus.sgu@gmail.com">
@@ -52,7 +52,7 @@ const Footer = () => {
       </div>
 
       {/* Footer Content */}
-      <div className="flex flex-col md:flex-row justify-between items-center mt-16 w-full md:px-16 px-4">
+      <div className="flex flex-col md:flex-row justify-between items-center mt-6 w-full md:px-16 px-4">
         <p className="text-sm md:text-base font-light md:order-1 order-2 mt-4 md:mt-0">
           &copy; {currentYear} StudyBuddy. All rights reserved.
         </p>

@@ -4,6 +4,7 @@ import { Check } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { twMerge } from 'tailwind-merge';
 
 const WaitlistButton = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,8 +27,11 @@ const WaitlistButton = () => {
   return (
     <>
       <motion.button
-        className="font-Outfit transition-all text-white px-4 py-2 rounded-full hover:brightness-110 hover:animate-pulse font-light border-[#3d4561] bg-purple border-[0.5px] shadow-sm shadow-[#5b72b8]"
-        whileHover={{ scale: 1.05 }}
+      className={twMerge(
+        "px-4 py-2 text-black text-sm hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] transition duration-200",
+        "font-Outfit transition-all text-white px-4 py-2 rounded-full hover:brightness-[101%] hover:animate-pulse font-light border-[#3d4561] bg-purple border-[0.5px] shadow-sm shadow-[#5b72b8]"
+      )}
+        whileHover={{ scale: 1.15 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(true)}
       >

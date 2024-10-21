@@ -14,7 +14,7 @@ const QwizzMagicalLander = () => {
 
   return (
 
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-indigo-500 via-purple to-blue-700">
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-indigo-500 via-purple to-blue-500">
       {/* <div className="absolute inset-0 bg-white/10 backdrop-blur-[120px] z-0"></div> */}
       {/* Magical particle background that i messed the hell up on */}
       <div className="absolute inset-0 overflow-hidden">
@@ -48,13 +48,13 @@ const QwizzMagicalLander = () => {
       </div>
 
       {/* Hero?? */}
-      <div className="relative z-10 flex flex-col md:flex-row items-center justify-between min-h-screen px-8 max-w-7xl mx-auto">
+      <div className="relative z-10 flex flex-col md:flex-row items-center justify-between min-h-screen px-10 ml-2 max-w-7xl mx-auto">
       <motion.div
           className="w-full md:w-1/2 md:pr-8 mb-8 md:mb-0"
           // initial={{ opacity: 0, x: -50 }}
           // animate={controls}
         >
-      <motion.div className="flex items-center mb-4" 
+      <motion.div className="flex items-center mb-4"
       // style={{ y }}
       >
           <Sparkles className="text-yellow-400 mr-2" size={32} />
@@ -95,7 +95,7 @@ const QwizzMagicalLander = () => {
             <FeatureItem icon={Sparkles} text="AI-Powered Insights" />
           </div>
 
-        
+
         </motion.div>
         {/* image on the right */}
         <motion.div
@@ -105,9 +105,9 @@ const QwizzMagicalLander = () => {
           // transition={{ delay: 0.6 }}
         >
           <div className="relative w-full max-w-md h-[400px] md:h-[500px]">
-            <Image 
-              src="/home-background.png" 
-              alt="Qwizz Learning Experience" 
+            <Image
+              src="/home-background.png"
+              alt="Qwizz Learning Experience"
               layout="fill"
               objectFit="cover"
               className="rounded-lg shadow-2xl"
@@ -115,7 +115,7 @@ const QwizzMagicalLander = () => {
             <div className="absolute inset-0 bg-gradient-to-t from-purple-900 via-purple-900/20 to-transparent rounded-lg opacity-50"></div>
           </div>
 
-          
+
         </motion.div>
       </div>
 
