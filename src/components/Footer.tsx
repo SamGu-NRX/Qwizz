@@ -21,7 +21,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="relative w-full pt-28 pb-10 bg-gradient-to-r from-gray-800/[0.5] via-black/[0.65] to-gray-800 text-white" id="contact">
+    <footer className="relative w-full pt-16 py-6 bg-gradient-to-r from-gray-800/[0.5] via-black/[0.65] to-gray-800 text-white" id="contact">
       {/* Background Grid */}
       <div className="absolute inset-0 -z-10 w-full h-full">
         <Image
@@ -37,10 +37,10 @@ const Footer = () => {
       {/* Call to Action Section */}
       <div className="flex flex-col items-center px-4 text-center">
         <h1 className="heading lg:max-w-[45vw] text-2xl lg:text-5xl font-bold">
-          Ready to take <span className="text-purple">your</span> digital presence to the next level?
+          Want to <span className="text-purple">collaborate</span> with us?
         </h1>
         <p className="text-white-200 md:mt-10 my-5 lg:text-lg">
-          Reach out to me today and let&apos;s discuss how I can help you achieve your goals.
+          Reach out to us today and let&apos;s discuss how we can work together!
         </p>
         <a href="mailto:focus.sgu@gmail.com">
           <MagicButton

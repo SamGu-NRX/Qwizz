@@ -96,7 +96,7 @@ const PricingSection: React.FC = () => {
 
   return (
     <TooltipProvider>
-      <section className="pt-24 pb-12 px-4 bg-gradient-to-br from-purple/55 to-indigo-500/55 dark:from-gray-900 dark:to-indigo-950">
+      <section className="pt-24 pb-12 px-4 bg-gradient-to-b from-pink-500/75 to-indigo-500/55 dark:from-gray-900 dark:to-indigo-950">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0.0, y: 40 }}

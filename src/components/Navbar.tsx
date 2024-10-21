@@ -78,7 +78,7 @@ const Navbar = () => {
               },
             },
           }}
-          className="flex items-center justify-between py-4 border-[#3d4561] shadow-md border-spacing-1 rounded-2xl shadow-[#3d4561] bg-blue-100/1 px-7 bg-gradient-to-r from-blue-100 to-cyan-50 backdrop:blur-md"
+          className="flex items-center justify-between py-4 border-[#3d4561] shadow-md border-spacing-1 rounded-2xl shadow-[#3d4561] px-7 bg-gradient-to-r from-indigo-100 to-blue-50 backdrop:blur-md"
         >
           {/* Name */}
           <motion.div

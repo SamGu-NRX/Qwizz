@@ -44,12 +44,12 @@ import { FaDiscord, FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa';
   ];
 
   export const socialMedia = [
-    { 
-      id: 1,
-      name: "GitHub", 
-      link: "https://github.com/SamGu-NRX/studybuddy",
-      icon:  <FaGithub className="h-6 w-6" />,
-    },
+    // { 
+    //   id: 1,
+    //   name: "GitHub", 
+    //   link: "https://github.com/SamGu-NRX/studybuddy",
+    //   icon:  <FaGithub className="h-6 w-6" />,
+    // },
     { 
       id: 2,
       name: "Twitter", 

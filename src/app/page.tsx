@@ -30,7 +30,7 @@ const HomePage = () => {
   }, []);
 
   return (
-    <div className="h-screen flex flex-col backdrop:blur-xl">
+    <div className="absolute inset-0 h-screen flex flex-col backdrop:blur-xl bg-white/10 backdrop-blur-[120px] z-0">
       {/* TODO:Check bugs for Dynamic Navbar, i.e. fade out when scrolling and show up when scrolling up */}
       <Navbar />
       <Hero />

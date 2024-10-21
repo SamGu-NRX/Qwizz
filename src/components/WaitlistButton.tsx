@@ -26,7 +26,7 @@ const WaitlistButton = () => {
   return (
     <>
       <motion.button
-        className="font-Outfit transition-all text-white px-4 py-2 rounded-full hover:brightness-110 hover:animate-pulse font-light border-[#3d4561] bg-[#5b72b8] border-[0.5px] shadow-sm shadow-[#5b72b8]"
+        className="font-Outfit transition-all text-white px-4 py-2 rounded-full hover:brightness-110 hover:animate-pulse font-light border-[#3d4561] bg-purple border-[0.5px] shadow-sm shadow-[#5b72b8]"
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(true)}

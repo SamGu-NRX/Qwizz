@@ -57,7 +57,7 @@ const FeaturesGrid = () => {
   }, []);
 
   return (
-    <div className="bg-gradient-to-b from-pink-700/75 to-blue-200 py-10 md:py-20 lg:py-28">
+    <div className="bg-gradient-to-b from-blue-700 to-blue-200 py-10 md:py-20 lg:py-28">
       <div className="container mx-auto space-y-10">
         <motion.div
           initial={{ opacity: 0.0, y: 40 }}
@@ -72,7 +72,7 @@ const FeaturesGrid = () => {
           <div className="text-3xl md:text-5xl font-bold text-white dark:text-white text-center">
             Qwizz: Your Personal Learning Wizard
           </div>
-          <div className="text-2xl text-center font-light md:text-xl text-neutral-500 dark:text-neutral-200 py-4 max-w-3xl">
+          <div className="text-2xl text-center font-light md:text-xl text-neutral-200 dark:text-neutral-200 py-4 max-w-3xl">
             If knowledge is power, then we&apos;re your magic wand.
           </div>
         </motion.div>
