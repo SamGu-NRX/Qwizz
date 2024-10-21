@@ -1,24 +1,29 @@
 // pages/api/activate.ts
 
-import { NextApiRequest, NextApiResponse } from 'next';
-import { prisma } from '@/lib/prisma';
-import { hash } from 'bcryptjs';
+import { NextApiRequest, NextApiResponse } from "next";
+import { prisma } from "@/lib/prisma";
+import { hash } from "bcryptjs";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   const { token } = req.query;
 
-  if (req.method !== 'POST') {
+  if (req.method !== "POST") {
     return res.status(405).json({ error: `Method ${req.method} Not Allowed` });
   }
 
-  if (typeof token !== 'string') {
-    return res.status(400).json({ error: 'Invalid token' });
+  if (typeof token !== "string") {
+    return res.status(400).json({ error: "Invalid token" });
   }
 
   const { password } = req.body;
 
   if (!password || password.length < 8) {
-    return res.status(400).json({ error: 'Password must be at least 8 characters' });
+    return res
+      .status(400)
+      .json({ error: "Password must be at least 8 characters" });
   }
 
   try {
@@ -27,7 +32,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
 
     if (!user) {
-      return res.status(400).json({ error: 'Invalid token' });
+      return res.status(400).json({ error: "Invalid token" });
     }
 
     // Hash the new password
@@ -43,9 +48,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
     });
 
-    res.status(200).json({ message: 'Account activated' });
+    res.status(200).json({ message: "Account activated" });
   } catch (error) {
-    console.error('Activation error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error("Activation error:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 }
