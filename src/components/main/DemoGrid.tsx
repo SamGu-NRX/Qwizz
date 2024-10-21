@@ -57,7 +57,7 @@ const FeaturesGrid = () => {
   }, []);
 
   return (
-    <div className="bg-gradient-to-b from-pink-800 to-blue-200 py-10 md:py-20 lg:py-28">
+    <div className="bg-gradient-to-b from-pink-700/75 to-blue-200 py-10 md:py-20 lg:py-28">
       <div className="container mx-auto space-y-10">
         <motion.div
           initial={{ opacity: 0.0, y: 40 }}

@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 import Image from "next/image"
-import Qwizz_Logo from "./public/Qwizz-Logo.svg"
+import Qwizz_Logo from "@/../public/Qwizz-Logo.svg"
 
 
 

@@ -25,7 +25,7 @@ import {
 } from "lucide-react";
 import { fadeUp } from "@/animations/gsap";
 import Image from "next/image";
-import Qwizz_Logo from "./public/Qwizz-Logo.svg";
+import Qwizz_Logo from "@/../public/Qwizz-Logo.svg";
 
 // Import the Sidebar components from Aceternity UI
 import { Sidebar, SidebarBody, SidebarLink } from "./ui/sidebar";
