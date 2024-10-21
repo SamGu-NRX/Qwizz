@@ -80,6 +80,11 @@ model User {
   Invoice        Invoice[]
   Subscription   Subscription[]
 
+  // New fields for beta rollout
+  waitlistEntry  WaitlistEntry?
+  betaInvited     Boolean   @default(false)
+  activationToken String?
+
   @@map("users")
 }
 
@@ -572,4 +577,17 @@ model Invoice {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
   user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+
+model WaitlistEntry {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId @unique
+  email     String   @unique
+  phone     String?
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("waitlist_entries")
 }
