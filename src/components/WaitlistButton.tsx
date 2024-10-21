@@ -4,30 +4,21 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 import { twMerge } from "tailwind-merge";
-import { signIn, useSession } from "next-auth/react";
-import WaitlistModal from "./WaitlistModal.tsx";
+import WaitlistModal from "./WaitlistModal";
 
 const WaitlistButton = () => {
-  const { data: session, status } = useSession();
   const [isOpen, setIsOpen] = useState(false);
   const [hasSignedUp, setHasSignedUp] = useState(false);
 
   useEffect(() => {
-    if (status === "authenticated") {
-      // Fetch waitlist status from API
-      const fetchWaitlistStatus = async () => {
-        const res = await fetch("/api/waitlist/status");
-        const data = await res.json();
-        setHasSignedUp(data.hasSignedUp);
-      };
-      fetchWaitlistStatus();
+    const signedUp = localStorage.getItem("hasSignedUpToWaitlist");
+    if (signedUp) {
+      setHasSignedUp(true);
     }
-  }, [status]);
+  }, []);
 
   const handleButtonClick = () => {
-    if (status === "unauthenticated") {
-      signIn();
-    } else if (!hasSignedUp) {
+    if (!hasSignedUp) {
       setIsOpen(true);
     }
   };
