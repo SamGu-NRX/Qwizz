@@ -45,6 +45,12 @@ export const RegisterSchema = z.object({
     }),
 })
 
+export const WaitlistSchema = z.object({
+  email: z.string().email(),
+  phoneNumber: z.string().regex(/^\d{10}$/, 'Phone number must be exactly 10 digits').optional(),
+  countryCode: z.string().regex(/^\+\d{1,999}$/, 'Country code must be in the format +<country code>').optional(),
+})
+
 export const ResetSchema = z.object({
   email: z.string().email({
     message: 'Email is required'

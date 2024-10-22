@@ -16,8 +16,13 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import { motion } from "framer-motion";
-import { count } from "console";
+import { motion, AnimatePresence } from "framer-motion";
+import { z } from "zod";
+import { WaitlistSchema } from "@/schema"; // this is the schema you provided
+import { useForm, Controller, SubmitHandler } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Confetti from "react-confetti";
+import { toast } from "sonner"; // Assuming 'sonner' is installed
 
 interface WaitlistModalProps {
   isOpen: boolean;
@@ -25,12 +30,14 @@ interface WaitlistModalProps {
   setHasSignedUp: (hasSignedUp: boolean) => void;
 }
 
+type WaitlistFormData = z.infer<typeof WaitlistSchema>;
+
 const countryCodes = [
   { code: "+1", country: "USA", available: true },
   { code: "+44", country: "UK", available: false },
   { code: "+61", country: "Australia", available: false },
   { code: "+91", country: "India", available: false },
-  { code: "+86", country: "China", available: false },
+  { code: "+86", country: "China", available: true },
   // Add more country codes as needed
 ];
 
@@ -39,114 +46,166 @@ const WaitlistModal: React.FC<WaitlistModalProps> = ({
   setIsOpen,
   setHasSignedUp,
 }) => {
-  const [email, setEmail] = useState("");
-  const [countryCode, setCountryCode] = useState("+1");
-  const [phoneNumber, setPhoneNumber] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
 
-  const handleCountryCodeChange = (value: string) => {
-    const selectedCountry = countryCodes.find((item) => item.code === value);
-    if (selectedCountry && !selectedCountry.available) {
-      alert("This country code is not available yet.");
-    } else {
-      setCountryCode(value);
-    }
-  };
+  const {
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    reset,
+    formState: { errors },
+  } = useForm<WaitlistFormData>({
+    resolver: zodResolver(WaitlistSchema),
+    defaultValues: {
+      email: "",
+      countryCode: "+1",
+      phoneNumber: "",
+    },
+  });
 
-  const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const input = e.target.value;
-    const digitsOnly = input.replace(/\D/g, "");
-    const limitedDigits = digitsOnly.slice(0, 10);
-    setPhoneNumber(limitedDigits);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit: SubmitHandler<WaitlistFormData> = async (data) => {
     setLoading(true);
     const res = await fetch("/api/waitlist/join", {
       method: "POST",
       body: JSON.stringify({
-        email,
-        phone: phoneNumber ? `${countryCode}${phoneNumber}` : "",
+        email: data.email,
+        phone: data.phoneNumber ? `${data.countryCode}${data.phoneNumber}` : "",
       }),
       headers: {
         "Content-Type": "application/json",
       },
     });
-
     setLoading(false);
 
     if (res.ok) {
-      setHasSignedUp(true);
-      setIsOpen(false);
-      localStorage.setItem("hasSignedUpToWaitlist", "true");
+      toast.success("Successfully joined the waitlist!");
+      setShowConfetti(true);
+
+      // Close the modal after a short delay to show confetti
+      setTimeout(() => {
+        setShowConfetti(false);
+        setHasSignedUp(true);
+        setIsOpen(false);
+        localStorage.setItem("hasSignedUpToWaitlist", "true");
+        reset();
+      }, 3000);
     } else {
-      const data = await res.json();
-      alert(data.error || "An error occurred");
+      const responseData = await res.json();
+      alert(responseData.error || "An error occurred");
     }
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-lg p-6 max-w-md mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          <DialogHeader>
-            <DialogTitle className="font-Outfit text-center text-2xl mb-4">
-              Join Our Waitlist
-            </DialogTitle>
-          </DialogHeader>
-          <form onSubmit={handleSubmit} className="font-Outfit space-y-4">
-            <Input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="bg-transparent border border-gray-300 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
-            />
-            <div className="flex space-x-2">
-              <Select
-                value={countryCode}
-                onValueChange={handleCountryCodeChange}
+    <div>
+      {showConfetti && <Confetti recycle={false} />}
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <AnimatePresence>
+          {isOpen && (
+            <DialogContent asChild>
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 40 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                className="bg-white bg-opacity-10 backdrop-filter backdrop-blur-xl rounded-3xl p-8 max-w-xl mx-auto shadow-2xl"
               >
-                <SelectTrigger className="bg-transparent border border-gray-300 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500">
-                  <SelectValue placeholder="Country Code" />
-                </SelectTrigger>
-                <SelectContent>
-                  {countryCodes.map((item) => (
-                    <SelectItem
-                      key={item.code}
-                      value={item.code}
-                      className={`${item.available ? "" : "text-gray-400"}`}
-                    >
-                      {item.code} {item.country}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Input
-                type="text"
-                placeholder="Phone Number (optional)"
-                value={phoneNumber}
-                onChange={handlePhoneNumberChange}
-                className="bg-transparent flex-1 border border-gray-300 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
-              />
-            </div>
-            <Button
-              type="submit"
-              className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition duration-200"
-              disabled={loading}
-            >
-              {loading ? "Submitting..." : "Submit"}
-            </Button>
-          </form>
-        </motion.div>
-      </DialogContent>
-    </Dialog>
+                <DialogHeader>
+                  <DialogTitle className="font-bold text-center text-4xl mb-8 text-white">
+                    Join Our Waitlist
+                  </DialogTitle>
+                </DialogHeader>
+                <form
+                  onSubmit={handleSubmit(onSubmit)}
+                  className="space-y-6 font-Outfit"
+                >
+                  <Input
+                    type="email"
+                    placeholder="Email"
+                    {...register("email")}
+                    required
+                    className="w-full bg-transparent border border-gray-200 rounded-full px-6 py-4 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-300"
+                  />
+                  {errors.email && (
+                    <p className="text-red-500 text-sm">
+                      {errors.email.message}
+                    </p>
+                  )}
+                  <div className="flex space-x-4">
+                    <Controller
+                      name="countryCode"
+                      control={control}
+                      render={({ field }) => (
+                        <Select
+                          value={field.value}
+                          onValueChange={(value) => {
+                            const selectedCountry = countryCodes.find(
+                              (item) => item.code === value
+                            );
+                            if (selectedCountry && !selectedCountry.available) {
+                              alert("This country code is not available yet.");
+                            } else {
+                              field.onChange(value);
+                            }
+                          }}
+                        >
+                          <SelectTrigger className="w-28 bg-transparent border border-gray-200 rounded-full px-4 py-4 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-300">
+                            <SelectValue placeholder="Code">
+                              {field.value}
+                            </SelectValue>
+                          </SelectTrigger>
+                          <SelectContent className="bg-gray-800 text-white rounded-lg overflow-hidden">
+                            {countryCodes.map((item) => (
+                              <SelectItem
+                                key={item.code}
+                                value={item.code}
+                                disabled={!item.available}
+                                className={`px-4 py-2 hover:bg-gray-700 justify-center ${
+                                  item.available
+                                    ? ""
+                                    : "opacity-50 cursor-not-allowed"
+                                }`}
+                              >
+                                {item.code} ({item.country})
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      )}
+                    />
+                    <Input
+                      type="text"
+                      placeholder="Phone Number (optional)"
+                      {...register("phoneNumber")}
+                      onChange={(e) => {
+                        const input = e.target.value;
+                        const digitsOnly = input.replace(/\D/g, "");
+                        const limitedDigits = digitsOnly.slice(0, 10);
+                        setValue("phoneNumber", limitedDigits);
+                      }}
+                      className="flex-1 bg-transparent border border-gray-200 rounded-full px-6 py-4 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-300"
+                    />
+                  </div>
+                  {errors.phoneNumber && (
+                    <p className="text-red-500 text-sm">
+                      {errors.phoneNumber.message}
+                    </p>
+                  )}
+                  <Button
+                    type="submit"
+                    className="w-full bg-purple-600 hover:bg-purple-700 text-white py-4 rounded-full font-semibold text-lg transition-all duration-300 transform hover:-translate-y-1"
+                    disabled={loading}
+                  >
+                    {loading ? "Submitting..." : "Submit"}
+                  </Button>
+                </form>
+              </motion.div>
+            </DialogContent>
+          )}
+        </AnimatePresence>
+      </Dialog>
+    </div>
   );
 };
 

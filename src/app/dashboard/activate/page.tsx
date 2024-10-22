@@ -1,7 +1,7 @@
 // pages/api/activate.ts
 
 import { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "@/lib/prisma";
+import { db } from "@/lib/db";
 import { hash } from "bcryptjs";
 
 export default async function handler(
@@ -27,7 +27,7 @@ export default async function handler(
   }
 
   try {
-    const user = await prisma.user.findFirst({
+    const user = await db.user.findFirst({
       where: { activationToken: token },
     });
 
@@ -39,7 +39,7 @@ export default async function handler(
     const hashedPassword = await hash(password, 10);
 
     // Activate the user account
-    await prisma.user.update({
+    await db.user.update({
       where: { id: user.id },
       data: {
         activationToken: null,

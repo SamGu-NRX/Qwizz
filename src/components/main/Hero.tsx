@@ -48,7 +48,7 @@ const QwizzMagicalLander = () => {
       </div>
 
       {/* Hero?? */}
-      <div className="relative z-10 flex flex-col md:flex-row items-center justify-between min-h-screen px-10 ml-2 max-w-7xl mx-auto">
+      <div className="relative z-10 flex flex-col md:flex-row items-center justify-between min-h-screen px-8 max-w-7xl mx-auto">
       <motion.div
           className="w-full md:w-1/2 md:pr-8 mb-8 md:mb-0"
           // initial={{ opacity: 0, x: -50 }}
