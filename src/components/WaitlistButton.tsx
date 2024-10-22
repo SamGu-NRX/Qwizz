@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import WaitlistModal from "./WaitlistModal";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
 
 const WaitlistButton = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,9 +27,10 @@ const WaitlistButton = () => {
   return (
     <>
       <WaitlistModal
-      isOpen={isOpen}
-      setIsOpen={setIsOpen}
-      setHasSignedUp={setHasSignedUp}>
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        setHasSignedUp={setHasSignedUp}
+      >
         <motion.button
           className={twMerge(
             "px-4 py-2 text-black text-sm hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] transition duration-200",
@@ -50,6 +52,19 @@ const WaitlistButton = () => {
           )}
         </motion.button>
       </WaitlistModal>
+
+      <Dialog>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Are you absolutely sure?</DialogTitle>
+            <DialogDescription>
+              This action cannot be undone. This will permanently delete your
+              account and remove your data from our servers.
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };
