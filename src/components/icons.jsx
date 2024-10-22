@@ -25,7 +25,7 @@ export const SaveQuestions = () => (
 );
 
 export const ProgressTracking = () => (
-  <div className="w-full h-32 bg-purple/[0.6] rounded-xl flex items-center justify-center p-4">
+  <div className="w-full h-32 bg-purple-new/[0.6] rounded-xl flex items-center justify-center p-4">
     <svg width="100" height="100" viewBox="0 0 100 100">
       <rect x="10" y="40" width="20" height="50" fill="#8B5CF6" opacity="0.4" />
       <rect x="40" y="20" width="20" height="70" fill="#8B5CF6" opacity="0.6" />

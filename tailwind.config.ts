@@ -1,5 +1,7 @@
 import { Config } from "tailwindcss";
 
+const defaultTheme = require("tailwindcss/defaultTheme");
+
 const svgToDataUri = require("mini-svg-data-uri");
 
 const colors = require("tailwindcss/colors");
@@ -15,7 +17,9 @@ const config: Config = {
     "./pages/**/*.{css,js,ts,jsx,tsx,mdx}",
     "./components/**/*.{css,js,ts,jsx,tsx,mdx}",
     "./src/**/*.{css,js,jsx,ts,tsx,mdx}",
-
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   prefix: "",
   theme: {
@@ -129,14 +133,14 @@ const config: Config = {
         "analytics-image": "url('/Analytics.png')",
       },
     },
-    plugins: [
-      require("tailwindcss-animate"),
-      // require("@tailwindcss/forms"),
-      // addVariablesForColors,
-      // addSvgPatterns,
-    ],
   },
-} satisfies Config;
+  plugins: [
+    require("tailwindcss-animate"),
+    require("@tailwindcss/forms"),
+    addVariablesForColors,
+    addSvgPatterns,
+  ],
+};
 
 function addVariablesForColors({ addBase, theme }: any) {
   const allColors = flattenColorPalette(theme("colors"));
