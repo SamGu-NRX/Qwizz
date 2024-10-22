@@ -112,6 +112,7 @@ const WaitlistModal: React.FC<WaitlistModalProps> = ({
             )}
           </Button>
         </DialogTrigger>
+
         <DialogContent
           className="bg-white bg-opacity-10 backdrop-blur-xl rounded-3xl p-8 max-w-xl mx-auto shadow-2xl
           transition-all duration-300 data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out"
