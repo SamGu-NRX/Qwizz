@@ -5,8 +5,6 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
-  DialogFooter,
-  DialogClose,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -106,7 +104,7 @@ const WaitlistModal: React.FC<WaitlistModalProps> = ({
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <AnimatePresence>
           {isOpen && (
-            <DialogContent className="p-0 overflow-hidden bg-transparent border-0">
+            <DialogContent className="p-0 bg-transparent border-0 overflow-hidden">
               <motion.div
                 initial={{ opacity: 0, y: 40, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -115,123 +113,145 @@ const WaitlistModal: React.FC<WaitlistModalProps> = ({
                   duration: 0.4,
                   ease: [0.4, 0, 0.2, 1],
                 }}
-                className="relative overflow-hidden rounded-lg"
+                className="relative rounded-lg overflow-hidden"
               >
-                {/* Animated background elements */}
-                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-purple-500/10 via-transparent to-blue-500/10 animate-gradient-x" />
-                <div className="absolute -top-32 -right-32 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl animate-pulse" />
-                <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-blue-500/20 rounded-full blur-3xl animate-pulse delay-700" />
-                <div className="relative bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]">
-                  <DialogHeader className="pb-6">
-                    <DialogTitle className="font-bold text-center text-4xl mb-3 bg-gradient-to-r from-white via-purple to-white bg-clip-text text-transparent">
-                      Join Our Waitlist
-                    </DialogTitle>
-                    <DialogDescription className="text-center text-white/80 text-lg">
-                      Be the first to know when we launch
-                    </DialogDescription>
-                  </DialogHeader>
-                  <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                    <div className="space-y-2">
-                      <Input
-                        type="email"
-                        placeholder="Email"
-                        {...register("email")}
-                        className="w-full bg-white/5 border-white/10 rounded-xl px-6 py-4
-                                text-white placeholder:text-white/50
-                                focus:bg-white/10 focus:border-purple-500/50 focus:ring-purple-500/30
-                                transition-all duration-300"
-                      />
-                      {errors.email && (
+                <div className="relative isolate">
+                  {/* Container for background effects with proper clipping */}
+                  <div className="absolute inset-0 rounded-lg overflow-hidden">
+                    {/* Gradient background */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-blue-500/10 animate-gradient-x" />
+
+                    {/* Animated orbs - positioned relative to container */}
+                    <div className="absolute w-[500px] h-[500px] -top-[250px] -right-[250px]">
+                      <div className="w-full h-full bg-purple-500/20 rounded-full blur-3xl animate-pulse" />
+                    </div>
+                    <div className="absolute w-[500px] h-[500px] -bottom-[250px] -left-[250px]">
+                      <div className="w-full h-full bg-blue-500/20 rounded-full blur-3xl animate-pulse delay-700" />
+                    </div>
+                  </div>
+
+                  {/* Main content container */}
+                  <div className="relative bg-black/40 backdrop-blur-xl border border-white/10 rounded-lg p-8">
+                    <DialogHeader className="pb-6">
+                      <DialogTitle className="font-bold text-center text-4xl mb-3 bg-gradient-to-r from-white via-purple-200 to-white bg-clip-text text-transparent">
+                        Join Our Waitlist
+                      </DialogTitle>
+                      <DialogDescription className="text-center text-white/80 text-lg">
+                        Be the first to know when we launch
+                      </DialogDescription>
+                    </DialogHeader>
+
+                    <form
+                      onSubmit={handleSubmit(onSubmit)}
+                      className="space-y-6"
+                    >
+                      <div className="space-y-2">
+                        <Input
+                          type="email"
+                          placeholder="Email"
+                          {...register("email")}
+                          className="w-full bg-white/5 border-white/10 rounded-xl px-6 py-4
+                                   text-white placeholder:text-white/50
+                                   focus:bg-white/10 focus:border-purple-500/50 focus:ring-purple-500/30
+                                   transition-all duration-300"
+                        />
+                        {errors.email && (
+                          <p className="text-red-400 text-sm pl-2">
+                            {errors.email.message}
+                          </p>
+                        )}
+                      </div>
+
+                      <div className="flex space-x-4">
+                        <Controller
+                          name="countryCode"
+                          control={control}
+                          render={({ field }) => (
+                            <Select
+                              value={field.value}
+                              onValueChange={(value) => {
+                                const selectedCountry = countryCodes.find(
+                                  (item) => item.code === value
+                                );
+                                if (
+                                  selectedCountry &&
+                                  !selectedCountry.available
+                                ) {
+                                  toast.error(
+                                    "This country code is not available yet."
+                                  );
+                                } else {
+                                  field.onChange(value);
+                                }
+                              }}
+                            >
+                              <SelectTrigger
+                                className="w-32 bg-white/5 border-white/10 rounded-xl
+                                                      text-white focus:bg-white/10 focus:border-purple-500/50
+                                                      transition-all duration-300"
+                              >
+                                <SelectValue>{field.value}</SelectValue>
+                              </SelectTrigger>
+                              <SelectContent className="bg-gray-900/95 border border-white/10 backdrop-blur-xl">
+                                {countryCodes.map((item) => (
+                                  <SelectItem
+                                    key={item.code}
+                                    value={item.code}
+                                    disabled={!item.available}
+                                    className={`text-white hover:bg-white/10 transition-colors
+                                              ${
+                                                !item.available
+                                                  ? "opacity-50"
+                                                  : ""
+                                              }`}
+                                  >
+                                    {item.code} ({item.country})
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          )}
+                        />
+
+                        <Input
+                          type="text"
+                          placeholder="Phone Number (optional)"
+                          {...register("phoneNumber")}
+                          onChange={(e) => {
+                            const input = e.target.value;
+                            const digitsOnly = input.replace(/\D/g, "");
+                            const limitedDigits = digitsOnly.slice(0, 10);
+                            setValue("phoneNumber", limitedDigits);
+                          }}
+                          className="flex-1 bg-white/5 border-white/10 rounded-xl px-6 py-4
+                                   text-white placeholder:text-white/50
+                                   focus:bg-white/10 focus:border-purple-500/50 focus:ring-purple-500/30
+                                   transition-all duration-300"
+                        />
+                      </div>
+                      {errors.phoneNumber && (
                         <p className="text-red-400 text-sm pl-2">
-                          {errors.email.message}
+                          {errors.phoneNumber.message}
                         </p>
                       )}
-                    </div>
-                    <div className="flex space-x-4">
-                      <Controller
-                        name="countryCode"
-                        control={control}
-                        render={({ field }) => (
-                          <Select
-                            value={field.value}
-                            onValueChange={(value) => {
-                              const selectedCountry = countryCodes.find(
-                                (item) => item.code === value
-                              );
-                              if (
-                                selectedCountry &&
-                                !selectedCountry.available
-                              ) {
-                                toast.error(
-                                  "This country code is not available yet."
-                                );
-                              } else {
-                                field.onChange(value);
-                              }
-                            }}
-                          >
-                            <SelectTrigger
-                              className="w-32 bg-white/5 border-white/10 rounded-xl
-                                                   text-white focus:bg-white/10 focus:border-purple-500/50
-                                                   transition-all duration-300"
-                            >
-                              <SelectValue>{field.value}</SelectValue>
-                            </SelectTrigger>
-                            <SelectContent className="bg-gray-900/95 border border-white/10 backdrop-blur-xl">
-                              {countryCodes.map((item) => (
-                                <SelectItem
-                                  key={item.code}
-                                  value={item.code}
-                                  disabled={!item.available}
-                                  className={`text-white hover:bg-white/10 transition-colors
-                                           ${
-                                             !item.available ? "opacity-50" : ""
-                                           }`}
-                                >
-                                  {item.code} ({item.country})
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        )}
-                      />
-                      <Input
-                        type="text"
-                        placeholder="Phone Number (optional)"
-                        {...register("phoneNumber")}
-                        onChange={(e) => {
-                          const input = e.target.value;
-                          const digitsOnly = input.replace(/\D/g, "");
-                          const limitedDigits = digitsOnly.slice(0, 10);
-                          setValue("phoneNumber", limitedDigits);
-                        }}
-                        className="flex-1 bg-white/5 border-white/10 rounded-xl px-6 py-4
-                                text-white placeholder:text-white/50
-                                focus:bg-white/10 focus:border-purple-500/50 focus:ring-purple-500/30
-                                transition-all duration-300"
-                      />
-                    </div>
-                    {errors.phoneNumber && (
-                      <p className="text-red-400 text-sm pl-2">
-                        {errors.phoneNumber.message}
-                      </p>
-                    )}
-                    <Button
-                      type="submit"
-                      disabled={loading}
-                      className={`
-                       w-full px-8 py-6 rounded-xl text-lg font-medium
-                       bg-gradient-to-r from-purple-600 to-blue-600
-                       hover:from-purple-500 hover:to-blue-500
-                       disabled:opacity-50
-                       transform hover:-translate-y-1 active:translate-y-0
-                       transition-all duration-300
-                       ${loading ? "animate-pulse" : ""}
-                     `}
-                    >
-                      {loading ? "Joining..." : "Join Waitlist"}
-                    </Button>
-                  </form>
+
+                      <Button
+                        type="submit"
+                        disabled={loading}
+                        className={`
+                          w-full px-8 py-6 rounded-xl text-lg font-medium
+                          bg-gradient-to-r from-purple-600 to-blue-600
+                          hover:from-purple-500 hover:to-blue-500
+                          disabled:opacity-50
+                          transform hover:-translate-y-1 active:translate-y-0
+                          transition-all duration-300
+                          ${loading ? "animate-pulse" : ""}
+                        `}
+                      >
+                        {loading ? "Joining..." : "Join Waitlist"}
+                      </Button>
+                    </form>
+                  </div>
                 </div>
               </motion.div>
             </DialogContent>
@@ -241,4 +261,5 @@ const WaitlistModal: React.FC<WaitlistModalProps> = ({
     </>
   );
 };
+
 export default WaitlistModal;
