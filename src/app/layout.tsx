@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import '@mantine/core/styles.css';
-import '@mantine/dropzone/styles.css';
-import { ColorSchemeScript, createTheme, MantineProvider } from '@mantine/core';
+import "@mantine/core/styles.css";
+import "@mantine/dropzone/styles.css";
+import { ColorSchemeScript, createTheme, MantineProvider } from "@mantine/core";
 import { ChakraProvider } from "@chakra-ui/react";
 
 import Providers from "./providers";
+import CustomScrollbar from "./ScrollBarProvider";
 
 const theme = createTheme({
   /** Put your mantine theme override here */
@@ -33,7 +34,9 @@ export default function RootLayout({
         </head>
         <body className={inter.className}>
           <ChakraProvider theme={theme}>
-            <MantineProvider>{children}</MantineProvider>
+            <MantineProvider>
+              <CustomScrollbar>{children}</CustomScrollbar>
+            </MantineProvider>
           </ChakraProvider>
         </body>
       </html>

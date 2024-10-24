@@ -37,7 +37,7 @@ interface SidebarDemoProps {
 
 export default function SidebarDemo({ children }: SidebarDemoProps) {
   const pathName = usePathname();
-  const [open, setOpen] = useState(true); // Sidebar open state
+  const [open, setOpen] = useState(false); // Sidebar open state
   const iconRefs = useRef<HTMLAnchorElement[] | null>(null);
 
   useEffect(() => {
@@ -89,10 +89,10 @@ export default function SidebarDemo({ children }: SidebarDemoProps) {
     >
       {/* Sidebar using Aceternity UI components */}
       <Sidebar open={open} setOpen={setOpen}>
-        <SidebarBody className="justify-between gap-10">
+        <SidebarBody className="justify-between gap-4 pl-4">
           <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
             {/* Logo */}
-            {open ? <Logo /> : <LogoIcon />}
+            {open ? <Logo /> : <LogoIcon/>}
             {/* Navigation Links */}
             <div className="mt-8 flex flex-col gap-2">
               {links.map((link, idx) => (
@@ -165,7 +165,7 @@ export const Logo = () => (
 );
 
 export const LogoIcon = () => (
-  <Link href="/" className="flex items-center px-4">
+  <Link href="/" className="-ml-[7px]">
     <Qwizz_Logo width={40} height={40} alt="logo" />
   </Link>
 );
